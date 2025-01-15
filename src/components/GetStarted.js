@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Smartphone, Apple, Mail, Send, Phone, ArrowRight } from 'lucide-react';
-import { Alert, AlertTitle, AlertDescription } from '../components/ui/alert';
+import { Alert, AlertDescription } from '../components/ui/alert';
 
 const GetStartedPage = () => {
   const [email, setEmail] = useState('');

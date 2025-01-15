@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Shield, Wallet, LineChart, ArrowRight, Globe, Activity, Users, ChevronDown, ExternalLink } from 'lucide-react';
+import { ArrowRight, Globe, Activity, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const GlowingButton = ({ children, className = "" }) => (
@@ -306,9 +306,9 @@ const LearnMorePage = () => {
               © 2024 LimitLess. All rights reserved.
             </div>
             <div className="flex gap-6">
-              <a href="#" className="text-gray-400 hover:text-white transition">Terms</a>
-              <a href="#" className="text-gray-400 hover:text-white transition">Privacy</a>
-              <a href="#" className="text-gray-400 hover:text-white transition">Contact</a>
+            <a href="/terms" className="text-gray-400 hover:text-white transition">Terms</a>
+            <a href="/privacy" className="text-gray-400 hover:text-white transition">Privacy</a>
+            <a href="/contact" className="text-gray-400 hover:text-white transition">Contact</a>
             </div>
           </div>
         </div>
