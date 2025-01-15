@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
+  Shield, 
   MessageSquare, 
   ArrowRight, 
   ChevronDown, 
-  Book, 
+  Book,
   CheckCircle2,
   AlertCircle,
   Lightbulb,
+  Rocket,
   PieChart,
   DollarSign,
   Timer,
   TrendingUp,
+  Zap,
   Target,
   Users
 } from 'lucide-react';
