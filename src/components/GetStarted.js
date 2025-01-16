@@ -3,6 +3,8 @@ import { Smartphone, Apple, Mail, Send, Phone, ArrowRight } from 'lucide-react';
 import { Alert, AlertDescription } from '../components/ui/alert';
 
 const GetStartedPage = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [notification, setNotification] = useState('');
@@ -12,15 +14,46 @@ const GetStartedPage = () => {
     setIsVisible(true);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email && !phone) {
       setNotification('Please provide either email or phone number');
       return;
     }
-    setNotification('Thanks for signing up! We\'ll keep you updated.');
-    setEmail('');
-    setPhone('');
+
+    try {
+      const response = await fetch('http://localhost:8080/api/subscribers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          createdAt: new Date().toISOString()
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Subscription failed');
+      }
+
+      setNotification('Thanks for signing up! We\'ll keep you updated.');
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPhone('');
+    } catch (error) {
+      setNotification(`Failed to subscribe: ${error.message}`);
+      console.error('Subscription error details:', {
+        message: error.message,
+        stack: error.stack
+      });
+    }
   };
 
   return (
@@ -85,6 +118,30 @@ const GetStartedPage = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="group relative">
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="First Name"
+                  className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-4 text-white placeholder:text-gray-500
+                    focus:outline-none focus:border-blue-500/50 transition-colors"
+                />
+              </div>
+
+              <div className="group relative">
+                <input
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Last Name"
+                  className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-4 text-white placeholder:text-gray-500
+                    focus:outline-none focus:border-blue-500/50 transition-colors"
+                />
+              </div>
+            </div>
+
             <div className="group relative">
               <Mail size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-white transition-colors" />
               <input

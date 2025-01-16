@@ -1,21 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Shield, 
-  MessageSquare, 
-  ArrowRight, 
-  ChevronDown, 
-  Book,
   CheckCircle2,
-  AlertCircle,
-  Lightbulb,
-  Rocket,
   PieChart,
   DollarSign,
   Timer,
   TrendingUp,
-  Zap,
   Target,
-  Users
+  Users,
+  MessageSquare
 } from 'lucide-react';
 
 const AIAssistant = ({ isOpen, onClose }) => {
@@ -176,6 +168,7 @@ const StatsCard = ({ icon: Icon, value, label, delay = 0 }) => {
   );
 };
 
+// eslint-disable-next-line no-unused-vars
 const FeatureCard = ({ icon: Icon, title, description }) => {
   const [isHovered, setIsHovered] = useState(false);
   

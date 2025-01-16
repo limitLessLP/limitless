@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronRight, ArrowRight, Shield, Wallet, LineChart, Globe, Activity, Zap, Linkedin } from 'lucide-react';
+import { ChevronRight, ArrowRight, Shield, Wallet, LineChart, Globe, Activity, Linkedin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import jackyPhoto from '../assets/jacky.jpg';
 import royPhoto from '../assets/roy.JPG';
@@ -85,13 +85,19 @@ const IPhoneMockup = ({ children }) => {
 const DeviceShowcase = () => {
   const [activeDevice, setActiveDevice] = useState('both');
   
+  const handleMacbookClick = () => setActiveDevice('macbook');
+  const handleIPhoneClick = () => setActiveDevice('iphone');
+  
   return (
     <div className="relative flex items-center justify-center gap-8">
-      <div className={`transition-all duration-500 transform ${
-        activeDevice === 'macbook' ? 'scale-110 opacity-100' :
-        activeDevice === 'iphone' ? 'scale-90 opacity-50' :
-        'scale-100 opacity-100'
-      }`}>
+      <div 
+        onClick={handleMacbookClick}
+        className={`transition-all duration-500 transform cursor-pointer ${
+          activeDevice === 'macbook' ? 'scale-110 opacity-100' :
+          activeDevice === 'iphone' ? 'scale-90 opacity-50' :
+          'scale-100 opacity-100'
+        }`}
+      >
         <MacBookMockup>
           <div className="bg-black w-full h-full p-6">
             <div className="h-full flex flex-col">
@@ -139,11 +145,14 @@ const DeviceShowcase = () => {
         </MacBookMockup>
       </div>
       
-      <div className={`transition-all duration-500 transform ${
-        activeDevice === 'iphone' ? 'scale-110 opacity-100' :
-        activeDevice === 'macbook' ? 'scale-90 opacity-50' :
-        'scale-100 opacity-100'
-      }`}>
+      <div 
+        onClick={handleIPhoneClick}
+        className={`transition-all duration-500 transform cursor-pointer ${
+          activeDevice === 'iphone' ? 'scale-110 opacity-100' :
+          activeDevice === 'macbook' ? 'scale-90 opacity-50' :
+          'scale-100 opacity-100'
+        }`}
+      >
         <IPhoneMockup>
           <div className="bg-black w-full h-full p-4">
             <div className="flex justify-between items-center mb-8">
@@ -349,7 +358,7 @@ const LandingPage = () => {
           <div className="text-center mb-20">
             <h2 className="text-5xl font-extralight mb-8">Our Team</h2>
             <p className="text-xl text-gray-400 mb-12 font-light leading-relaxed max-w-3xl mx-auto">
-              We're building a more inclusive startup ecosystem by democratizing access to venture capital investments.
+              We&apos;re building a more inclusive startup ecosystem by democratizing access to venture capital investments.
             </p>
           </div>
 
