@@ -76,7 +76,7 @@ const LandingPage = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="text-xl font-light tracking-wider">LimitLess</div>
           <button 
-            onClick={() => navigate('/get-started')}
+            onClick={() => navigate('/select-type')}
             className="group relative bg-gradient-to-b from-black/10 to-white/10 
                       dark:from-white/10 dark:to-black/10 p-px rounded-2xl backdrop-blur-lg 
                       overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
@@ -127,7 +127,7 @@ const LandingPage = () => {
             </p>
             <div className="flex gap-4 justify-center">
               <button 
-                onClick={() => navigate('/get-started')}
+                onClick={() => navigate('/select-type')}
                 className="group relative bg-gradient-to-b from-black/10 to-white/10 
                           dark:from-white/10 dark:to-black/10 p-px rounded-2xl backdrop-blur-lg 
                           overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"

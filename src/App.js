@@ -1,17 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
-import LearnMoreVC from './components/LearnMoreVC';
-import LearnMoreInvestor from './components/LearnMoreInvestor';
-import GetStartedPage from './components/GetStarted';
+import UserTypeSelection from './components/UserTypeSelection';
+import SignUpPage from './components/SignUpPage';
+// Import your GP signup page when you create it
+// import SignUpGPPage from './components/SignUpGPPage';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/for-vcs" element={<LearnMoreVC />} />
-        <Route path="/for-investors" element={<LearnMoreInvestor />} />
-        <Route path="/get-started" element={<GetStartedPage />} />
+        <Route path="/select-type" element={<UserTypeSelection />} />
+        <Route path="/signup-lp" element={<SignUpPage />} />
+        {/* Add the GP signup route when you create it */}
+        {/* <Route path="/signup-gp" element={<SignUpGPPage />} /> */}
       </Routes>
     </Router>
   );
