@@ -6,9 +6,11 @@ import { Eye, EyeOff, ArrowRight } from "lucide-react"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
+import { useNavigate } from "react-router-dom"
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <div className="flex min-h-screen">
@@ -146,6 +148,18 @@ export default function SignUpPage() {
                 <ArrowRight className="h-4 w-4" />
               </motion.div>
             </Button>
+
+            <div className="text-center mt-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Already have an account?{" "}
+                <button
+                  onClick={() => navigate("/signin")}
+                  className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+                >
+                  Sign in
+                </button>
+              </p>
+            </div>
           </form>
         </div>
       </div>
