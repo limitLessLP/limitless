@@ -22,11 +22,11 @@ const UserTypeSelection = () => {
         >
           <h1 className="text-7xl font-extralight mb-8">
             <span className="bg-gradient-to-r from-neutral-900 to-neutral-700/80 dark:from-white dark:to-white/80 bg-clip-text text-transparent">
-              Choose Your Path
+              I am...
             </span>
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 mb-12 font-light leading-relaxed max-w-2xl mx-auto">
-            Select whether you&apos;re a VC firm looking to expand your reach or an investor seeking premium opportunities.
+            Select the option that best describes you
           </p>
         </motion.div>
 
@@ -40,9 +40,9 @@ const UserTypeSelection = () => {
           >
             <div className="p-8 rounded-[1.15rem] backdrop-blur-md bg-white/95 dark:bg-black/95 h-full">
               <Building2 className="w-12 h-12 mb-6 text-blue-500" />
-              <h2 className="text-2xl font-medium mb-4">VC Firm (GP)</h2>
+              <h2 className="text-2xl font-medium mb-4">A Venture Capital Firm</h2>
               <p className="text-gray-600 dark:text-gray-400">
-                For venture capital firms looking to expand their investor base and streamline operations.
+                Looking to expand my investor base and streamline operations
               </p>
             </div>
           </motion.div>
@@ -56,9 +56,9 @@ const UserTypeSelection = () => {
           >
             <div className="p-8 rounded-[1.15rem] backdrop-blur-md bg-white/95 dark:bg-black/95 h-full">
               <Users className="w-12 h-12 mb-6 text-purple-500" />
-              <h2 className="text-2xl font-medium mb-4">Investor (LP)</h2>
+              <h2 className="text-2xl font-medium mb-4">An Investor</h2>
               <p className="text-gray-600 dark:text-gray-400">
-                For accredited investors seeking access to premium venture capital opportunities.
+                Seeking access to premium venture capital opportunities
               </p>
             </div>
           </motion.div>

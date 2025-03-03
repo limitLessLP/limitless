@@ -6,6 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import jackyPhoto from '../assets/jacky.jpg';
 import royPhoto from '../assets/roy.JPG';
 import { motion } from "framer-motion";
+import logo from '../assets/logo.png';
+import { IRRChart } from "./irr-chart"
+import { InvestmentSlider } from "./investment-slider"
 
 function FloatingPaths({ position }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -74,7 +77,9 @@ const LandingPage = () => {
 
       <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md' : ''}`}>
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-xl font-light tracking-wider">LimitLess</div>
+          <div className="flex items-center">
+            <img src={logo} alt="LimitLess" className="h-8 w-auto" />
+          </div>
           <button 
             onClick={() => navigate('/select-type')}
             className="group relative bg-gradient-to-b from-black/10 to-white/10 
@@ -281,6 +286,68 @@ const LandingPage = () => {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Why VC As An Asset Section */}
+      <section className="min-h-screen flex items-center relative z-10 py-24">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-5xl font-extralight mb-8">Performance is everything.</h2>
+            <p className="text-xl text-gray-400 font-light leading-relaxed max-w-3xl mx-auto">
+              Only top-quartile funds consistently outperform public indexes. Identifying and accessing those top managers, therefore, is critical to your success.
+            </p>
+          </motion.div>
+
+          <div className="max-w-5xl mx-auto">
+            <IRRChart />
+          </div>
+        </div>
+      </section>
+
+      {/* Current Offerings Section */}
+      <section className="min-h-screen flex items-center relative z-10 py-24">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-5xl font-extralight mb-8">Current Offerings</h2>
+            <p className="text-xl text-gray-400 font-light leading-relaxed max-w-3xl mx-auto">
+              As trusted industry insiders, we work to source these sought-after funds and make them available to eligible individuals and family offices.
+            </p>
+          </motion.div>
+
+          <div className="max-w-5xl mx-auto">
+            <InvestmentSlider />
+          </div>
+        </div>
+      </section>
+
+      {/* Vision Section - Keep but simplified */}
+      <section className="min-h-screen flex items-center relative z-10 py-24">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-5xl font-extralight mb-8">Our Vision</h2>
+            <p className="text-xl text-gray-400 font-light leading-relaxed max-w-3xl mx-auto">
+              Building the future of venture capital investment through innovative technology and inclusive access.
+            </p>
+          </motion.div>
         </div>
       </section>
 
