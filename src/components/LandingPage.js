@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import jackyPhoto from '../assets/jacky.jpg';
 import royPhoto from '../assets/roy.JPG';
 import { motion } from "framer-motion";
-import logo from '../assets/logo.png';
 import { IRRChart } from "./irr-chart"
 import { InvestmentSlider } from "./investment-slider"
+import Navbar from "./Navbar"
 
 function FloatingPaths({ position }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -75,30 +75,7 @@ const LandingPage = () => {
         <FloatingPaths position={-1} />
       </div>
 
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md' : ''}`}>
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <img src={logo} alt="LimitLess" className="h-8 w-auto" />
-          </div>
-          <button 
-            onClick={() => navigate('/select-type')}
-            className="group relative bg-gradient-to-b from-black/10 to-white/10 
-                      dark:from-white/10 dark:to-black/10 p-px rounded-2xl backdrop-blur-lg 
-                      overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-          >
-            <span className="inline-block px-6 py-2 rounded-[1.15rem] text-sm font-semibold 
-                           backdrop-blur-md bg-white/95 hover:bg-white/100 dark:bg-black/95 
-                           dark:hover:bg-black/100 text-black dark:text-white transition-all 
-                           duration-300 group-hover:-translate-y-0.5">
-              Get Started
-              <span className="ml-2 opacity-70 group-hover:opacity-100 
-                             group-hover:translate-x-1.5 transition-all duration-300">
-                →
-              </span>
-            </span>
-          </button>
-        </div>
-      </nav>
+      <Navbar scrolled={scrolled} />
 
       <div className="flex items-center justify-center min-h-screen">
         <header className="relative z-10 container mx-auto px-4">
