@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@vercel/analytics": "^1.5.0",
     "chalk": "^5.4.1",
     "es-abstract": "^1.23.9",
     "framer-motion": "^12.4.7",
@@ -16,6 +17,7 @@
     "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
     "recharts": "^2.10.4",
+    "typescript": "^5.8.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
