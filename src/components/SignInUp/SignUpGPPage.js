@@ -3,12 +3,12 @@
 import { useState, useRef } from "react"
 import { motion } from "framer-motion"
 import { Eye, EyeOff, ArrowRight, Building2 } from "lucide-react"
-import { Button } from "./ui/button"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+import { Label } from "../ui/label"
 import { useNavigate } from "react-router-dom"
 
-export default function SignUpGPPage() {
+export const SignUpGPPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [step, setStep] = useState(1)
   const navigate = useNavigate()

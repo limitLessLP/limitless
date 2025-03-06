@@ -13,7 +13,17 @@ module.exports = {
     'text-green-400'
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        shine: {
+          "0%": { transform: "translateX(-200%)" },
+          "100%": { transform: "translateX(200%)" }
+        }
+      },
+      animation: {
+        shine: "shine 4s linear infinite"
+      }
+    }
   },
   plugins: [],
 };

@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Eye, EyeOff, ArrowRight } from "lucide-react"
-import { Button } from "./ui/button"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+import { Label } from "../ui/label"
 import { useNavigate } from "react-router-dom"
 
-export default function SignUpPage() {
+export const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 

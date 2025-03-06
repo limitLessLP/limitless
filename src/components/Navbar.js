@@ -4,7 +4,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import logo from '../assets/logo.png'
+import logoBlack from '../assets/logoBlack.png'
 
 export default function Navbar({ scrolled }) {
   const navigate = useNavigate()
@@ -20,7 +20,6 @@ export default function Navbar({ scrolled }) {
   const companyItems = [
     { label: "About Us", href: "/about" },
     { label: "Team", href: "/team" },
-    { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" },
   ]
 
@@ -32,7 +31,7 @@ export default function Navbar({ scrolled }) {
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md' : ''}`}>
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center gap-8">
-          <img src={logo} alt="LimitLess" className="h-8 w-auto" />
+          <img src={logoBlack} alt="LimitLess" className="h-8 w-auto" />
           
           {/* Resources Dropdown */}
           <div className="relative">

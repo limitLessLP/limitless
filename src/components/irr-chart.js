@@ -21,12 +21,20 @@ const data = [
 export function IRRChart() {
   const [hoveredAsset, setHoveredAsset] = useState(null)
 
+  // const assetColors = {
+  //   VC: "hsl(var(--chart-1))",
+  //   PE: "hsl(var(--chart-2))",
+  //   Stocks: "hsl(var(--chart-3))",
+  //   Bonds: "hsl(var(--chart-4))",
+  // }
+
   const assetColors = {
-    VC: "hsl(var(--chart-1))",
-    PE: "hsl(var(--chart-2))",
-    Stocks: "hsl(var(--chart-3))",
-    Bonds: "hsl(var(--chart-4))",
+    VC: "hsl(142, 76%, 36%)", // Green
+    PE: "#000000", // Black
+    Stocks: "#000000", // Black
+    Bonds: "#000000", // Black
   }
+
 
   return (
     <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg">

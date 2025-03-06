@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { Eye, EyeOff, ArrowRight } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
-export default function SignInPage() {
+export const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
