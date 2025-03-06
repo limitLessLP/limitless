@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react";
-import LandingPage from './components/LandingPage';
+import LandingPage from './components/Landing/LandingPage';
 import UserTypeSelection from './components/UserTypeSelection';
 import { TeamPage } from './components/Team';
 import { SignUpPage } from './components/SignInUp/SignUpPage';

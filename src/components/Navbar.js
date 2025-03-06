@@ -4,9 +4,10 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import logo from '../assets/logo.png'
 import logoBlack from '../assets/logoBlack.png'
 
-export default function Navbar({ scrolled }) {
+export const Navbar = ({ scrolled, isFirstSection }) => {
   const navigate = useNavigate()
   const [openDropdown, setOpenDropdown] = useState(null)
 
@@ -28,16 +29,21 @@ export default function Navbar({ scrolled }) {
   }
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md' : ''}`}>
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <div className="flex items-center gap-8">
-          <img src={logoBlack} alt="LimitLess" className="h-8 w-auto" />
-          
-          {/* Resources Dropdown */}
-          <div className="relative">
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      scrolled ? 'bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md' : ''
+    }`}>
+      <div className={`container mx-auto px-4 py-4 transition-colors ${
+        isFirstSection ? 'text-black dark:text-white' : 'text-white'
+      }`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <img src={isFirstSection ? logo : logoBlack} alt="LimitLess" className="h-10 w-auto" /> 
+  
+            {/* Resources Dropdown */}
+            <div className="relative">
             <button
               onClick={() => handleDropdownClick('resources')}
-              className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
+              className="flex items-center gap-1 text-sm text-white hover:text-white/80 transition-colors" /* Updated text color */
             >
               Resources
               <ChevronDown
@@ -47,10 +53,7 @@ export default function Navbar({ scrolled }) {
             <AnimatePresence>
               {openDropdown === 'resources' && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.2 }}
+                  // ... existing motion props ...
                   className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-neutral-900 rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5 overflow-hidden"
                 >
                   {resourcesItems.map((item) => (
@@ -60,8 +63,8 @@ export default function Navbar({ scrolled }) {
                         navigate(item.href)
                         setOpenDropdown(null)
                       }}
-                      className="block w-full px-4 py-3 text-left text-sm text-gray-600 dark:text-gray-300 
-                               hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+                      className="block w-full px-4 py-3 text-left text-sm text-white hover:text-white/80 
+                               hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors" /* Updated text color */
                     >
                       {item.label}
                     </button>
@@ -75,7 +78,7 @@ export default function Navbar({ scrolled }) {
           <div className="relative">
             <button
               onClick={() => handleDropdownClick('company')}
-              className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
+              className="flex items-center gap-1 text-sm text-white hover:text-white/80 transition-colors" /* Updated text color */
             >
               Company
               <ChevronDown
@@ -85,10 +88,7 @@ export default function Navbar({ scrolled }) {
             <AnimatePresence>
               {openDropdown === 'company' && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.2 }}
+                  // ... existing motion props ...
                   className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-neutral-900 rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5 overflow-hidden"
                 >
                   {companyItems.map((item) => (
@@ -98,8 +98,8 @@ export default function Navbar({ scrolled }) {
                         navigate(item.href)
                         setOpenDropdown(null)
                       }}
-                      className="block w-full px-4 py-3 text-left text-sm text-gray-600 dark:text-gray-300 
-                               hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+                      className="block w-full px-4 py-3 text-left text-sm text-white hover:text-white/80 
+                               hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors" /* Updated text color */
                     >
                       {item.label}
                     </button>
@@ -124,6 +124,7 @@ export default function Navbar({ scrolled }) {
           </span>
         </button>
       </div>
-    </nav>
+    </div>
+  </nav>
   )
-} 
+}
