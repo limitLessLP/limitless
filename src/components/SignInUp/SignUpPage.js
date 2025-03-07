@@ -3,9 +3,9 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Eye, EyeOff, ArrowRight } from "lucide-react"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
-import { Label } from "../ui/label"
+import { Button } from "../Common/button"
+import { Input } from "../Common/input"
+import { Label } from "../Common/label"
 import { useNavigate } from "react-router-dom"
 
 export const SignUpPage = () => {
