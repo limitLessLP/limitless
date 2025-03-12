@@ -74,12 +74,12 @@ export function InvestmentSlider() {
   useEffect(() => {
     const timer = setInterval(() => {
       paginate(1)
-    }, 5000)
+    }, 3000) // Increased interval duration to 8000ms (8 seconds)
     return () => clearInterval(timer)
   }, [])
 
   return (
-    <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-sm">
+    <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-sm shadow-lg" style={{ height: '400px' }}>
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={currentIndex}
@@ -104,7 +104,7 @@ export function InvestmentSlider() {
               paginate(-1)
             }
           }}
-          className="p-8"
+          className="absolute inset-0 p-16 shadow-lg" // Added shadow-lg class here
         >
           <div className="grid md:grid-cols-3 gap-8">
             <div className="md:col-span-1">
@@ -131,7 +131,7 @@ export function InvestmentSlider() {
                 <button className="px-6 py-2 border border-white/20 rounded-lg hover:bg-white/5 transition-colors">
                   Learn More
                 </button>
-                <button className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors">
+                <button className="px-6 py-2 bg-green-700 rounded-lg hover:bg-green-800 transition-colors text-white hover:text-white/80">
                   Invest Now
                 </button>
               </div>
@@ -157,4 +157,4 @@ export function InvestmentSlider() {
       </div>
     </div>
   )
-} 
+}

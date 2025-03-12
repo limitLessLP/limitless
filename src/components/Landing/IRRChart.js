@@ -37,7 +37,7 @@ export function IRRChart() {
 
 
   return (
-    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg">
+    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg z-1000">
       <div className="mb-8">
         <h3 className="text-2xl font-light mb-4">Internal Rate of Return (IRR) Comparison</h3>
         <p className="text-gray-400 font-light">
@@ -45,7 +45,7 @@ export function IRRChart() {
         </p>
       </div>
 
-      <div className="h-[400px]">
+      <div className="h-[275px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />

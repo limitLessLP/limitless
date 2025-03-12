@@ -13,11 +13,11 @@ export default function Background() {
     const navigate = useNavigate();
     const [isVisible, setIsVisible] = useState(false)
 
-    const dataPoints = [15, 25, 20, 35, 30, 45, 55, 50, 70, 90]
+    const dataPoints = [5, 10, 15, 20, 25, 20, 25, 30, 35, 30, 40, 45, 60, 65, 70, 60, 75, 80, 75, 80, 85, 90]
 
     const calculateLinePath = () => {
-        const width = 1000
-        const height = 400
+        const width = 1175
+        const height = 435
         const xStep = width / (dataPoints.length - 1)
 
         return dataPoints
@@ -32,14 +32,6 @@ export default function Background() {
         setIsVisible(true)
     }, [])
 
-    const [showAxes, setShowAxes] = useState(true);
-
-    useEffect(() => {
-        if (!isVisible) {
-            setShowAxes(true); 
-        }
-    }, [isVisible]);
-
     return (
         <div className="relative w-full h-screen flex flex-col overflow-hidden">
             {/* Mountain background image */}
@@ -52,94 +44,100 @@ export default function Background() {
             {/* Overlay with slight transparency */}
             <div className="absolute inset-0 bg-black/40" />
 
-            {/* SVG for the graph */}
-            <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-                {showAxes && (
-                    <>
-                        {/* Y-axis */}
-                        <motion.line
-                            x1="0%"
-                            y1="100%"
-                            x2="0%"
-                            y2="0%"
-                            stroke="white"
-                            strokeWidth="2"
-                            initial={{ pathLength: 0, strokeOpacity: 1 }}
-                            animate={{ pathLength: isVisible ? 1 : 0, strokeOpacity: isVisible ? 1 : 0 }}
-                            transition={{ duration: 2, ease: "easeInOut" }}
-                            onAnimationComplete={() => setShowAxes(false)}
-                        />
-
-                        {/* X-axis */}
-                        <motion.line
-                            x1="0%"
-                            y1="100%"
-                            x2="100%"
-                            y2="100%"
-                            stroke="white"
-                            strokeWidth="2"
-                            initial={{ pathLength: 0, strokeOpacity: 1 }}
-                            animate={{ pathLength: isVisible ? 1 : 0, strokeOpacity: isVisible ? 1 : 0 }}
-                            transition={{ duration: 2, ease: "easeInOut" }}
-                            onAnimationComplete={() => setShowAxes(false)}
-                        />
-                    </>
-                )}
-
-                {/* Graph line */}
-                <motion.path
-                    d={calculateLinePath()}
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    initial={{
-                        pathLength: 0,
-                        y: 400,
-                        x: 0
-                    }}
-                    animate={{
-                        pathLength: isVisible ? 1 : 0,
-                        y: 0,
-                        x: 0
-                    }}
-                    transition={{
-                        duration: 3,
-                        ease: "easeOut",
-                        delay: 0.5
-                    }}
-                />
-
-                {/* Area under the graph */}
-                <motion.path
-                    d={`${calculateLinePath()} L ${window.innerWidth},400 L 0,400 Z`}
-                    fill="url(#areaGradient)"
-                    opacity="0.2"
-                    initial={{
-                        opacity: 0,
-                        y: 400,
-                        x: 0
-                    }}
-                    animate={{
-                        opacity: isVisible ? 0.2 : 0,
-                        y: 0,
-                        x: 0
-                    }}
-                    transition={{
-                        duration: 3,
-                        ease: "easeOut",
-                        delay: 0.5
-                    }}
-                />
-
-                {/* Gradient definitions */}
+              {/* SVG for the graph */}
+              <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
                 <defs>
-                    <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="white" stopOpacity="0.3" />
-                        <stop offset="100%" stopColor="white" stopOpacity="0.05" />
-                    </linearGradient>
-                </defs>
+                  <marker
+                    id="arrowhead"
+                    markerWidth="10"
+                    markerHeight="7"
+                    refX="5"
+                    refY="3.5"
+                    orient="auto"
+                    markerUnits="strokeWidth"
+                  >
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
+                </marker>
+              </defs>
+
+            <motion.path
+                d={calculateLinePath()}
+                fill="none"
+                stroke="white"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                initial={{
+                    pathLength: 0,
+                    y: 400,
+                    x: 0
+                }}
+                animate={{
+                    pathLength: isVisible ? 1 : 0,
+                    y: 0,
+                    x: 0
+                }}
+                transition={{
+                    duration: 3,
+                    ease: "easeOut",
+                    delay: 0.5
+                }}
+            />
+
+            <motion.path
+                d={`${calculateLinePath()} L ${window.innerWidth},400 L 0,400 Z`}
+                fill="url(#areaGradient)"
+                opacity="0.2"
+                initial={{
+                    opacity: 0,
+                    y: 400,
+                    x: 0
+                }}
+                animate={{
+                    opacity: isVisible ? 0.2 : 0,
+                    y: 0,
+                    x: 0
+                }}
+                transition={{
+                    duration: 3,
+                    ease: "easeOut",
+                    delay: 0.5
+                }}
+            />
+
+            {/* Arrow at the tip of the line */}
+            <motion.line
+                x1="0%"
+                y1="100%"
+                x2="100%"
+                y2="100%"
+                stroke="white"
+                strokeWidth="4"
+                markerEnd="url(#arrowhead)"
+                initial={{
+                    pathLength: 0,
+                    y: 400,
+                    x: 0
+                }}
+                animate={{
+                    pathLength: isVisible ? 1 : 0,
+                    y: 0,
+                    x: 0
+                }}
+                transition={{
+                    duration: 3,
+                    ease: "easeOut",
+                    delay: 0.5
+                }}
+            />
+
+            {/* Gradient definitions */}
+              <defs>
+                  <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="white" stopOpacity="0.3" />
+                      <stop offset="100%" stopColor="white" stopOpacity="0.05" />
+                  </linearGradient>
+              </defs>
             </svg>
 
             {/* Centered text */}

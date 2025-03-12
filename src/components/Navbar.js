@@ -6,8 +6,6 @@ import { ChevronDown } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 export function Navbar({ section }) {
-  const isFirstSection = section === 'hero'
-
   const navigate = useNavigate();
 
   const [openDropdown, setOpenDropdown] = useState(null)
@@ -87,9 +85,7 @@ export function Navbar({ section }) {
                           navigate(item.href)
                           setOpenDropdown(null)
                         }}
-                        className={`block w-full px-4 py-3 text-left text-sm ${
-                          isFirstSection ? 'text-black hover:text-black/80' : 'text-white hover:text-white/80'
-                        } hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors`}
+                        className={`block w-full px-4 py-3 text-left text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors`}
                       >
                         {item.label}
                       </button>
@@ -120,7 +116,7 @@ export function Navbar({ section }) {
                           navigate(item.href)
                           setOpenDropdown(null)
                         }}
-                        className={`block w-full px-4 py-3 text-left text-sm ${getTextColor()} hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors`}
+                        className={`block w-full px-4 py-3 text-left text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors`}
                       >
                         {item.label}
                       </button>

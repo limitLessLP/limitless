@@ -5,26 +5,25 @@ import { IRRChart } from "./IRRChart"
 
 export function PerformanceSection() {
   return (
-    <div className="w-full pt-60 bg-white">
-      <div className="container mx-auto px-4">
+    <div className="w-full pt-40 bg-white z-1000">
+      <div className="container mx-auto">
+        <div className="max-w-4xl mx-auto">
+          <IRRChart /> {/* Adjust the height as needed */}
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center pt-10"
         >
-          <p className="text-xl text-gray-400 font-light leading-relaxed max-w-3xl mx-auto">
+          <p className="text-xl text-black font-light leading-relaxed max-w-3xl mx-auto">
             Only top-quartile funds consistently outperform public indexes. Identifying and accessing those top
             managers, therefore, is critical to your success.
           </p>
         </motion.div>
-
-        <div className="max-w-5xl mx-auto">
-          <IRRChart />
-        </div>
       </div>
     </div>
   )
 }
-
