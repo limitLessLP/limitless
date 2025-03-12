@@ -7,6 +7,7 @@ import { Button } from "../Common/button"
 import { Input } from "../Common/input"
 import { Label } from "../Common/label"
 import { useNavigate } from "react-router-dom"
+import { TrendAnimation } from "./TrendAnimation"
 
 export const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -22,35 +23,7 @@ export const SignUpPage = () => {
           </h1>
         </div>
 
-        <div className="relative h-96 z-0">
-          {/* Animated circles */}
-          <motion.svg className="absolute w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <motion.path
-              d="M0,50 C20,20 50,70 100,50 L100,100 L0,100 Z"
-              fill="none"
-              stroke="rgba(255,255,255,0.2)"
-              strokeWidth="0.5"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{
-                pathLength: 1,
-                opacity: 1,
-                d: [
-                  "M0,50 C20,20 50,70 100,50 L100,100 L0,100 Z",
-                  "M0,50 C50,30 80,80 100,50 L100,100 L0,100 Z",
-                  "M0,50 C20,20 50,70 100,50 L100,100 L0,100 Z",
-                ],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Number.POSITIVE_INFINITY,
-                repeatType: "reverse",
-                ease: "easeInOut",
-              }}
-            />
-          </motion.svg>
-        </div>
-
-        <div className="space-y-4 z-10">
+        <div className="space-y-2 z-10"> {/* Adjusted margin-top */}
           <h2 className="text-4xl font-bold bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
             Create your account
           </h2>
@@ -59,6 +32,8 @@ export const SignUpPage = () => {
             starts here.
           </p>
         </div>
+
+        <TrendAnimation />
       </div>
 
       {/* Right side with form */}
@@ -165,4 +140,4 @@ export const SignUpPage = () => {
       </div>
     </div>
   )
-} 
+}

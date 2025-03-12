@@ -7,6 +7,7 @@ import { Button } from "../Common/button"
 import { Input } from "../Common/input"
 import { Label } from "../Common/label"
 import { useNavigate } from "react-router-dom"
+import { TrendAnimation } from "./TrendAnimation"
 
 export const SignUpGPPage = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -56,6 +57,7 @@ export const SignUpGPPage = () => {
         </div>
 
         <div className="space-y-4 z-10">
+          <TrendAnimation />
           <h2 className="text-4xl font-bold bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
             Register Your VC Firm
           </h2>
