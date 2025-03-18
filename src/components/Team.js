@@ -1,14 +1,12 @@
 import jackyPhoto from '../assets/jacky.jpg';
 import royPhoto from '../assets/roy.JPG';
-import { Linkedin, ArrowLeft } from 'lucide-react';
+import { Linkedin } from 'lucide-react';
+import { Navbar } from './Navbar';
 
 export const TeamPage = () => {
     return (
         <>
-        <a href="/" className="inline-flex items-center gap-2 text-black hover:text-gray-500 transition-colors mb-12 mt-8 ml-8">
-            <ArrowLeft size={20} />
-            <span>Back</span>
-        </a>
+        <Navbar />
         <section className="relative z-10 py-32 border-t border-white/10">
         <div className="container mx-auto px-4">
           <div className="text-center mb-20">

@@ -1,15 +1,11 @@
 import { Globe, Activity, LineChart } from 'lucide-react';
-import { ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Navbar } from './Navbar';
 
 export const AboutUsPage = () => {
     return (
         <>
-        <a href="/" className="inline-flex items-center gap-2 text-black hover:text-gray-500 transition-colors mb-12 mt-8 ml-8">
-            <ArrowLeft size={20} />
-            <span>Back</span>
-        </a>
-        {/* Vision Section - Keep but simplified */}
+        <Navbar />
         <section className="relative z-10 py-32 px-8 border-t border-white/10">
             <div className="text-center mb-20">
                 <div className="mt-32">

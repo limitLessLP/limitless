@@ -7,6 +7,9 @@ import { SignUpPage } from './components/SignInUp/SignUpPage';
 import { SignUpGPPage } from './components/SignInUp/SignUpGPPage';
 import { SignInPage } from './components/SignInUp/SignInPage';
 import { AboutUsPage } from './components/AboutUs';
+import { InvestorEducationPage } from './components/LearnMore/LearnMoreInvestor';
+import { LearnMorePage } from './components/LearnMore/LearnMoreVC';
+import { FAQDropdown } from './components/LearnMore/FAQ';
 
 
 function App() {
@@ -20,6 +23,9 @@ function App() {
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/about" element={<AboutUsPage />} />
+        <Route path="/learn-more-investor" element={<InvestorEducationPage />} />
+        <Route path="/learn-more-gp" element={<LearnMorePage />} />
+        <Route path="/faq" element={<FAQDropdown />} />
       </Routes>
       <Analytics />
     </Router>

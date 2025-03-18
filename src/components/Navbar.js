@@ -25,7 +25,7 @@ export function Navbar({ section }) {
 
   const resourcesItems = [
     { label: "Learn More - Investors", href: "/learn-more-investor" },
-    { label: "Learn More - VCs", href: "/learn-more-vc" },
+    { label: "Learn More - VCs", href: "/learn-more-gp" },
     { label: "Blog", href: "/blog" },
     { label: "FAQ", href: "/faq" },
   ]
@@ -60,9 +60,12 @@ export function Navbar({ section }) {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <h1 href="/" className={`text-2xl font-bold ${getTextColor()}`}>
+            <button
+              onClick={() => navigate("/")}
+              className={`text-2xl font-bold ${getTextColor()}`}
+            >
               LimitLess
-            </h1>
+            </button>
 
             {/* Resources Dropdown */}
             <div className="relative">
