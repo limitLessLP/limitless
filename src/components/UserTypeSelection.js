@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Building2, Users } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const UserTypeSelection = () => {
   const navigate = useNavigate();
@@ -12,6 +13,17 @@ const UserTypeSelection = () => {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl bg-blue-500/10 animate-pulse-slow" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl bg-purple-500/10 animate-float" />
       </div>
+
+      <button className="absolute top-4 left-4">
+        <motion.a 
+          whileHover={{ scale: 1.1 }}
+          onClick={() => navigate('/')}
+          className="flex items-center text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+        >
+          <ArrowRight className="rotate-180 mr-2" />
+          <span>Back to Home</span>
+        </motion.a>
+      </button>
 
       <div className="relative z-10 container mx-auto px-4 py-32">
         <motion.div 
