@@ -2,6 +2,7 @@ import jackyPhoto from '../assets/jacky.jpg';
 import royPhoto from '../assets/roy.JPG';
 import { Linkedin } from 'lucide-react';
 import { Navbar } from './Navbar';
+import { Footer } from './Footer/Footer';
 
 export const TeamPage = () => {
     return (
@@ -64,6 +65,10 @@ export const TeamPage = () => {
             ))}
           </div>
           </div>
+          </section>
+
+          <section className="h-screen snap-start relative z-10">
+            <Footer />
           </section>
         </>
         

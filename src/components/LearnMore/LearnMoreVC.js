@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Globe, Activity, Users } from 'lucide-react';
 import { Navbar } from '../Navbar';
-
+import { Footer } from '../Footer/Footer';
 
 const ParallaxSection = ({ children, className = "" }) => {
   const [offset, setOffset] = useState(0);
@@ -231,20 +231,9 @@ export const LearnMorePage = () => {
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-black/10 snap-start">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-between items-center">
-            <div className="text-sm text-gray-400">
-              © 2024 LimitLess. All rights reserved.
-            </div>
-            <div className="flex gap-6">
-            <a href="/terms" className="text-gray-400 hover:text-black transition">Terms</a>
-            <a href="/privacy" className="text-gray-400 hover:text-black transition">Privacy</a>
-            <a href="/contact" className="text-gray-400 hover:text-black transition">Contact</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <section className="h-screen snap-start relative z-10">
+          <Footer />
+        </section>
     </div>
   );
 };

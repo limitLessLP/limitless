@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Navbar } from "../Navbar";
+import { Footer } from "../Footer/Footer";
 
 const sections = [
   {
@@ -37,7 +38,7 @@ export const FAQDropdown = () => {
 
   return (
     <>      
-    <Navbar />
+    <Navbar section="faq"/>
     <div className="max-w-2xl mx-auto p-4 text-center pt-60">
       <h1 className="text-4xl font-bold mb-2">Frequently Asked Questions</h1>
       <p className="text-lg mb-4">What do you need help with?</p>
@@ -76,6 +77,9 @@ export const FAQDropdown = () => {
         )
       ))}
     </div>
+    <section className="h-screen snap-start relative z-10">
+          <Footer />
+    </section>
     </>
   );
 }

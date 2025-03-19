@@ -1,6 +1,7 @@
 import { Globe, Activity, LineChart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Navbar } from './Navbar';
+import { Footer } from './Footer/Footer';
 
 export const AboutUsPage = () => {
     return (
@@ -56,6 +57,10 @@ export const AboutUsPage = () => {
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section className="h-screen snap-start relative z-10">
+          <Footer />
         </section>
         </>
         

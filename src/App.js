@@ -11,7 +11,6 @@ import { InvestorEducationPage } from './components/LearnMore/LearnMoreInvestor'
 import { LearnMorePage } from './components/LearnMore/LearnMoreVC';
 import { FAQDropdown } from './components/LearnMore/FAQ';
 
-
 function App() {
   return (
     <Router>

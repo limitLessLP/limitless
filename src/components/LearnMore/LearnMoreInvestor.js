@@ -10,6 +10,7 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { Navbar } from '../Navbar';
+import { Footer } from '../Footer/Footer';
 
 const AIAssistant = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
@@ -240,6 +241,10 @@ export const InvestorEducationPage = () => {
       </main>
 
       <AIAssistant isOpen={showAssistant} onClose={() => setShowAssistant(false)} />
+        
+      <section className="h-screen snap-start relative z-10">
+          <Footer />
+        </section>
     </div>
   );
 };
