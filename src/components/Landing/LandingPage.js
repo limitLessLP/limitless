@@ -10,6 +10,22 @@ import { Footer } from '../Footer/Footer';
 
 const LandingPage = () => {
   const [currentSection, setCurrentSection] = useState('hero');
+  const [isBackgroundRendered, setIsBackgroundRendered] = useState(false);
+  // const [animateText, setAnimateText] = useState(false);
+
+  useEffect(() => {
+      const timer = setTimeout(() => {
+          setIsBackgroundRendered(true);
+      }, 4000);
+
+      return () => clearTimeout(timer);
+  }, []);
+
+  // useEffect(() => {
+  //   if (isBackgroundRendered) {
+  //     setAnimateText(true);
+  //   }
+  // }, [isBackgroundRendered]);
 
   const heroRef = useRef(null);
   const performanceRef = useRef(null);
@@ -50,7 +66,6 @@ const LandingPage = () => {
 
 
       <div className="h-screen snap-y snap-mandatory overflow-y-scroll">
-        {/* Hero Section - Full height */}
         <section
           id="hero"
           ref={heroRef}
@@ -62,15 +77,18 @@ const LandingPage = () => {
           {/* Sticky transition effect now inside hero section */}
           <div className="sticky bottom-0 bg-white text-black text-center z-20">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, y: 50 }}
+              animate={isBackgroundRendered ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+              transition={{ duration: 1, ease: "easeInOut" }}
               className="text-center mb-4"
             >
-              <h2 className="text-4xl md:text-5xl sm:text-2xl my-8 md:my-16 z-10">
-                Performance is everything.
-              </h2>
+              {isBackgroundRendered ? (
+                <h2 className="text-4xl md:text-5xl sm:text-2xl my-8 md:my-16 z-10">
+                  Performance is everything.
+                </h2>
+              ) : (
+                <p className="h-40"></p>
+              )}
             </motion.div>
           </div>
         </section>
