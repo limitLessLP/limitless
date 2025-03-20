@@ -10,6 +10,7 @@ import { AboutUsPage } from './components/AboutUs';
 import { InvestorEducationPage } from './components/LearnMore/LearnMoreInvestor';
 import { LearnMorePage } from './components/LearnMore/LearnMoreVC';
 import { FAQDropdown } from './components/LearnMore/FAQ';
+import { Contact } from './components/Contact';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/learn-more-investor" element={<InvestorEducationPage />} />
         <Route path="/learn-more-gp" element={<LearnMorePage />} />
         <Route path="/faq" element={<FAQDropdown />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
       <Analytics />
     </Router>

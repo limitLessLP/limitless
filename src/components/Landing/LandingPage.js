@@ -11,7 +11,6 @@ import { Footer } from '../Footer/Footer';
 const LandingPage = () => {
   const [currentSection, setCurrentSection] = useState('hero');
   const [isBackgroundRendered, setIsBackgroundRendered] = useState(false);
-  // const [animateText, setAnimateText] = useState(false);
 
   useEffect(() => {
       const timer = setTimeout(() => {
@@ -20,12 +19,6 @@ const LandingPage = () => {
 
       return () => clearTimeout(timer);
   }, []);
-
-  // useEffect(() => {
-  //   if (isBackgroundRendered) {
-  //     setAnimateText(true);
-  //   }
-  // }, [isBackgroundRendered]);
 
   const heroRef = useRef(null);
   const performanceRef = useRef(null);
@@ -74,7 +67,6 @@ const LandingPage = () => {
           <div className="flex-grow flex flex-col items-center">
             <Background />
           </div>
-          {/* Sticky transition effect now inside hero section */}
           <div className="sticky bottom-0 bg-white text-black text-center z-20">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -101,7 +93,6 @@ const LandingPage = () => {
           <PerformanceSection />
         </section>
           
-          {/* Current Offerings Section */}
         <section id="offeringsRef" ref={offeringsRef} className="min-h-screen snap-start flex flex-col relative z-10">
           <CurrentOfferings />
         </section>
