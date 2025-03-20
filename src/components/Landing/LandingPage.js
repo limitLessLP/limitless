@@ -68,7 +68,7 @@ const LandingPage = () => {
               transition={{ duration: 0.8 }}
               className="text-center mb-4"
             >
-              <h2 className="text-5xl fmd:text-2xl my-16 z-10">
+              <h2 className="text-4xl md:text-5xl sm:text-2xl my-8 md:my-16 z-10">
                 Performance is everything.
               </h2>
             </motion.div>
@@ -88,7 +88,7 @@ const LandingPage = () => {
           <CurrentOfferings />
         </section>
 
-        <section className="h-screen snap-start relative z-10">
+        <section className="snap-start relative z-10">
           <Footer />
         </section>
       </div>

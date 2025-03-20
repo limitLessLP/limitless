@@ -26,7 +26,7 @@ export function Navbar({ section }) {
   const resourcesItems = [
     { label: "Learn More - Investors", href: "/learn-more-investor" },
     { label: "Learn More - VCs", href: "/learn-more-gp" },
-    { label: "Blog", href: "/blog" },
+    // { label: "Blog", href: "/blog" },
     { label: "FAQ", href: "/faq" },
   ]
 
@@ -73,7 +73,7 @@ export function Navbar({ section }) {
                 onClick={() => handleDropdownClick('resources')}
                 className={`flex items-center gap-1 text-sm ${getTextColor()} transition-colors`}
               >
-                Resources
+                Investing
                 <ChevronDown className={`h-4 w-4 transition-transform ${openDropdown === 'resources' ? 'rotate-180' : ''}`} />
               </button>
               <AnimatePresence>

@@ -12,18 +12,41 @@ import { TrendAnimation } from "./TrendAnimation"
 export const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
+  const [firmName, setFirmName] = useState("")
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [position, setPosition] = useState("")
+  const [businessEmail, setBusinessEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [password, setPassword] = useState("")
+
+  function isAllFieldsEmpty(...fields) {
+    return fields.every(field => !field.trim())
+  }
 
   return (
     <div className="flex min-h-screen">
       {/* Left side with animations */}
       <div className="hidden lg:flex lg:w-1/2 bg-white p-12 flex-col justify-between relative overflow-hidden">
         <div className="z-10">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
+          <button
+            onClick={() => {
+              if (isAllFieldsEmpty(firmName, firstName, lastName, position, businessEmail, phone, password)) {
+                navigate("/")
+              } else {
+                const confirmed = window.confirm("Discard unsaved changes?")
+                if (confirmed) {
+                  navigate("/")
+                }
+              }
+            }}
+            className="text-3xl font-bold bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent"
+          >
             Limitless
-          </h1>
+          </button>
         </div>
 
-        <div className="space-y-2 z-10"> {/* Adjusted margin-top */}
+        <div className="space-y-2 z-10">
           <h2 className="text-4xl font-bold bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
             Create your account
           </h2>
@@ -46,6 +69,18 @@ export const SignUpPage = () => {
           </div>
 
           <form className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="firmName">Firm Name</Label>
+              <Input
+                id="firmName"
+                placeholder="Enter firm name"
+                className="h-12 border-gray-300 focus:border-gray-500"
+                required
+                value={firmName}
+                onChange={e => setFirmName(e.target.value)}
+              />
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First name</Label>
@@ -54,6 +89,8 @@ export const SignUpPage = () => {
                   placeholder="Enter your first name"
                   className="h-12 border-gray-300 focus:border-gray-500"
                   required
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
@@ -63,18 +100,34 @@ export const SignUpPage = () => {
                   placeholder="Enter your last name"
                   className="h-12 border-gray-300 focus:border-gray-500"
                   required
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="position">Position</Label>
               <Input
-                id="email"
+                id="position"
+                placeholder="e.g. Managing Partner"
+                className="h-12 border-gray-300 focus:border-gray-500"
+                required
+                value={position}
+                onChange={e => setPosition(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="businessEmail">Business Email</Label>
+              <Input
+                id="businessEmail"
                 type="email"
                 placeholder="you@example.com"
                 className="h-12 border-gray-300 focus:border-gray-500"
                 required
+                value={businessEmail}
+                onChange={e => setBusinessEmail(e.target.value)}
               />
             </div>
 
@@ -86,6 +139,8 @@ export const SignUpPage = () => {
                 placeholder="(123) 456-7890"
                 className="h-12 border-gray-300 focus:border-gray-500"
                 required
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
               />
             </div>
 
@@ -98,6 +153,8 @@ export const SignUpPage = () => {
                   placeholder="Create a secure password"
                   className="h-12 border-gray-300 focus:border-gray-500 pr-10"
                   required
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -123,18 +180,6 @@ export const SignUpPage = () => {
                 <ArrowRight className="h-4 w-4" />
               </motion.div>
             </Button>
-
-            <div className="text-center mt-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Already have an account?{" "}
-                <button
-                  onClick={() => navigate("/signin")}
-                  className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
-                >
-                  Sign in
-                </button>
-              </p>
-            </div>
           </form>
         </div>
       </div>

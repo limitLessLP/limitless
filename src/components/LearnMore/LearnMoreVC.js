@@ -231,7 +231,7 @@ export const LearnMorePage = () => {
         </div>
       </section>
 
-      <section className="h-screen snap-start relative z-10">
+      <section className="snap-start relative z-10">
           <Footer />
         </section>
     </div>
