@@ -7,6 +7,10 @@ import { ArrowRight } from 'lucide-react';
 const UserTypeSelection = () => {
   const navigate = useNavigate();
 
+  const handleInvestorClick = () => {
+    navigate("/signup") // Regular signup instead of GP signup
+  }
+
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950 text-black dark:text-white relative overflow-hidden">
       <div className="absolute inset-0">
@@ -64,7 +68,7 @@ const UserTypeSelection = () => {
             whileHover={{ scale: 1.02 }}
             className="group relative bg-gradient-to-b from-black/10 to-white/10 dark:from-white/10 dark:to-black/10 
               p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
-            onClick={() => navigate('/signup')}
+            onClick={handleInvestorClick}
           >
             <div className="p-8 rounded-[1.15rem] backdrop-blur-md bg-white/95 dark:bg-black/95 h-full">
               <Users className="w-12 h-12 mb-6 text-purple-500" />

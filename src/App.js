@@ -13,6 +13,12 @@ import { FAQDropdown } from './components/LearnMore/FAQ';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Contact from './pages/Contact';
+import { MFAVerification } from "./components/SignInUp/MFAVerification"
+import { LPDashboard } from "./components/Dashboard/LPDashboard"
+import { WelcomeAnimation } from './components/Dashboard/WelcomeAnimation';
+import { Portfolio } from "./components/Dashboard/Portfolio"
+import { Offerings } from "./components/Dashboard/Offerings"
+import { Account } from "./components/Dashboard/Account"
 
 function App() {
   return (
@@ -31,6 +37,12 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/mfa-verification" element={<MFAVerification />} />
+        <Route path="/dashboard" element={<LPDashboard />} />
+        <Route path="/welcome" element={<WelcomeAnimation />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/offerings" element={<Offerings />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
       <Analytics />
     </Router>
