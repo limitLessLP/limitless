@@ -104,28 +104,16 @@ export function InvestmentSlider() {
               paginate(-1)
             }
           }}
-          className="absolute inset-0 p-16 shadow-lg" // Added shadow-lg class here
+          className="absolute inset-0 p-16 shadow-lg"
         >
           <div className="grid md:grid-cols-3 gap-8">
             <div className="md:col-span-1">
-              <h3 className="text-2xl font-light mb-4">{currentInvestment.title}</h3>
-              <div className="grid grid-cols-3 gap-4 w-full">
-                <div className="text-center">
-                  <p className="text-xs text-gray-400">Target</p>
-                  <p className="text-lg font-medium">{currentInvestment.stats.target}</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs text-gray-400">Target IRR</p>
-                  <p className="text-lg font-medium">{currentInvestment.stats.irr}</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs text-gray-400">Vintage</p>
-                  <p className="text-lg font-medium">{currentInvestment.stats.vintage}</p>
-                </div>
-              </div>
+              <h3 className="text-2xl font-light mb-4">Early Stage Fund</h3>
+              <p className="text-lg font-medium">{currentInvestment.title}</p>
             </div>
+           
 
-            <div className="md:col-span-2">
+            <div className="md:col-span-1">
               <p className="text-gray-400 font-light mb-8">{currentInvestment.description}</p>
               <div className="flex gap-4">
                 <button className="px-6 py-2 border border-white/20 rounded-lg hover:bg-white/5 transition-colors">
@@ -134,6 +122,21 @@ export function InvestmentSlider() {
                 <button className="px-6 py-2 bg-green-700 rounded-lg hover:bg-green-800 transition-colors text-white hover:text-white/80">
                   Invest Now
                 </button>
+              </div>
+            </div>
+
+            <div className="md:col-span-2 grid grid-cols-3 gap-4 w-full">
+              <div className="text-center">
+                <p className="text-xs text-gray-400">Target</p>
+                <p className="text-lg font-medium">{currentInvestment.stats.target}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xs text-gray-400">Target IRR</p>
+                <p className="text-lg font-medium">{currentInvestment.stats.irr}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xs text-gray-400">Vintage</p>
+                <p className="text-lg font-medium">{currentInvestment.stats.vintage}</p>
               </div>
             </div>
           </div>
