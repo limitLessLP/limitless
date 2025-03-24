@@ -52,31 +52,31 @@ export const TeamPage = () => {
               key={idx}
               src={item.src}
               alt={item.alt}
-              className={`absolute w-24 h-24 object-contain shadow-lg ${item.style}`}
+              className={`absolute object-contain shadow-lg ${item.style} ${item.alt === 'Y Combinator' || item.alt === 'Plug and Play' || item.alt === 'Stanford' ? 'w-32 h-32' : 'w-24 h-24'}`}
             />
           ))}
         </div>
 
-        {/* Jacky Foreground Photo */}
-        <div className="absolute top-1/4 left-1/4 group z-10">
-          <img
-            src={jackyPhoto}
-            alt="Jacky Zhao"
-            className="w-36 h-36 rounded-xl object-cover shadow-xl"
-          />
-          <a
-            href="https://linkedin.com/in/jackyzhao"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-sm text-white rounded-xl transition duration-300"
-          >
-            <Linkedin className="mx-2" size={16} />
-            Connect on LinkedIn
-          </a>
-        </div>
+          {/* Jacky Foreground Photo */}
+          <div className="absolute top-36 left-1/4 group z-10">
+            <img
+              src={jackyPhoto}
+              alt="Jacky Zhao"
+              className="w-36 h-36 rounded-xl object-cover shadow-xl"
+            />
+            <a
+              href="https://linkedin.com/in/jackyzhao"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-sm text-white rounded-xl transition duration-300"
+            >
+              <Linkedin className="mx-2" size={16} />
+              Connect on LinkedIn
+            </a>
+          </div>
 
         {/* Roy Foreground Photo */}
-        <div className="absolute bottom-1/4 right-1/4 group z-10">
+        <div className="absolute bottom-1/4 right-1/4 group z-10 mt-4">
           <img
             src={royPhoto}
             alt="Roy Luo"
@@ -94,7 +94,7 @@ export const TeamPage = () => {
         </div>
 
         {/* Center Quote */}
-        <div className="z-10 text-center max-w-2xl px-6 py-2">
+        <div className="z-10 text-center max-w-2xl px-6 py-16">
           <p className="text-2xl sm:text-3xl font-light mb-6 leading-relaxed">
             We are building a platform that allows retail investors to access the best venture capital funds in the world.
           </p>

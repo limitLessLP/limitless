@@ -142,8 +142,8 @@ const StatsCard = ({ icon: Icon, value, label, delay = 0 }) => {
           <Icon className="w-6 h-6 text-green-900" />
         </div>
         <div>
-          <div className="text-2xl font-light text-black mb-1">{value}</div>
-          <div className="text-gray-500 text-sm">{label}</div>
+          <div className="text-4xl text-black mb-1">{value}</div>
+          <div className="text-black text-xl">{label}</div>
         </div>
       </div>
     </div>
@@ -174,19 +174,25 @@ export const InvestorEducationPage = () => {
         <div className="container mx-auto px-4">
           <header className="text-center mb-20">
             <h1 className="text-6xl font-extralight text-green-900 mb-6">
-              Your Journey into<br />
-              <span className="bg-gradient-to-r from-green-900 to-green-900 bg-clip-text text-transparent">
+              Your Journey into{' '}
+              <strong className="bg-gradient-to-r from-green-900 to-green-900 bg-clip-text text-transparent">
                 Venture Capital
-              </span>
+              </strong>
             </h1>
-            <p className="text-xl text-black max-w-2xl mx-auto">
-              Learn how to invest in premium VC funds and become part of the next generation of technology innovation.
+            <p className="text-4xl text-black max-w-2xl mx-auto">
+              To Consumers: The <strong>first</strong> marketplace to offer access to established VC funds
             </p>
           </header>
 
           <section className="mb-20 snap-start">
-            <h2 className="text-3xl font-light text-green-900 mb-10">Market Overview</h2>
+            <h2 className="text-3xl text-green-900 mb-10">Market Overview</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <StatsCard
+                icon={TrendingUp}
+                value="25.3%"
+                label="Highest avg. IRR Asset Class"
+                delay={400}
+              />
               <StatsCard
                 icon={Target}
                 value="$590Bn"
@@ -199,17 +205,11 @@ export const InvestorEducationPage = () => {
                 label="Accredited Investors"
                 delay={200}
               />
-              <StatsCard
-                icon={TrendingUp}
-                value="25.3%"
-                label="Average Annual Return"
-                delay={400}
-              />
             </div>
           </section>
 
           <section className="mb-20 snap-start">
-            <h2 className="text-3xl font-light text-green-900 mb-10">Investment Process</h2>
+            <h2 className="text-3xl text-green-900 mb-10">Investment Process</h2>
             <div className="space-y-16 bg-white text-black">
               <ProcessStep
                 icon={CheckCircle2}
