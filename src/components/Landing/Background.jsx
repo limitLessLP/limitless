@@ -113,32 +113,6 @@ const Background = React.memo(() => {
                     }}
                 />
 
-                {/* Arrow at the tip of the line */}
-                <motion.line
-                    x1="0%"
-                    y1="100%"
-                    x2="100%"
-                    y2="100%"
-                    stroke="white"
-                    strokeWidth="4"
-                    markerEnd="url(#arrowhead)"
-                    initial={{
-                        pathLength: 0,
-                        y: 400,
-                        x: 0
-                    }}
-                    animate={{
-                        pathLength: isVisible ? 1 : 0,
-                        y: 0,
-                        x: 0
-                    }}
-                    transition={{
-                        duration: 3,
-                        ease: "easeOut",
-                        delay: 0.5
-                    }}
-                />
-
                 {/* Gradient definitions */}
                 <defs>
                     <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">

@@ -7,6 +7,7 @@ import { CurrentOfferings } from './CurrentOfferings';
 import { Navbar } from "../Navbar"
 import Background from './Background';
 import { Footer } from '../Footer/Footer';
+import { FloatingPaths } from '../Animations/FloatingPaths';
 
 const LandingPage = () => {
   const [currentSection, setCurrentSection] = useState('hero');
@@ -20,12 +21,6 @@ const LandingPage = () => {
 
       return () => clearTimeout(timer);
   }, []);
-
-  // useEffect(() => {
-  //   if (isBackgroundRendered) {
-  //     setAnimateText(true);
-  //   }
-  // }, [isBackgroundRendered]);
 
   const heroRef = useRef(null);
   const performanceRef = useRef(null);
@@ -93,16 +88,22 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section
-          id="performanceRef"
+        <section 
+        id="performanceRef"
           ref={performanceRef}
           className="min-h-screen snap-start relative z-1000"
         >
           <PerformanceSection />
         </section>
           
+        {currentSection !== "hero" && <FloatingPaths position={1} />}
+
           {/* Current Offerings Section */}
-        <section id="offeringsRef" ref={offeringsRef} className="min-h-screen snap-start flex flex-col relative z-10">
+        <section 
+          id="offerings" 
+          ref={offeringsRef} 
+          className="min-h-screen snap-start flex flex-col relative"
+        >
           <CurrentOfferings />
         </section>
 

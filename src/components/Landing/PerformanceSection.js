@@ -5,9 +5,9 @@ import { IRRChart } from "./IRRChart"
 
 export function PerformanceSection() {
   return (
-    <div className="w-full pt-40 bg-white z-1000">
-      <div className="container mx-auto">
-        <div className="max-w-4xl mx-auto">
+    <div className="w-full pt-40 bg-white z-20">
+      <div className="container mx-auto relative z-30">
+        <div className="max-w-4xl mx-auto z-20">
           <IRRChart /> {/* Adjust the height as needed */}
         </div>
 

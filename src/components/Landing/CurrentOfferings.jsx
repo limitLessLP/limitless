@@ -3,7 +3,7 @@ import { InvestmentSlider } from "./InvestmentSlider"
 
 export const CurrentOfferings = () => {
     return (
-          <div className="flex-grow flex items-center">
+          <div className="flex-grow flex items-center z-20">
             <div className="container mx-auto px-4">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
