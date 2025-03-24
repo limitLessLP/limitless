@@ -1,7 +1,7 @@
 import { Globe, Activity, LineChart } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Navbar } from './Navbar';
-import { Footer } from './Footer/Footer';
+import { Navbar } from '../Navbar';
+import { Footer } from '../Footer/Footer';
 
 export const AboutUsPage = () => {
     return (

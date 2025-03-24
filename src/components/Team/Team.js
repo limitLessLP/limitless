@@ -1,14 +1,14 @@
-import jackyPhoto from '../assets/jacky.jpg';
-import royPhoto from '../assets/roy.JPG';
-import teslaLogo from '../assets/tesla.png';
-import stanfordLogo from '../assets/stanford.png';
-import uwaterlooLogo from '../assets/uwaterloo.png';
-import nfxLogo from '../assets/nfx.png';
-import ycLogo from '../assets/yc.png';
-import plugAndPlayLogo from '../assets/plugandplay.png';
+import jackyPhoto from '../../assets/jacky.jpg';
+import royPhoto from '../../assets/roy.JPG';
+import teslaLogo from '../../assets/tesla.png';
+import stanfordLogo from '../../assets/stanford.png';
+import uwaterlooLogo from '../../assets/uwaterloo.png';
+import nfxLogo from '../../assets/nfx.png';
+import ycLogo from '../../assets/yc.png';
+import plugAndPlayLogo from '../../assets/plugandplay.png';
 import { Linkedin } from 'lucide-react';
-import { Navbar } from './Navbar';
-import { Footer } from './Footer/Footer';
+import { Navbar } from '../Navbar';
+import { Footer } from '../Footer/Footer';
 
 export const TeamPage = () => {
   const logos = [
@@ -26,6 +26,10 @@ export const TeamPage = () => {
     { src: royPhoto, alt: 'Roy BG', style: 'bottom-10 right-1/4' },
     { src: teslaLogo, alt: 'Tesla BG', style: 'top-1/4 right-1/3' },
     { src: nfxLogo, alt: 'NFX BG', style: 'bottom-1/4 left-1/3' },
+    { src: stanfordLogo, alt: 'Stanford BG', style: 'top-1/4 left-1/4' },
+    { src: uwaterlooLogo, alt: 'Waterloo BG', style: 'bottom-1/4 right-1/3' },
+    { src: ycLogo, alt: 'Y Combinator BG', style: 'top-1/2 left-1/4' },
+    { src: plugAndPlayLogo, alt: 'Plug and Play BG', style: 'bottom-1/2 right-1/4' },
   ];
 
   return (
@@ -52,7 +56,7 @@ export const TeamPage = () => {
               key={idx}
               src={item.src}
               alt={item.alt}
-              className={`absolute object-contain shadow-lg ${item.style} ${item.alt === 'Y Combinator' || item.alt === 'Plug and Play' || item.alt === 'Stanford' ? 'w-32 h-32' : 'w-24 h-24'}`}
+              className={`absolute object-contain shadow-lg ${item.style} ${item.alt === 'Y Combinator' || item.alt === 'Plug and Play' || item.alt === 'Stanford' ? 'w-36 h-36' : 'w-24 h-24'}`}
             />
           ))}
         </div>

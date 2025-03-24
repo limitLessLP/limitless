@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react";
 import LandingPage from './components/Landing/LandingPage';
-import { TeamPage } from './components/Team';
+import { TeamPage } from './components/Team/Team';
 import { SignUpPage } from './components/SignInUp/SignUpPage';
 import { SignInPage } from './components/SignInUp/SignInPage';
-import { AboutUsPage } from './components/AboutUs';
+import { AboutUsPage } from './components/AboutUs/AboutUs';
 import { InvestorEducationPage } from './components/LearnMore/LearnMoreInvestor';
 import { LearnMorePage } from './components/LearnMore/LearnMoreVC';
 import { FAQDropdown } from './components/LearnMore/FAQ';
