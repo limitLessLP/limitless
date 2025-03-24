@@ -96,7 +96,9 @@ const LandingPage = () => {
           <PerformanceSection />
         </section>
           
-        {currentSection !== "hero" && <FloatingPaths position={1} />}
+        <div className={`${currentSection === "hero" ? 'hidden' : ''}`}>
+          <FloatingPaths position={1} />
+        </div>
 
           {/* Current Offerings Section */}
         <section 

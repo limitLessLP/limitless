@@ -172,7 +172,7 @@ export function Navbar({ section }) {
           </div>
 
           <button
-            onClick={() => navigate("/select-type")}
+            onClick={() => navigate("/signup")}
             className={`group relative p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 
                       ${
                         section === "hero"
