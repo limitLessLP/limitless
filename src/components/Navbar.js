@@ -51,6 +51,34 @@ export function Navbar({ section }) {
     }
   }
 
+  const containerVariants = {
+    closed: {
+      height: 0,
+      opacity: 0,
+      transition: {
+        when: "afterChildren",
+        staggerChildren: 0.2,
+        staggerDirection: -1,
+      },
+    },
+    open: {
+      height: "auto", 
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.2, 
+        delayChildren: 0.1,
+      },
+    },
+  }
+  
+  const itemVariants = {
+    hidden: { opacity: 0, x: 20 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+    exit: { opacity: 0, x: 20, transition: { duration: 0.2 } },
+  }
+    
+
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
@@ -79,23 +107,30 @@ export function Navbar({ section }) {
               <AnimatePresence>
                 {openDropdown === 'resources' && (
                   <motion.div
+                    key="resources"
+                    variants={containerVariants}
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
                     className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-neutral-900 rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5 overflow-hidden"
                   >
                     {resourcesItems.map((item) => (
-                      <button
+                      <motion.button
                         key={item.href}
+                        variants={itemVariants}
                         onClick={() => {
                           navigate(item.href)
                           setOpenDropdown(null)
                         }}
-                        className={`block w-full px-4 py-3 text-left text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors`}
+                        className="block w-full px-4 py-3 text-left text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
                       >
                         {item.label}
-                      </button>
+                      </motion.button>
                     ))}
                   </motion.div>
                 )}
               </AnimatePresence>
+
             </div>
 
             {/* Company Dropdown */}
@@ -110,19 +145,25 @@ export function Navbar({ section }) {
               <AnimatePresence>
                 {openDropdown === 'company' && (
                   <motion.div
-                    className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-neutral-900 rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5 overflow-hidden"
+                    key="resources"
+                    variants={containerVariants}
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
+                    className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-neutral-900 rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5 overflow-hidden"
                   >
                     {companyItems.map((item) => (
-                      <button
+                      <motion.button
                         key={item.href}
+                        variants={itemVariants}
                         onClick={() => {
                           navigate(item.href)
                           setOpenDropdown(null)
                         }}
-                        className={`block w-full px-4 py-3 text-left text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors`}
+                        className="block w-full px-4 py-3 text-left text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
                       >
                         {item.label}
-                      </button>
+                      </motion.button>
                     ))}
                   </motion.div>
                 )}
