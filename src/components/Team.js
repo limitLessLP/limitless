@@ -1,76 +1,109 @@
 import jackyPhoto from '../assets/jacky.jpg';
 import royPhoto from '../assets/roy.JPG';
+import teslaLogo from '../assets/tesla.png';
+import stanfordLogo from '../assets/stanford.png';
+import uwaterlooLogo from '../assets/uwaterloo.png';
+import nfxLogo from '../assets/nfx.png';
+import ycLogo from '../assets/yc.png';
+import plugAndPlayLogo from '../assets/plugandplay.png';
 import { Linkedin } from 'lucide-react';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer/Footer';
 
 export const TeamPage = () => {
-    return (
-        <>
-        <Navbar />
-        <section className="relative z-10 py-32 border-t border-white/10">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl font-extralight mb-8">Our Team</h2>
-            <p className="text-xl text-gray-400 mb-12 font-light leading-relaxed max-w-3xl mx-auto">
-              We&apos;re building a more inclusive startup ecosystem by democratizing access to venture capital investments.
-            </p>
-          </div> 
+  const logos = [
+    { src: teslaLogo, alt: 'Tesla', style: 'top-24 left-24' },
+    { src: stanfordLogo, alt: 'Stanford', style: 'top-32 right-24' },
+    { src: uwaterlooLogo, alt: 'Waterloo', style: 'bottom-24 left-32' },
+    { src: nfxLogo, alt: 'NFX', style: 'top-1/2 left-32' },
+    { src: ycLogo, alt: 'Y Combinator', style: 'bottom-24 right-24' },
+    { src: plugAndPlayLogo, alt: 'Plug and Play', style: 'bottom-1/2 right-24' },
+  ];
+  
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            {/* Team cards */}
-            {[
-              {
-                name: "Jacky Zhao",
-                role: "Co-Founder",
-                education: "Stanford Econ + BioE",
-                experience: "Previously @ NFX Capital (VC), Bregal Sagemount, YC-Healthtech",
-                linkedin: "jackyzhao",
-                photo: jackyPhoto
-              },
-              {
-                name: "Roy Luo",
-                role: "Co-Founder",
-                education: "UWaterloo ECE",
-                experience: "Previously @ Tesla, AES (Cambridge-based biotech), Lead SWE @ PropTech",
-                linkedin: "royluo",
-                photo: royPhoto
-              }
-            ].map((member) => (
-              <div key={member.name} className="group backdrop-blur-sm bg-white/5 rounded-xl p-8 transition-all duration-500 hover:scale-105 hover:bg-white/10 relative overflow-hidden">
-                <div className="flex items-start gap-8">
-                  <img
-                    src={member.photo}
-                    alt={member.name}
-                    className="w-32 h-32 rounded-xl object-cover"
-                  />
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-light mb-2">{member.name}</h3>
-                    <p className="text-blue-400 mb-4">{member.role}</p>
-                    <p className="text-gray-400 font-light mb-2">{member.education}</p>
-                    <p className="text-gray-400 font-light mb-4">{member.experience}</p>
-                    <a
-                      href={`https://linkedin.com/in/${member.linkedin}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
-                    >
-                      <Linkedin size={16} />
-                      Connect on LinkedIn
-                    </a>
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-            ))}
-          </div>
-          </div>
-          </section>
+  const backgroundItems = [
+    { src: jackyPhoto, alt: 'Jacky BG', style: 'top-10 left-1/3' },
+    { src: royPhoto, alt: 'Roy BG', style: 'bottom-10 right-1/4' },
+    { src: teslaLogo, alt: 'Tesla BG', style: 'top-1/4 right-1/3' },
+    { src: nfxLogo, alt: 'NFX BG', style: 'bottom-1/4 left-1/3' },
+  ];
 
-          <section className="snap-start relative z-10">
-            <Footer />
-          </section>
-        </>
-        
-    )
-    }
+  return (
+    <>
+      <Navbar/>
+
+      <section className="relative w-full h-screen bg-black text-white overflow-hidden flex items-center justify-center mt-20">
+      {/* BACKGROUND Blur Layer */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          {backgroundItems.map((item, idx) => (
+            <img
+              key={idx}
+              src={item.src}
+              alt={item.alt}
+              className={`absolute ${item.style} w-40 h-40 object-contain opacity-25 blur-lg brightness-75`}
+            />
+          ))}
+        </div>
+
+        {/* FOREGROUND Logos */}
+        <div className="z-10">
+          {logos.map((item, idx) => (
+            <img
+              key={idx}
+              src={item.src}
+              alt={item.alt}
+              className={`absolute w-24 h-24 object-contain shadow-lg ${item.style}`}
+            />
+          ))}
+        </div>
+
+        {/* Jacky Foreground Photo */}
+        <div className="absolute top-1/4 left-1/4 group z-10">
+          <img
+            src={jackyPhoto}
+            alt="Jacky Zhao"
+            className="w-36 h-36 rounded-xl object-cover shadow-xl"
+          />
+          <a
+            href="https://linkedin.com/in/jackyzhao"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-sm text-white rounded-xl transition duration-300"
+          >
+            <Linkedin className="mx-2" size={16} />
+            Connect on LinkedIn
+          </a>
+        </div>
+
+        {/* Roy Foreground Photo */}
+        <div className="absolute bottom-1/4 right-1/4 group z-10">
+          <img
+            src={royPhoto}
+            alt="Roy Luo"
+            className="w-36 h-36 rounded-xl object-cover shadow-xl"
+          />
+          <a
+            href="https://linkedin.com/in/royluo"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-sm text-white rounded-xl transition duration-300"
+          >
+            <Linkedin className="mx-2" size={16} />
+            Connect on LinkedIn
+          </a>
+        </div>
+
+        {/* Center Quote */}
+        <div className="z-10 text-center max-w-2xl px-6 py-2">
+          <p className="text-2xl sm:text-3xl font-light mb-6 leading-relaxed">
+            We are building a platform that allows retail investors to access the best venture capital funds in the world.
+          </p>
+        </div>
+      </section>
+
+      <section className="snap-start relative z-10">
+        <Footer />
+      </section>
+    </>
+  );
+};

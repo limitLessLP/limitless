@@ -74,7 +74,7 @@ export function InvestmentSlider() {
   useEffect(() => {
     const timer = setInterval(() => {
       paginate(1)
-    }, 3000) // Increased interval duration to 8000ms (8 seconds)
+    }, 3000)
     return () => clearInterval(timer)
   }, [])
 
@@ -103,49 +103,48 @@ export function InvestmentSlider() {
             } else if (swipe > swipeConfidenceThreshold) {
               paginate(-1)
             }
-          }}
-          className="absolute inset-0 p-16 shadow-lg"
-        >
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="md:col-span-1">
-              <h3 className="text-2xl font-light mb-4">Early Stage Fund</h3>
-              <p className="text-lg font-medium">{currentInvestment.title}</p>
-            </div>
-           
-
-            <div className="md:col-span-1">
-              <p className="text-gray-400 font-light mb-8">{currentInvestment.description}</p>
-              <div className="flex gap-4">
-                <button className="px-6 py-2 border border-white/20 rounded-lg hover:bg-white/5 transition-colors">
+            }}
+            className="absolute inset-0 p-16 shadow-lg flex items-center justify-center"
+          >
+            <div className="md:col-span-2 flex flex-col md:flex-row gap-4 w-full h-full pl-16">
+              <div className="flex flex-col gap-4 md:w-1/2 h-full">
+                <div className="md:col-span-1 flex-grow">
+                <h3 className="text-4xl font-light mb-4">Early Stage Fund</h3>
+                <p className="text-2xl font-medium">{currentInvestment.title}</p>
+                </div>
+                <div className="md:col-span-1 flex-grow">
+                <p className="text-gray-400 font-light mb-8 text-xl">{currentInvestment.description}</p>
+                <div className="flex gap-4">
+                  <button className="px-8 py-4 border border-white/20 rounded-lg hover:bg-white/5 transition-colors text-lg">
                   Learn More
-                </button>
-                <button className="px-6 py-2 bg-green-700 rounded-lg hover:bg-green-800 transition-colors text-white hover:text-white/80">
+                  </button>
+                  <button className="px-8 py-4 bg-green-700 rounded-lg hover:bg-green-800 transition-colors text-white hover:text-white/80 text-lg">
                   Invest Now
-                </button>
+                  </button>
+                </div>
+                </div>
+              </div>
+              <div className="md:w-1/2 flex flex-col gap-4 w-full h-full">
+                <div className="text-center flex-grow">
+                <p className="text-sm text-gray-400">Target</p>
+                <p className="text-2xl font-medium">{currentInvestment.stats.target}</p>
+                </div>
+                <div className="text-center flex-grow">
+                <p className="text-sm text-gray-400">Target IRR</p>
+                <p className="text-2xl font-medium">{currentInvestment.stats.irr}</p>
+                </div>
+                <div className="text-center flex-grow">
+                <p className="text-sm text-gray-400">Vintage</p>
+                <p className="text-2xl font-medium">{currentInvestment.stats.vintage}</p>
+                </div>
               </div>
             </div>
+          </motion.div>
+          </AnimatePresence>
 
-            <div className="md:col-span-2 grid grid-cols-3 gap-4 w-full">
-              <div className="text-center">
-                <p className="text-xs text-gray-400">Target</p>
-                <p className="text-lg font-medium">{currentInvestment.stats.target}</p>
-              </div>
-              <div className="text-center">
-                <p className="text-xs text-gray-400">Target IRR</p>
-                <p className="text-lg font-medium">{currentInvestment.stats.irr}</p>
-              </div>
-              <div className="text-center">
-                <p className="text-xs text-gray-400">Vintage</p>
-                <p className="text-lg font-medium">{currentInvestment.stats.vintage}</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
-
-      <div className="flex justify-center mt-8 gap-2">
-        {investments.map((_, index) => (
-          <button
+          <div className="flex justify-center mt-8 gap-2">
+          {investments.map((_, index) => (
+            <button
             key={index}
             onClick={() => {
               setDirection(index > currentIndex ? 1 : -1)
