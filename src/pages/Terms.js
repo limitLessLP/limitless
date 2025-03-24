@@ -13,7 +13,7 @@ const Terms = () => {
         <div className="space-y-6 text-gray-600 dark:text-gray-300">
           <section>
             <h2 className="text-2xl font-light mb-4 text-black dark:text-white">1. Agreement to Terms</h2>
-            <p>By accessing or using LimitLess&apos;s services, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you do not have permission to access our services.</p>
+            <p>By accessing or using Limitless&apos;s services, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you do not have permission to access our services.</p>
           </section>
 
           <section>
@@ -33,7 +33,7 @@ const Terms = () => {
 
           <section>
             <h2 className="text-2xl font-light mb-4 text-black dark:text-white">5. Limitation of Liability</h2>
-            <p>LimitLess shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use or inability to use the service.</p>
+            <p>Limitless shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use or inability to use the service.</p>
           </section>
         </div>
       </div>

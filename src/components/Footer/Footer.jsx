@@ -9,13 +9,13 @@ export const Footer = () => {
 
       <div className="container mx-auto px-4 py-8">
         <a className="text-gray-400 transition text-sm">
-        *Hypothetical examples of investments you might see on LimitLess, non-representative of current or future investment opportunities. To learn about currently opened investments, please proceed to <a href="/select-type" className="font-bold hover:text-black">get started</a>. 
+        *Hypothetical examples of investments you might see on Limitless, non-representative of current or future investment opportunities. To learn about currently opened investments, please proceed to <a href="/select-type" className="font-bold hover:text-black">get started</a>. 
         </a>
       </div>
       
       <div className="flex justify-between items-center">
         <div className="text-sm text-gray-400">
-        © 2024 LimitLess.
+        © 2024 Limitless.
         </div>
         <div className="flex gap-6">
         <a href="/terms" className="text-gray-400 hover:text-white transition text-sm">Terms</a>

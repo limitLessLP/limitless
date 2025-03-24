@@ -128,7 +128,7 @@ export const LearnMorePage = () => {
       <ParallaxSection className="pt-32 pb-20 text-center snap-start">
         <header className="relative z-10">
           <h1 className="text-7xl font-extralight text-green-900 mb-6 bg-gradient-to-r from-black to-gray-400 bg-clip-text text-transparent">
-            Partner With LimitLess
+            Partner With Limitless
           </h1>
           <p className="text-xl text-black max-w-2xl mx-auto mb-12 leading-relaxed">
             Join our network of premium VC funds and access a broader pool of <strong>qualified investors</strong> through our innovative platform.

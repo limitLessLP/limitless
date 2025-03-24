@@ -105,7 +105,7 @@ const LandingPage = () => {
               ))}
             </h1>
             <p className="text-xl text-gray-400 mb-12 font-light leading-relaxed max-w-2xl mx-auto">
-              Robinhood for VC. Access premium VC funds as a new asset class. LimitLess combines institutional-grade investments with an intuitive platform.
+              Robinhood for VC. Access premium VC funds as a new asset class. Limitless combines institutional-grade investments with an intuitive platform.
             </p>
             <div className="flex gap-4 justify-center">
               <button 
@@ -332,7 +332,7 @@ const LandingPage = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex justify-between items-center">
             <div className="text-sm text-gray-400">
-              © 2024 LimitLess.
+              © 2024 Limitless.
             </div>
             <div className="flex gap-6">
             <a href="/terms" className="text-gray-400 hover:text-white transition text-sm">Terms</a>

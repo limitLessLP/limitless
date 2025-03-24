@@ -92,7 +92,7 @@ export function Navbar({ section }) {
               onClick={() => navigate("/")}
               className={`text-2xl font-bold ${getTextColor()}`}
             >
-              LimitLess
+              Limitless
             </button>
 
             {/* Resources Dropdown */}
