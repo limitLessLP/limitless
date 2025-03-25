@@ -37,7 +37,7 @@ export const Portfolio = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <DashboardNav />
+      <DashboardNav currentPage={"Portfolio"}/>
       
       <main className="pt-16">
         {/* Hero Section */}
@@ -77,7 +77,7 @@ export const Portfolio = () => {
         </div>
 
         {/* Active Investments */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12">
           <h2 className="text-2xl font-bold mb-6">Active Investments</h2>
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="overflow-x-auto">

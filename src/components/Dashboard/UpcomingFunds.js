@@ -21,7 +21,7 @@ export const UpcomingFunds = () => {
 
   return (
     <div className="mt-8 bg-white shadow-lg rounded-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 font-freight">Upcoming Funds</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6 ">Upcoming Funds</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {upcomingFunds.map((fund, index) => (
           <motion.div
@@ -33,7 +33,7 @@ export const UpcomingFunds = () => {
           >
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 font-freight">{fund.name}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 ">{fund.name}</h3>
                 <p className="text-sm text-gray-600">{fund.firm}</p>
               </div>
               <button className="text-gray-400 hover:text-gray-600" title="Get notified">

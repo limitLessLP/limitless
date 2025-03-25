@@ -1,7 +1,10 @@
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export const CurrentOfferings = () => {
+  const navigate = useNavigate()
+  
   const offerings = [
     {
       id: 1,
@@ -32,8 +35,8 @@ export const CurrentOfferings = () => {
   return (
     <div className="mt-8 bg-white shadow-lg rounded-lg p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 font-freight">Current Offerings</h2>
-        <button className="text-gray-500 hover:text-gray-700">View All</button>
+        <h2 className="text-2xl font-bold text-gray-900 ">Current Offerings</h2>
+        <button onClick={() => navigate("/offerings")} className="text-gray-500 hover:text-gray-700">View All</button>
       </div>
       <div className="space-y-4">
         {offerings.map((offering, index) => (
@@ -46,7 +49,7 @@ export const CurrentOfferings = () => {
           >
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 font-freight">{offering.name}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 ">{offering.name}</h3>
                 <p className="text-sm text-gray-600">{offering.firm}</p>
               </div>
               <button className="text-black hover:bg-gray-50 rounded-full p-2 transition-colors">
