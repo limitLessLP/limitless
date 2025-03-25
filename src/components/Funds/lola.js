@@ -1,0 +1,61 @@
+import React from 'react';
+import { DashboardNav } from '../Dashboard/DashboardNav';
+import lola from '../../assets/lola.png';
+
+export const Lola = () => {
+    return (
+        <div className="min-h-screen bg-[#f8f9fa]">
+            <DashboardNav />
+
+            <div className="max-w-5xl mx-auto px-4 py-24">
+                <div className="bg-white rounded-2xl shadow-md p-8 space-y-6">
+                    <div className="flex items-center justify-between space-x-4">
+                        <div className="flex items-center space-x-4">
+                            <img src={lola} alt="Logo" className="w-18 h-16 rounded-full" />
+                            <div>
+                                <h3 className="text-2xl font-semibold">Lola Capital Mission</h3>
+                                <p className="text-sm text-gray-500">LoLaCap Partners</p>
+                            </div>
+                        </div>
+                        <div className="bg-green-100 text-green-800 px-4 py-2 rounded text-lg">
+                            Open
+                        </div>
+                    </div>
+                    <div className="text-sm text-black space-y-4">
+                        <p>
+                            LoLaCap is a diversified life science investment fund founded and managed by highly experienced entrepreneurs, scientists, company builders and investment professionals with a well-established track record of providing transformative products to patients and significant returns to investors.
+                        </p>
+                        <p>
+                            LoLaCap will focus on company formation and high-value-added investments, primarily at the seed stage and Series A.
+                        </p>
+                        <p>
+                            Emphasis will be given to NewCos being founded by LoLaCap Partners, with co-investments by major life science venture funds with whom the partners have had long-standing, successful relationships.
+                        </p>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2">
+                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">Life Sciences</span>
+                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">Seed Stage</span>
+                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">Global</span>
+                    </div>
+
+                    {/* Investment Info and CTA */}
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center pt-4 space-y-4 md:space-y-0">
+                        <div className="pr-4">
+                            <p className="text-sm text-gray-500">Target Size</p>
+                            <p className="font-medium">$300M</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-500">Minimum Investment</p>
+                            <p className="font-medium">$100K</p>
+                        </div>
+                        <button className="bg-green-950 text-white px-4 py-2 rounded hover:bg-blue-600 transition ml-auto">
+                            View Details →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};

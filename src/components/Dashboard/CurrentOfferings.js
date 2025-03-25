@@ -17,10 +17,11 @@ export const CurrentOfferings = () => {
     {
       id: 2,
       name: "Healthcare Innovation Fund",
-      firm: "Andreessen Horowitz",
-      target: "$300M",
+      firm: "LOLA Capital Partners",
+      target: "$5-10M",
       focus: "Digital Health & Biotech",
       deadline: "Sep 15, 2024",
+      redirect: "/lola",
     },
     {
       id: 3,
@@ -49,11 +50,11 @@ export const CurrentOfferings = () => {
           >
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 ">{offering.name}</h3>
-                <p className="text-sm text-gray-600">{offering.firm}</p>
+                <h3 className="text-lg font-semibold text-gray-900 ">{offering.firm}</h3>
+                <p className="text-sm text-gray-600">{offering.name}</p>
               </div>
               <button className="text-black hover:bg-gray-50 rounded-full p-2 transition-colors">
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-5 w-5" onClick={() => navigate(offering.redirect)}/>
               </button>
             </div>
             <div className="mt-4 grid grid-cols-3 gap-4">

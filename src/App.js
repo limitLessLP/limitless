@@ -17,6 +17,7 @@ import { WelcomeAnimation } from './components/Dashboard/WelcomeAnimation';
 import { Portfolio } from "./components/Dashboard/Portfolio"
 import { Offerings } from "./components/Dashboard/Offerings"
 import { Account } from "./components/Dashboard/Account"
+import { Lola } from "./components/Funds/lola"
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/offerings" element={<Offerings />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/lola" element={<Lola />} />
       </Routes>
       <Analytics />
     </Router>
