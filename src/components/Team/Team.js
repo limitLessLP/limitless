@@ -69,7 +69,7 @@ export const TeamPage = () => {
               className="w-36 h-36 rounded-xl object-cover shadow-xl"
             />
             <a
-              href="https://linkedin.com/in/jackyzhao"
+              href="https://www.linkedin.com/in/jacky-p-zhao/"
               target="_blank"
               rel="noopener noreferrer"
               className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-sm text-white rounded-xl transition duration-300"
@@ -87,7 +87,7 @@ export const TeamPage = () => {
             className="w-36 h-36 rounded-xl object-cover shadow-xl"
           />
           <a
-            href="https://linkedin.com/in/royluo"
+            href="https://www.linkedin.com/in/ee-royluo/"
             target="_blank"
             rel="noopener noreferrer"
             className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-sm text-white rounded-xl transition duration-300"
