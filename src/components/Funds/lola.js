@@ -1,12 +1,9 @@
 import React from 'react';
-import { DashboardNav } from '../Dashboard/DashboardNav';
 import lola from '../../assets/lola.png';
 
 export const Lola = () => {
     return (
         <div className="min-h-screen bg-[#f8f9fa]">
-            <DashboardNav />
-
             <div className="max-w-5xl mx-auto px-4 py-24">
                 <div className="bg-white rounded-2xl shadow-md p-8 space-y-6">
                     <div className="flex items-center justify-between space-x-4">
