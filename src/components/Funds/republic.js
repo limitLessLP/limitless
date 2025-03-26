@@ -1,8 +1,8 @@
 import React from 'react';
 import { DashboardNav } from '../Dashboard/DashboardNav';
-import lola from '../../assets/lola.png';
+import republic from '../../assets/republic.png';
 
-export const Lola = () => {
+export const RepublicVC = () => {
     return (
         <div className="min-h-screen bg-[#f8f9fa]">
             <DashboardNav />
@@ -11,10 +11,10 @@ export const Lola = () => {
                 <div className="bg-white rounded-2xl shadow-md p-8 space-y-6">
                     <div className="flex items-center justify-between space-x-4">
                         <div className="flex items-center space-x-4">
-                            <img src={lola} alt="Logo" className="w-18 h-16 rounded-full" />
+                            <img src={republic} alt="Logo" className="w-18 h-16 rounded-full" />
                             <div>
-                                <h3 className="text-2xl font-semibold">Fund III: LoLa Capital</h3>
-                                <p className="text-sm text-gray-500">LoLaCap Partners</p>
+                                <h3 className="text-2xl font-semibold">Fund II: Republic VC</h3>
+                                <p className="text-sm text-gray-500">Republic Ventures</p>
                             </div>
                         </div>
                         <div className="bg-green-100 text-green-800 px-4 py-2 rounded text-lg">
@@ -23,41 +23,40 @@ export const Lola = () => {
                     </div>
                     <div className="text-sm text-black space-y-4">
                         <p>
-                            LoLa Capital is a life sciences-focused investment fund managed by experienced professionals. The fund targets investments in therapeutics and medical devices.
+                            Republic VC is an investment fund focused on AI, fintech, and consumer sectors. The fund is managed by experienced professionals.
                         </p>
                         <p>
                             <strong>Fund Manager(s):</strong> 
-                            <a href="https://www.linkedin.com/in/greg-verdine-b181991/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Greg Verdine</a>, Founding General Manager (emphasized), 
-                            <a href="https://www.linkedin.com/in/circe-lyu-190901a1/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Circe Lyu</a>, Founding General Manager, and Sashank Reddy, Venture Partner.
+                            <a href="https://www.linkedin.com/in/sophie007/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Sophie Liao</a>, General Partner.
                         </p>
                         <p>
-                            The total fund size is $200MM, with $5MM allocated to LimitLess. The fund is set to close by June 30, 2025.
+                            The total fund size is approximately $50MM, with $1MM allocated to LimitLess. The fund closing date is yet to be determined.
                         </p>
                         <p>
-                            LoLa Capital aims to provide significant returns to investors over a targeted timeline of 10-12 years before fund exit.
+                            Republic VC aims to provide significant returns to investors over a targeted timeline of 5-10 years before fund exit.
                         </p>
                     </div>
 
                     {/* Tags */}
                     <div className="flex flex-wrap gap-2">
-                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">Life Sciences</span>
-                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">Therapeutics</span>
-                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">Medical Devices</span>
+                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">AI</span>
+                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">Fintech</span>
+                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">Consumers</span>
                     </div>
 
                     {/* Investment Info and CTA */}
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center pt-4 space-y-4 md:space-y-0">
                         <div className="pr-4">
                             <p className="text-sm text-gray-500">Total Fund Size</p>
-                            <p className="font-medium">$200MM</p>
+                            <p className="font-medium">~$50MM</p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Minimum Investment</p>
-                            <p className="font-medium">$50K</p>
+                            <p className="font-medium">$25K</p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Fee Structure</p>
-                            <p className="font-medium">3.5% Management Fee, 20% Carried Interest</p>
+                            <p className="font-medium">3% Management Fee, 20% Carried Interest</p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Investor Requirement</p>
@@ -79,7 +78,7 @@ export const Lola = () => {
                             <strong>Capital Call:</strong> Schedule TBD
                         </p>
                         <p className="text-sm text-gray-500">
-                            <strong>Targeted Timeline:</strong> 10-12 years before fund exit
+                            <strong>Targeted Timeline:</strong> 5-10 years before fund exit
                         </p>
                     </div>
                 </div>

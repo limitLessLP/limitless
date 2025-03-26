@@ -18,6 +18,8 @@ import { Portfolio } from "./components/Dashboard/Portfolio"
 import { Offerings } from "./components/Dashboard/Offerings"
 import { Account } from "./components/Dashboard/Account"
 import { Lola } from "./components/Funds/lola"
+import { PioneerVC } from './components/Funds/pioneer';
+import { RepublicVC } from './components/Funds/republic';
 
 function App() {
   return (
@@ -41,6 +43,8 @@ function App() {
         <Route path="/offerings" element={<Offerings />} />
         <Route path="/account" element={<Account />} />
         <Route path="/lola" element={<Lola />} />
+        <Route path="/pioneer" element={<PioneerVC />} />
+        <Route path="/republic" element={<RepublicVC />} />
       </Routes>
       <Analytics />
     </Router>
