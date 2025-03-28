@@ -76,6 +76,9 @@ export const PioneerVC = () => {
                             <strong>Targeted Timeline:</strong> 5-10 years before fund exit
                         </p>
                     </div>
+                    <footer className="text-sm text-gray-500">
+                        *2/20 structure paid to fund manager (standard across industry), plus a 1% management fee to LimitLess to support platform, service, security, and operations.
+                    </footer>
                 </div>
             </div>
         </div>
