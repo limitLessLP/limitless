@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react"
 import { Button } from "../Common/button"
 import { Input } from "../Common/input"
 import { Label } from "../Common/label"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 
 export const SignUpPage = () => {
   const [firstName, setFirstName] = useState("")
@@ -13,13 +13,44 @@ export const SignUpPage = () => {
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
   const [password, setPassword] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Store name for welcome animation
-    localStorage.setItem('userName', firstName)
-    navigate("/mfa-verification")
+    setIsLoading(true)
+    setError("")
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+          phone,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        localStorage.setItem('userName', firstName)
+        localStorage.setItem('userEmail', email) // Store email for verification
+        navigate("/mfa-verification")
+      } else {
+        setError(data.message || "Sign up failed. Please try again.")
+      }
+    } catch (err) {
+      setError("Connection error. Please try again later.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -103,14 +134,31 @@ export const SignUpPage = () => {
               <p className="text-sm text-gray-500">Must be at least 8 characters</p>
             </div>
 
+            {error && (
+              <p className="text-red-500 text-sm mt-2">{error}</p>
+            )}
+
             <Button
               type="submit"
+              disabled={isLoading}
               className="w-full h-12 bg-black text-white hover:bg-gray-900 transition-colors"
             >
-              Create Account
+              {isLoading ? "Creating Account..." : "Create Account"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </form>
+
+          <div className="text-center mt-6">
+            <p className="text-sm text-gray-600">
+              Already have an account?{" "}
+              <Link
+                to="/signin"
+                className="text-blue-500 hover:text-blue-600 font-medium"
+              >
+                Sign in
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
 
