@@ -9,12 +9,44 @@ export const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Add authentication logic here
-    console.log("Sign in attempt with:", { email, password })
+    setIsLoading(true)
+    setError("")
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        // Store the JWT token
+        localStorage.setItem('token', data.token)
+        // Store user's name for welcome page
+        localStorage.setItem('userName', data.firstName || data.user?.firstName || 'User')
+        // Navigate to welcome page instead of data.next
+        navigate("/welcome")
+      } else {
+        setError(data.message || "Invalid email or password")
+      }
+    } catch (err) {
+      setError("Connection error. Please try again later.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -77,6 +109,10 @@ export const SignInPage = () => {
               </div>
             </div>
 
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
+
             <div className="flex items-center justify-between">
               <label className="flex items-center">
                 <input type="checkbox" className="rounded border-gray-300" />
@@ -92,6 +128,7 @@ export const SignInPage = () => {
 
             <motion.button
               type="submit"
+              disabled={isLoading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-full group relative bg-gradient-to-b from-black/10 to-white/10 
@@ -102,7 +139,7 @@ export const SignInPage = () => {
                            text-sm font-semibold backdrop-blur-md bg-white/95 hover:bg-white/100 
                            dark:bg-black/95 dark:hover:bg-black/100 text-black dark:text-white 
                            transition-all duration-300 group-hover:-translate-y-0.5">
-                Sign In
+                {isLoading ? "Signing In..." : "Sign In"}
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </span>
             </motion.button>

@@ -19,13 +19,14 @@ import { Account } from "./components/Dashboard/Account"
 import { Lola } from "./components/Funds/lola"
 import { PioneerVC } from './components/Funds/pioneer';
 import { RepublicVC } from './components/Funds/republic';
+import { UserTypeSelection } from './components/UserTypeSelection';
+import { Waitlist } from './components/Waitlist/Waitlist';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/learn-more-investor" element={<InvestorEducationPage />} />
@@ -43,6 +44,9 @@ function App() {
         <Route path="/lola" element={<Lola />} />
         <Route path="/pioneer" element={<PioneerVC />} />
         <Route path="/republic" element={<RepublicVC />} />
+        <Route path="/select-type" element={<UserTypeSelection />} />
+        <Route path="/signup" element={<SignUpPage/>} />
+        <Route path="/waitlist" element={<Waitlist />} />
       </Routes>
       <Analytics />
     </Router>

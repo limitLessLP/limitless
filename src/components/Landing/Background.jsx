@@ -36,7 +36,7 @@ const Background = React.memo(() => {
     }, []);
 
     const handleNavigate = useCallback(() => {
-        navigate('/select-type');
+        navigate('/select-type?for=waitlist');
     }, [navigate]);
 
     return (
@@ -157,7 +157,7 @@ const Background = React.memo(() => {
                             backdrop-blur-md bg-white/95 hover:bg-white/100 dark:bg-black/95 
                             dark:hover:bg-black/100 text-black dark:text-white transition-all 
                             duration-300 group-hover:-translate-y-0.5">
-                                Discover Excellence
+                                Join Waitlist
                                 <ChevronRight className="inline-block ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </span>
                         </button>

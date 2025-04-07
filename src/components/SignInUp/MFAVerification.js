@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import { Button } from "../Common/button"
@@ -10,12 +10,72 @@ import { useNavigate } from "react-router-dom"
 
 export const MFAVerification = () => {
   const [verificationCode, setVerificationCode] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [countdown, setCountdown] = useState(30)
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [countdown])
+
+  const handleResendCode = async () => {
+    setIsLoading(true)
+    setError("")
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/resend-verification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: localStorage.getItem('userEmail'),
+        }),
+      })
+
+      const data = await response.json()
+      if (data.success) {
+        setCountdown(30)
+      } else {
+        setError(data.message || "Failed to resend code")
+      }
+    } catch (err) {
+      setError("Connection error. Please try again later.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (verificationCode.length === 6) {
-      navigate("/welcome")
+    setIsLoading(true)
+    setError("")
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/verify-phone', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: localStorage.getItem('userEmail'),
+          verification_code: verificationCode,
+        }),
+      })
+
+      const data = await response.json()
+      if (data.success) {
+        navigate("/welcome")
+      } else {
+        setError(data.message || "Invalid verification code")
+      }
+    } catch (err) {
+      setError("Connection error. Please try again later.")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -45,12 +105,16 @@ export const MFAVerification = () => {
               />
             </div>
 
+            {error && (
+              <p className="text-red-500 text-sm">{error}</p>
+            )}
+
             <Button
               type="submit"
-              disabled={verificationCode.length !== 6}
+              disabled={verificationCode.length !== 6 || isLoading}
               className="w-full h-12 bg-gradient-to-r from-black to-gray-800 hover:from-gray-900 hover:to-black text-white transition-all duration-300 shadow-md hover:shadow-lg font-freight"
             >
-              <span>Verify & Continue</span>
+              {isLoading ? "Verifying..." : "Verify & Continue"}
               <motion.div
                 className="ml-2 inline-flex"
                 animate={{ x: [0, 5, 0] }}
@@ -59,6 +123,19 @@ export const MFAVerification = () => {
                 <ArrowRight className="h-4 w-4" />
               </motion.div>
             </Button>
+
+            <div className="text-center mt-4">
+              <button
+                type="button"
+                onClick={handleResendCode}
+                disabled={countdown > 0 || isLoading}
+                className="text-sm text-blue-500 hover:text-blue-600 disabled:text-gray-400"
+              >
+                {countdown > 0 
+                  ? `Resend code in ${countdown}s` 
+                  : "Resend verification code"}
+              </button>
+            </div>
           </form>
         </div>
       </div>
