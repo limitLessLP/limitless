@@ -7,7 +7,6 @@ import microsoftLogo from '../../assets/microsoft.png';
 import stanfordLogo from '../../assets/stanford.png';
 import uwaterlooLogo from '../../assets/uwaterloo.png';
 import nfxLogo from '../../assets/nfx.png';
-import ycLogo from '../../assets/yc.png';
 import plugAndPlayLogo from '../../assets/plugandplay.png';
 import { Linkedin, Globe, Activity, LineChart } from 'lucide-react';
 import { Navbar } from '../Navbar';
@@ -20,7 +19,6 @@ const logos = [
   plugAndPlayLogo,
   microsoftLogo,
   teslaLogo,
-  ycLogo,
   uwaterlooLogo,
   nvidiaLogo,
 ];
@@ -116,7 +114,7 @@ export const AboutUsPage = () => {
         <div className="text-center mb-20">
           <h2 className="text-5xl font-extralight mb-6">Meet the Founders</h2>
           <p className="text-lg text-gray-400 font-light max-w-2xl mx-auto">
-            Backed by top institutions. Driven by vision. United in building access to world-class venture capital.
+            Driven by vision. Strong background and experience in leading firms. United in building access to world-class venture capital.
           </p>
         </div>
 
@@ -198,7 +196,7 @@ export const AboutUsPage = () => {
             <div className="absolute inset-0 flex items-center justify-center px-6 z-20 pointer-events-none">
               <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
                 <p className="text-lg text-white/90 font-light leading-relaxed drop-shadow-xl px-6 py-4 rounded-2xl">
-                  Roy specializes in operations and investor relations, with a background at Tesla, Y Combinator, and Waterloo.
+                  Roy specializes in operations and investor relations, with a background at Tesla and Waterloo.
                 </p>
               </div>
             </div>
