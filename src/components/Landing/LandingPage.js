@@ -54,10 +54,10 @@ const LandingPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950 text-black dark:text-white relative overflow-hidden">
+    <div className="min-h-screen bg-black dark:bg-neutral-950 text-black dark:text-white relative overflow-hidden">
 
 
-      <Navbar section={currentSection} />
+      <Navbar section={"hero"} />
 
 
       <div className="h-screen snap-y snap-mandatory overflow-y-scroll">
@@ -70,7 +70,7 @@ const LandingPage = () => {
             <Background />
           </div>
           {/* Sticky transition effect now inside hero section */}
-          <div className="sticky bottom-0 bg-white text-black text-center z-20">
+          <div className="sticky bottom-0 bg-black text-black text-center z-20">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={isBackgroundRendered ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -78,7 +78,7 @@ const LandingPage = () => {
               className="text-center mb-4"
             >
               {isBackgroundRendered ? (
-                <h2 className="text-4xl md:text-5xl sm:text-2xl my-8 md:my-16 z-10">
+                <h2 className="text-4xl md:text-5xl sm:text-2xl my-8 md:my-16 z-10 text-white">
                   Performance is everything.
                 </h2>
               ) : (
@@ -96,11 +96,10 @@ const LandingPage = () => {
           <PerformanceSection />
         </section>
           
-        <div className={`${currentSection === "hero" ? 'hidden' : ''}`}>
+        <div className={`${currentSection === "hero" ? 'hidden' : ''} z-2000`}>
           <FloatingPaths position={1} />
         </div>
 
-          {/* Current Offerings Section */}
         <section 
           id="offerings" 
           ref={offeringsRef} 

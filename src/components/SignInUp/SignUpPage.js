@@ -1,11 +1,58 @@
 "use client"
 
+import React from 'react';
 import { useState } from "react"
 import { ArrowRight } from "lucide-react"
 import { Button } from "../Common/button"
 import { Input } from "../Common/input"
 import { Label } from "../Common/label"
 import { useNavigate, Link } from "react-router-dom"
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { motion } from 'framer-motion';
+
+const data = [
+  { year: '2021', irr: 8.5 },
+  { year: '2022', irr: 12.3 },
+  { year: '2023', irr: 15.1 },
+  { year: '2024', irr: 18.0 },
+  { year: '2025', irr: 20.5 }
+];
+
+const FloatingIRRChart = () => {
+  return (
+      <div className="p-6 bg-white shadow-xl rounded-2xl w-full max-w-lg ml-3">
+          <ResponsiveContainer width="90%" height={400}>
+              <BarChart data={data}>
+                  <XAxis dataKey="year" tick={{ display: 'none' }}/>
+                  <YAxis tick={{ display: 'none' }}/>
+                  <Bar
+                      dataKey="irr"
+                      shape={(props) => {
+                          const { index, ...rest } = props;
+                          return (
+                              <motion.rect
+                                  {...rest}
+                                  style={{ transformOrigin: '50% 100%' }}
+                                  fill="rgba(144,238,144,0.5)"  // Light green transparent fill
+                                  stroke="black"               // Black border
+                                  strokeWidth={1}
+                                  animate={{ scaleY: [1, 1.05, 1] }}
+                                  transition={{
+                                      delay: index * 0.3, // Sequential animation delay
+                                      duration: 1.5,
+                                      repeat: Infinity,
+                                      repeatType: "mirror",
+                                      ease: "easeInOut"
+                                  }}
+                              />
+                          );
+                      }}
+                  />
+              </BarChart>
+          </ResponsiveContainer>
+      </div>
+  );
+};
 
 export const SignUpPage = () => {
   const [firstName, setFirstName] = useState("")
@@ -64,7 +111,7 @@ export const SignUpPage = () => {
           endpoint = "https://limitless-backend.vercel.app/api/lp-waitlist";
         }
       }
-      
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -166,9 +213,9 @@ export const SignUpPage = () => {
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
 
-            <Button disabled={isLoading} className="w-full h-12 bg-black text-white">
+            <Button disabled={isLoading} className="w-full h-12 bg-black text-white flex items-center justify-center">
               {buttonText({ loadState: isLoading })}
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <ArrowRight className="ml-2 h-4 w-4 self-center" />
             </Button>
           </form>
 
@@ -181,8 +228,18 @@ export const SignUpPage = () => {
         </div>
       </div>
 
-      <div className="hidden lg:block lg:w-1/2 bg-gradient-to-br from-gray-50 to-gray-100">
-        {/* Background animation from landing page */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-gray-50 to-gray-100 flex-col justify-center items-center space-y-8">
+        <span className="w-full text-center">
+          <h2 className="text-3xl font-extralight text-gray-700">
+            Access, transparency, opportunity
+          </h2>
+        </span>
+        <FloatingIRRChart />
+        <span className="w-full text-center">
+          <h2 className="text-3xl font-extralight text-gray-700">
+            This is venture capital without the velvet rope
+          </h2>
+        </span>
       </div>
     </div>
   )

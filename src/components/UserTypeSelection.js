@@ -14,10 +14,10 @@ export const UserTypeSelection = () => {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white relative overflow-hidden">
-      <div className="absolute inset-0">
+      {/* <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl bg-blue-600/20 animate-pulse-slow" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl bg-purple-600/20 animate-float" />
-      </div>
+      </div> */}
 
       <button className="absolute top-4 left-4">
         <motion.a 
@@ -55,7 +55,7 @@ export const UserTypeSelection = () => {
             onClick={() => handleClick("gp")}
           >
             <div className="p-8 rounded-[1.15rem] bg-neutral-900 h-full">
-              <Building2 className="w-12 h-12 mb-6 text-blue-500" />
+              <Building2 className="w-12 h-12 mb-6" />
               <h2 className="text-2xl font-medium mb-4">A Venture Capital Firm</h2>
               <p className="text-gray-400">
                 Looking to expand my investor base and streamline operations
@@ -70,7 +70,7 @@ export const UserTypeSelection = () => {
             onClick={() => handleClick("lp")}
           >
             <div className="p-8 rounded-[1.15rem] bg-neutral-900 h-full">
-              <Users className="w-12 h-12 mb-6 text-purple-500" />
+              <Users className="w-12 h-12 mb-6" />
               <h2 className="text-2xl font-medium mb-4">An Investor</h2>
               <p className="text-gray-400">
                 Seeking access to premium venture capital opportunities

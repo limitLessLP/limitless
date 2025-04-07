@@ -9,7 +9,7 @@ const sections = [
     faqs: [
       { question: "Who can invest?", answer: "Limitless investments are typically available to accredited investors who meet certain financial requirements." },
       { question: "How does the typical Limitless investment work?", answer: "Investors commit capital to funds, which is drawn down over time as investments are made. Returns are distributed based on fund performance." },
-      { question: "What's the minimum commitment?", answer: "The minimum investment amount varies by fund but typically starts at around €50,000." },
+      { question: "What's the minimum commitment?", answer: "The minimum investment amount varies by fund but typically starts at around $25,000." },
       { question: "When is capital drawn on my commitment?", answer: "Capital is drawn down gradually as the fund makes investments. Investors are notified in advance of capital calls." },
       { question: "What's the selection process for the funds on Limitless?", answer: "Limitless follows a rigorous due diligence process to select high-quality private equity and venture capital funds." },
       { question: "What is a typical fund that Limitless offers?", answer: "Limitless offers private equity, venture capital, and other alternative investment funds." },

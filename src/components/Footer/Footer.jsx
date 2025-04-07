@@ -3,7 +3,7 @@ export const Footer = () => {
     return (
       <footer
       id="footerRef"
-      className="snap-start relative z-10 border-t border-white/10 h-32 flex items-center"
+      className="snap-start relative z-10 h-32 flex items-center"
       >
       <div className="container mx-auto px-4 py-8">
 
