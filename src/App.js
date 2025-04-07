@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react";
 import LandingPage from './components/Landing/LandingPage';
-import { TeamPage } from './components/Team/Team';
 import { SignUpPage } from './components/SignInUp/SignUpPage';
 import { SignInPage } from './components/SignInUp/SignInPage';
 import { AboutUsPage } from './components/AboutUs/AboutUs';
@@ -28,7 +27,6 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/signin" element={<SignInPage />} />
-        <Route path="/team" element={<TeamPage />} />
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/learn-more-investor" element={<InvestorEducationPage />} />
         <Route path="/learn-more-gp" element={<LearnMorePage />} />

@@ -29,13 +29,6 @@ export function Navbar({ section }) {
     // { label: "Blog", href: "/blog" },
     { label: "FAQ", href: "/faq" },
   ]
-
-  const companyItems = [
-    { label: "About Us", href: "/about" },
-    { label: "Team", href: "/team" },
-    { label: "Contact", href: "/contact" },
-  ]
-
   const handleDropdownClick = (dropdown) => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown)
   }
@@ -133,42 +126,14 @@ export function Navbar({ section }) {
 
             </div>
 
-            {/* Company Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => handleDropdownClick('company')}
-                className={`flex items-center gap-1 text-sm ${getTextColor()} transition-colors`}
-              >
-                Company
-                <ChevronDown className={`h-4 w-4 transition-transform ${openDropdown === 'company' ? 'rotate-180' : ''}`} />
-              </button>
-              <AnimatePresence>
-                {openDropdown === 'company' && (
-                  <motion.div
-                    key="resources"
-                    variants={containerVariants}
-                    initial="closed"
-                    animate="open"
-                    exit="closed"
-                    className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-neutral-900 rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5 overflow-hidden"
-                  >
-                    {companyItems.map((item) => (
-                      <motion.button
-                        key={item.href}
-                        variants={itemVariants}
-                        onClick={() => {
-                          navigate(item.href)
-                          setOpenDropdown(null)
-                        }}
-                        className="block w-full px-4 py-3 text-left text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
-                      >
-                        {item.label}
-                      </motion.button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            {/* Our company */}
+            <button
+                onClick={() => navigate("/about")}
+                className={`text-sm ${getTextColor()} transition-colors`}
+            >
+            About Us
+            </button>
+
           </div>
 
           <button
