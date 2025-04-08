@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import introVideo from '../../assets/waitlistEnding.mp4';
+import endPage from '../../assets/endPage.gif';
 
 export const Waitlist = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export const Waitlist = () => {
         setFadeOut(true);
         setTimeout(() => {
           setVideoEnded(true);
-        }, 1000);
+        }, 800);
       };
       video.addEventListener('ended', onEnded);
       return () => {
@@ -33,8 +34,10 @@ export const Waitlist = () => {
   
   if (!videoEnded) {
     return (
+      // You can remove bg-black here if you want the GIF to be visible immediately in the background,
+      // or only use it for the video stage.
       <div
-        className={`fixed inset-0 bg-black flex items-center justify-center ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
+        className={`fixed inset-0 flex items-center bg-black justify-center ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
         style={{ transition: 'opacity 0.5s ease-out' }}
       >
         <video 
@@ -56,35 +59,45 @@ export const Waitlist = () => {
   }
   
   return (
-    <div className="flex flex-col min-h-screen items-center justify-start bg-black p-4">
-\        <div 
-          className="w-full text-center mt-8 mb-16 animate-fadeIn"
-          style={{ animationDelay: '0.5s' }}
-        >
-          <p className="font-serif italic text-white text-4xl md:text-5xl lg:text-6xl leading-tight px-4">
-            <div className="w-full">
-                <span className="opacity-0 animate-fadeIn" style={{ animationDelay: '1s' }}>
-                Venture capital, reimagined —{' '}
-                </span>
-                <span className="opacity-0 animate-fadeIn" style={{ animationDelay: '2s' }}>
-                  Funded by rebels.{' '}
-                </span>
-            </div>
-            <div className="w-full">
-                <span className="opacity-0 animate-fadeIn" style={{ animationDelay: '3s' }}>
-                  Backed by vision.{' '}
-                </span>
-                <span className="opacity-0 animate-fadeIn" style={{ animationDelay: '4s' }}>
-                  Driven by{' '}
-                </span>
-                <strong className="font-bold opacity-0 animate-fadeIn" style={{ animationDelay: '5s' }}>you.</strong>
-            </div>
-          </p>
-        </div>
-
-        {/* Middle Section with Return Home */}
+    // Apply the background GIF to the full page here.
+    <div 
+      className="flex flex-col min-h-screen items-center justify-start"
+      style={{ 
+        backgroundImage: `url(${endPage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <div 
-        className="w-full max-w-md text-center animate-fadeIn block opacity-0 animate-fadeIn"
+        className="w-full text-center mt-8 mb-16 animate-fadeIn"
+        style={{ animationDelay: '0.5s', paddingTop: '70px' }} // Added paddingTop here
+      >
+        <p className="text-white text-4xl md:text-5xl lg:text-6xl leading-tight px-4">
+          <div className="w-full">
+            <span className="opacity-0 animate-fadeIn" style={{ animationDelay: '1s' }}>
+              Venture capital, reimagined —{' '}
+            </span>
+            <span className="opacity-0 animate-fadeIn" style={{ animationDelay: '2s' }}>
+              Funded by rebels.{' '}
+            </span>
+          </div>
+          <div className="w-full">
+            <span className="opacity-0 animate-fadeIn" style={{ animationDelay: '3s' }}>
+              Backed by vision.{' '}
+            </span>
+            <span className="opacity-0 animate-fadeIn" style={{ animationDelay: '4s' }}>
+              Driven by{' '}
+            </span>
+            <strong className="font-bold opacity-0 animate-fadeIn" style={{ animationDelay: '5s' }}>
+              you.
+            </strong>
+          </div>
+        </p>
+      </div>
+
+      <div 
+        className="w-full max-w-md text-center animate-fadeIn block opacity-0"
         style={{ animationDelay: '6s' }}
       >
         {success === 'true' ? (
@@ -97,7 +110,7 @@ export const Waitlist = () => {
               </div>
             </div>
             <h1 className="mb-2 text-center text-3xl font-bold text-white">You&apos;re on the list!</h1>
-            <p className="mb-8 text-center text-gray-300">
+            <p className="mb-8 text-center text-black">
               Thank you for joining our community of investors.
             </p>
           </div>
@@ -125,17 +138,16 @@ export const Waitlist = () => {
         </button>
       </div>
 
-      {/* Bottom Text */}
-      <div 
-        className="w-full text-center mt-16 block opacity-0 animate-fadeIn"
+      {/* <div 
+        className="w-full text-center mt-16 animate-fadeIn block opacity-0"
         style={{ animationDelay: '7s' }}
       >
-        <p className="font-serif italic text-white text-4xl md:text-5xl lg:text-6xl leading-tight px-4">
+        <p className="text-white text-4xl md:text-5xl lg:text-6xl leading-tight px-4">
           {success === 'true' 
             ? "Thank you for joining us in reshaping the future of investing." 
             : "Need help? Contact our support team at roy@limitlessvc.co"}
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };

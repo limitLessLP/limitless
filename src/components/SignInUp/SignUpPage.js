@@ -9,6 +9,7 @@ import { Label } from "../Common/label"
 import { useNavigate, Link } from "react-router-dom"
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
 
 const data = [
   { year: '2021', irr: 8.5 },
@@ -141,6 +142,12 @@ export const SignUpPage = () => {
   return (
     <div className="flex min-h-screen">
       <div className="w-full lg:w-1/2 bg-white p-6 md:p-12 flex items-center">
+        <div className="absolute top-0 left-0 space-x-2 mb-4">
+          <Link to="/select-type" className="flex items-center text-gray-600 hover:text-black py-4 px-4">
+            <ArrowLeft className="h-5 w-5" />
+            <span className="ml-2">Back to Select Type</span>
+          </Link>
+        </div>
         <div className="w-full max-w-md mx-auto space-y-8">
           {forPage === "account" &&
           <div>
