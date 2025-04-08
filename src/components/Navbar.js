@@ -1,15 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { ChevronDown } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { ChevronDown } from "lucide-react"
 
 export function Navbar({ section }) {
-  const navigate = useNavigate();
-
-  const [openDropdown, setOpenDropdown] = useState(null)
+  const navigate = useNavigate()
   const [scrolled, setScrolled] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,17 +21,6 @@ export function Navbar({ section }) {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [scrolled])
 
-  const resourcesItems = [
-    { label: "Learn More - Investors", href: "/learn-more-investor" },
-    { label: "Learn More - VCs", href: "/learn-more-gp" },
-    // { label: "Blog", href: "/blog" },
-    { label: "FAQ", href: "/faq" },
-  ]
-  const handleDropdownClick = (dropdown) => {
-    setOpenDropdown(openDropdown === dropdown ? null : dropdown)
-  }
-
-  // Get text color based on current section
   const getTextColor = () => {
     if (scrolled) return "text-white hover:text-white/80"
     switch (section) {
@@ -44,34 +31,6 @@ export function Navbar({ section }) {
     }
   }
 
-  const containerVariants = {
-    closed: {
-      height: 0,
-      opacity: 0,
-      transition: {
-        when: "afterChildren",
-        staggerChildren: 0.2,
-        staggerDirection: -1,
-      },
-    },
-    open: {
-      height: "auto", 
-      opacity: 1,
-      transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.2, 
-        delayChildren: 0.1,
-      },
-    },
-  }
-  
-  const itemVariants = {
-    hidden: { opacity: 0, x: 20 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
-    exit: { opacity: 0, x: 20, transition: { duration: 0.2 } },
-  }
-    
-
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
@@ -80,7 +39,8 @@ export function Navbar({ section }) {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-8">
+          {/* Left side: Logo + Links */}
+          <div className="flex items-center gap-24">
             <button
               onClick={() => navigate("/")}
               className={`text-2xl font-bold ${getTextColor()}`}
@@ -88,67 +48,73 @@ export function Navbar({ section }) {
               Limitless
             </button>
 
-            {/* Resources Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => handleDropdownClick('resources')}
-                className={`flex items-center gap-1 text-sm ${getTextColor()} transition-colors`}
-              >
-                Investing
-                <ChevronDown className={`h-4 w-4 transition-transform ${openDropdown === 'resources' ? 'rotate-180' : ''}`} />
-              </button>
-              <AnimatePresence>
-                {openDropdown === 'resources' && (
-                  <motion.div
-                    key="resources"
-                    variants={containerVariants}
-                    initial="closed"
-                    animate="open"
-                    exit="closed"
-                    className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-neutral-900 rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5 overflow-hidden"
-                  >
-                    {resourcesItems.map((item) => (
-                      <motion.button
-                        key={item.href}
-                        variants={itemVariants}
-                        onClick={() => {
-                          navigate(item.href)
-                          setOpenDropdown(null)
-                        }}
-                        className="block w-full px-4 py-3 text-left text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
-                      >
-                        {item.label}
-                      </motion.button>
-                    ))}
-                  </motion.div>
+            {/* Navigation Links */}
+            <div className="flex items-center gap-16 relative">
+              {/* Learn More Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className={`flex items-center gap-1 text-sm ${getTextColor()} transition-colors`}
+                >
+                  Learn More
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      dropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {dropdownOpen && (
+                  <div className="absolute top-full mt-2 w-44 bg-white dark:bg-neutral-900 rounded-xl shadow-lg ring-1 ring-black/10 dark:ring-white/10 z-10">
+                    <button
+                      onClick={() => {
+                        navigate("/learn-more-investor")
+                        setDropdownOpen(false)
+                      }}
+                      className="block w-full text-left px-4 py-3 text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+                    >
+                      Investors
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate("/learn-more-gp")
+                        setDropdownOpen(false)
+                      }}
+                      className="block w-full text-left px-4 py-3 text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+                    >
+                      Partners
+                    </button>
+                  </div>
                 )}
-              </AnimatePresence>
+              </div>
 
-            </div>
-
-            {/* Our company */}
-            <button
+              {/* Other standalone links */}
+              <button
                 onClick={() => navigate("/about")}
                 className={`text-sm ${getTextColor()} transition-colors`}
-            >
-            About Us
-            </button>
-
+              >
+                About Us
+              </button>
+              <button
+                onClick={() => navigate("/faq")}
+                className={`text-sm ${getTextColor()} transition-colors`}
+              >
+                FAQ
+              </button>
+            </div>
           </div>
 
+          {/* Get Started Button */}
           <button
             onClick={() => navigate("/select-type?for=account")}
             className={`group relative p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 
-                      ${
-                        section === "hero"
-                          ? "bg-white text-black hover:bg-gray-200"
-                          : "bg-black text-white hover:bg-gray-900"
-                      }`}
+              ${
+                section === "hero"
+                  ? "bg-white text-black hover:bg-gray-200"
+                  : "bg-black text-white hover:bg-gray-900"
+              }`}
           >
-            <span
-              className="inline-block px-6 py-2 rounded-[1.15rem] text-sm font-semibold 
-                           transition-all duration-300 group-hover:-translate-y-0.5"
-            >
+            <span className="inline-block px-6 py-2 rounded-[1.15rem] text-sm font-semibold transition-all duration-300 group-hover:-translate-y-0.5">
               Get Started
             </span>
           </button>
@@ -157,4 +123,3 @@ export function Navbar({ section }) {
     </nav>
   )
 }
-
