@@ -106,7 +106,7 @@ export function Navbar({ section }) {
 
           {/* Get Started Button */}
           <button
-            onClick={() => navigate("/select-type?for=account")}
+            onClick={() => navigate("/select-type?for=waitlist")}
             className={`group relative p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 
               ${
                 section === "hero"

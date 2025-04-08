@@ -10,25 +10,29 @@ export function FloatingPaths({ position }) {
     } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
       684 - i * 5 * position
     } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-    color: `rgba(15,23,42,${0.1 + i * 0.03})`,
-    width: 0.5 + i * 0.03,
+    color: `rgba(255,255,255,${0.3 + i * 0.02})`, // Increased opacity and set to pure white
+    width: 0.8 + i * 0.05, // Slightly increased width for visibility
   }));
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-10">
-      <svg className="w-full h-full text-slate-950 dark:text-white" viewBox="0 0 696 316" fill="none">
+    <div className="absolute inset-0 pointer-events-none z-2000">
+      <svg
+        className="w-full h-full text-white" // Set text color to white for contrast
+        viewBox="0 0 696 316"
+        fill="none"
+      >
         <title>Background Paths</title>
         {paths.map((path) => (
           <motion.path
             key={path.id}
             d={path.d}
-            stroke="currentColor"
+            stroke={path.color} // Use the calculated color
             strokeWidth={path.width}
-            strokeOpacity={0.1 + path.id * 0.03}
-            initial={{ pathLength: 0.3, opacity: 0.6 }}
+            strokeOpacity={0.5 + path.id * 0.02} // Increased base opacity
+            initial={{ pathLength: 0.3, opacity: 0.7 }} // Make the initial opacity higher
             animate={{
               pathLength: 1,
-              opacity: [0.3, 0.6, 0.3],
+              opacity: [0.6, 1, 0.6], // Increased opacity range
               pathOffset: [0, 1, 0],
             }}
             transition={{
@@ -41,4 +45,4 @@ export function FloatingPaths({ position }) {
       </svg>
     </div>
   );
-} 
+}

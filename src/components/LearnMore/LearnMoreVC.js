@@ -122,7 +122,7 @@ export const LearnMorePage = () => {
 
   return (
     <div className="h-screen snap-y snap-mandatory overflow-y-scroll bg-white text-black relative">
-      <Navbar />
+      <Navbar section="learnMoreVc"/>
       <ScrollProgress />
 
       <ParallaxSection className="pt-32 pb-20 text-center snap-start">
