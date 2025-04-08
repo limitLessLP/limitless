@@ -165,7 +165,7 @@ export const AboutUsPage = () => {
             <div className="absolute inset-0 flex items-center justify-center px-6 z-20 pointer-events-none">
               <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
                 <p className="text-lg text-white/90 font-light leading-relaxed drop-shadow-xl px-6 py-4 rounded-2xl">
-                  Jacky leads the product and technical vision, drawing from experiences at Stanford, NFX, and Plug and Play.
+                  Jacky specializes in operations and investor relations, drawing from experiences at Stanford, NFX, and Plug and Play.
                 </p>
               </div>
             </div>
@@ -196,7 +196,7 @@ export const AboutUsPage = () => {
             <div className="absolute inset-0 flex items-center justify-center px-6 z-20 pointer-events-none">
               <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
                 <p className="text-lg text-white/90 font-light leading-relaxed drop-shadow-xl px-6 py-4 rounded-2xl">
-                  Roy specializes in operations and investor relations, with a background at Tesla and Waterloo.
+                  Roy leads the product and technical vision, with a background at Tesla and Waterloo.
                 </p>
               </div>
             </div>
