@@ -106,39 +106,34 @@ export function InvestmentSlider() {
             }}
             className="absolute inset-0 p-16 shadow-lg flex items-center justify-center"
           >
-            <div className="md:col-span-2 flex flex-col md:flex-row gap-4 w-full h-full pl-16">
-              <div className="flex flex-col gap-4 md:w-1/2 h-full text-white">
-                <div className="md:col-span-1 flex-grow">
-                <h3 className="text-4xl font-light mb-4">Early Stage Fund</h3>
-                <p className="text-2xl font-medium">{currentInvestment.title}</p>
-                </div>
-                <div className="md:col-span-1 flex-grow">
-                <p className="text-white font-light mb-8 text-xl">{currentInvestment.description}</p>
-                {/* <div className="flex gap-4">
-                  <button className="px-8 py-4 border border-white/20 rounded-lg hover:bg-white/5 transition-colors text-lg">
-                  Learn More
-                  </button>
-                  <button className="px-8 py-4 bg-green-700 rounded-lg hover:bg-green-800 transition-colors text-white hover:text-white/80 text-lg">
-                  Invest Now
-                  </button>
-                </div> */}
-                </div>
+          <div className="md:col-span-2 flex flex-col md:flex-row gap-4 w-full h-full pl-16">
+            <div className="flex flex-col gap-4 md:w-1/2 h-full text-white" style={{ flexWrap: 'wrap', minWidth: '250px' }}>
+              <div className="md:col-span-1 flex-grow">
+                <h3 className="text-4xl font-light mb-4" style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+                  {currentInvestment.title}
+                </h3>
               </div>
-              <div className="md:w-1/2 flex flex-col gap-4 w-full h-full text-white">
-                <div className="text-center flex-grow">
-                <p className="text-sm text-white">Target</p>
-                <p className="text-2xl font-medium">{currentInvestment.stats.target}</p>
-                </div>
-                <div className="text-center flex-grow">
-                <p className="text-sm text-white">Target IRR</p>
-                <p className="text-2xl font-medium">{currentInvestment.stats.irr}</p>
-                </div>
-                <div className="text-center flex-grow">
-                <p className="text-sm text-white">Vintage</p>
-                <p className="text-2xl font-medium">{currentInvestment.stats.vintage}</p>
-                </div>
+              <div className="md:col-span-1 flex-grow">
+                <p className="text-white font-light mb-8 text-xl" style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+                  {currentInvestment.description}
+                </p>
               </div>
             </div>
+            <div className="md:w-1/2 flex flex-col gap-4 w-full h-full text-white" style={{ flexWrap: 'wrap', minWidth: '250px' }}>
+              <div className="text-center flex-grow">
+                <p className="text-sm text-white">Target</p>
+                <p className="text-2xl font-medium">{currentInvestment.stats.target}</p>
+              </div>
+              <div className="text-center flex-grow">
+                <p className="text-sm text-white">Target IRR</p>
+                <p className="text-2xl font-medium">{currentInvestment.stats.irr}</p>
+              </div>
+              <div className="text-center flex-grow">
+                <p className="text-sm text-white">Vintage</p>
+                <p className="text-2xl font-medium">{currentInvestment.stats.vintage}</p>
+              </div>
+            </div>
+          </div>
           </motion.div>
           </AnimatePresence>
 

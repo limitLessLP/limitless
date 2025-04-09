@@ -71,7 +71,7 @@ export function Navbar({ section }) {
                         navigate("/learn-more-investor")
                         setDropdownOpen(false)
                       }}
-                      className="block w-full text-left px-4 py-3 text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+                      className="rounded-t-xl block w-full text-left px-4 py-3 text-sm text-black hover:bg-black hover:text-white transition-colors"
                     >
                       Investors
                     </button>
@@ -80,7 +80,7 @@ export function Navbar({ section }) {
                         navigate("/learn-more-gp")
                         setDropdownOpen(false)
                       }}
-                      className="block w-full text-left px-4 py-3 text-sm text-black hover:text-black/80 dark:text-white dark:hover:text-white/80 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+                      className="rounded-b-xl block w-full text-left px-4 py-3 text-sm text-black hover:bg-black hover:text-white transition-colors"
                     >
                       Partners
                     </button>
