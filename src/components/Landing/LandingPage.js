@@ -70,7 +70,7 @@ const LandingPage = () => {
             <Background />
           </div>
           {/* Sticky transition effect now inside hero section */}
-          <div className="sticky bottom-0 bg-black text-black text-center z-20">
+          <div className="sticky bottom-0 bg-black/80 backdrop-blur-sm text-black text-center z-20">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={isBackgroundRendered ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
