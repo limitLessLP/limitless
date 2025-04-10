@@ -141,13 +141,18 @@ export const SignUpPage = () => {
 
   return (
     <div className="flex min-h-screen">
+      <div className="p-4 fixed top-0 left-0 z-50">
+        <button
+          onClick={() => navigate("/select-type?for=waitlist")}
+          className="group relative p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white text-black hover:bg-gray-200 flex items-center justify-center"
+        >
+          <ArrowLeft className="w-4 h-4 mx-2" />
+          <span className="inline-block pr-3 py-2 rounded-[1.15rem] text-sm font-semibold transition-all duration-300 group-hover:-translate-y-0.5">
+            Back to Select Type
+          </span>
+        </button>
+      </div>
       <div className="w-full lg:w-1/2 bg-white p-6 md:p-12 flex items-center">
-        <div className="absolute top-0 left-0 space-x-2 mb-4">
-          <Link to="/select-type?for=waitlist" className="flex items-center text-gray-600 hover:text-black py-4 px-4">
-            <ArrowLeft className="h-5 w-5" />
-            <span className="ml-2">Back to Select Type</span>
-          </Link>
-        </div>
         <div className="w-full max-w-md mx-auto space-y-8">
           {forPage === "account" &&
           <div>

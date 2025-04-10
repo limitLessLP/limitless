@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Building2, Users, ArrowRight } from 'lucide-react';
+import { Building2, Users, ArrowLeft } from 'lucide-react';
 
 export const UserTypeSelection = () => {
   const navigate = useNavigate();
@@ -14,27 +14,19 @@ export const UserTypeSelection = () => {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white relative overflow-hidden">
-      {/* <button 
-        className="absolute top-4 left-4"
-        onClick={() => navigate('/')}
-      >
-        <motion.a 
-          whileHover={{ scale: 1.1 }}
-          className="flex items-center text-gray-400 hover:text-white transition-colors"
-        >
-          <ArrowRight className="rotate-180 mr-2" />
-          Back to Home
-        </motion.a>
-      </button> */}
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        className="absolute top-4 left-4 flex items-center text-gray-400 hover:text-white transition-colors"
-        onClick={() => navigate('/')}
-      >
-        <ArrowRight className="rotate-180 mr-2" />
-        Back
-      </motion.button>
 
+      {/* Get Started Button */}
+      <div className="p-4">
+        <button
+          onClick={() => navigate("/")}
+          className="group relative p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white text-black hover:bg-gray-200 flex items-center justify-center"
+        >
+          <ArrowLeft className="w-4 h-4 mx-2" />
+          <span className="inline-block pr-3 py-2 rounded-[1.15rem] text-sm font-semibold transition-all duration-300 group-hover:-translate-y-0.5">
+            Back To Home
+          </span>
+        </button>
+      </div>
 
       <div className="relative z-10 container mx-auto px-4 py-32">
         <motion.div 
