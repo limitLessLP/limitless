@@ -22,6 +22,8 @@ export function Navbar({ section }) {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [scrolled])
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   const getTextColor = () => {
     if (scrolled) return "text-white hover:text-white/80"
     switch (section) {
@@ -34,7 +36,7 @@ export function Navbar({ section }) {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`${isMobile? '': "fixed"} top-0 w-full z-50 transition-all duration-300 ${
         scrolled ? "bg-black/80 backdrop-blur-sm" : "bg-transparent"
       }`}
     >
