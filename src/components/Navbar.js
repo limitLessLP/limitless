@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, Menu, X } from "lucide-react"
 
 export function Navbar({ section }) {
   const navigate = useNavigate()
   const [scrolled, setScrolled] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,8 +40,8 @@ export function Navbar({ section }) {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Left side: Logo + Links */}
-          <div className="flex items-center gap-24">
+          {/* Left side: Logo + Desktop Links */}
+          <div className="flex items-center gap-8">
             <button
               onClick={() => navigate("/")}
               className={`text-2xl font-bold ${getTextColor()}`}
@@ -48,8 +49,8 @@ export function Navbar({ section }) {
               Limitless
             </button>
 
-            {/* Navigation Links */}
-            <div className="flex items-center gap-16 relative">
+            {/* Desktop Nav */}
+            <div className="hidden md:flex items-center gap-8 relative">
               {/* Learn More Dropdown */}
               <div className="relative">
                 <button
@@ -88,7 +89,6 @@ export function Navbar({ section }) {
                 )}
               </div>
 
-              {/* Other standalone links */}
               <button
                 onClick={() => navigate("/about")}
                 className={`text-sm ${getTextColor()} transition-colors`}
@@ -104,21 +104,74 @@ export function Navbar({ section }) {
             </div>
           </div>
 
-          {/* Get Started Button */}
-          <button
-            onClick={() => navigate("/select-type?for=waitlist")}
-            className={`group relative p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 
-              ${
-                section === "hero"
-                  ? "bg-white text-black hover:bg-gray-200"
-                  : "bg-black text-white hover:bg-gray-900"
-              }`}
-          >
-            <span className="inline-block px-6 py-2 rounded-[1.15rem] text-sm font-semibold transition-all duration-300 group-hover:-translate-y-0.5">
-              Get Started
-            </span>
-          </button>
+          {/* Right side: Get Started + Mobile Menu Toggle */}
+          <div className="flex items-center gap-4">
+            {/* Get Started Button */}
+            <button
+              onClick={() => navigate("/select-type?for=waitlist")}
+              className={`group relative p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 
+                ${
+                  section === "hero"
+                    ? "bg-white text-black hover:bg-gray-200"
+                    : "bg-black text-white hover:bg-gray-900"
+                }`}
+            >
+              <span className="inline-block px-6 py-2 rounded-[1.15rem] text-sm font-semibold transition-all duration-300 group-hover:-translate-y-0.5">
+                Get Started
+              </span>
+            </button>
+
+            {/* Hamburger Menu (Mobile only) */}
+            <button
+              className="md:hidden text-white"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden mt-4 space-y-2 bg-black/90 backdrop-blur-md rounded-xl p-4 text-white">
+            <button
+              onClick={() => {
+                navigate("/learn-more-investor")
+                setMobileMenuOpen(false)
+              }}
+              className="block w-full text-left text-sm py-2 hover:text-gray-300"
+            >
+              Investors
+            </button>
+            <button
+              onClick={() => {
+                navigate("/learn-more-gp")
+                setMobileMenuOpen(false)
+              }}
+              className="block w-full text-left text-sm py-2 hover:text-gray-300"
+            >
+              Partners
+            </button>
+            <button
+              onClick={() => {
+                navigate("/about")
+                setMobileMenuOpen(false)
+              }}
+              className="block w-full text-left text-sm py-2 hover:text-gray-300"
+            >
+              About Us
+            </button>
+            <button
+              onClick={() => {
+                navigate("/faq")
+                setMobileMenuOpen(false)
+              }}
+              className="block w-full text-left text-sm py-2 hover:text-gray-300"
+            >
+              FAQ
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   )
