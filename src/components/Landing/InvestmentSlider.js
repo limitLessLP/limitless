@@ -80,6 +80,21 @@ export function InvestmentSlider() {
 
   return (
     <div className="relative overflow-hidden rounded-xl bg-white/5 backdrop-blur-sm shadow-lg" style={{ height: '400px' }}>
+      <div className="absolute top-4 left-0 right-0 z-10 flex justify-center gap-2">
+      {investments.map((_, index) => (
+        <button
+          key={index}
+          onClick={() => {
+            setDirection(index > currentIndex ? 1 : -1)
+            setCurrentIndex(index)
+          }}
+          className={`w-2 h-2 rounded-full transition-colors ${
+            index === currentIndex ? "bg-white" : "bg-white/30"
+          }`}
+          aria-label={`Go to slide ${index + 1}`}
+        />
+      ))}
+    </div>
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={currentIndex}
@@ -103,55 +118,35 @@ export function InvestmentSlider() {
             } else if (swipe > swipeConfidenceThreshold) {
               paginate(-1)
             }
-            }}
-            className="absolute inset-0 p-16 shadow-lg flex items-center justify-center"
-          >
-          <div className="md:col-span-2 flex flex-col md:flex-row gap-4 w-full h-full pl-16">
-            <div className="flex flex-col gap-4 md:w-1/2 h-full text-white" style={{ flexWrap: 'wrap', minWidth: '250px' }}>
-              <div className="md:col-span-1 flex-grow">
-                <h3 className="text-4xl font-light mb-4" style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
-                  {currentInvestment.title}
-                </h3>
-              </div>
-              <div className="md:col-span-1 flex-grow">
-                <p className="text-white font-light mb-8 text-xl" style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
-                  {currentInvestment.description}
-                </p>
-              </div>
+          }}
+          className="absolute inset-0 flex items-center justify-center p-4 md:p-8 overflow-auto"
+        >
+          <div className="flex flex-col md:flex-row gap-4 w-full h-full items-center justify-center text-center pt-12 pb-4">
+            <div className="md:w-1/2 flex flex-col gap-4 text-white min-w-0">
+              <h3 className="text-2xl md:text-4xl font-light break-words">
+                {currentInvestment.title}
+              </h3>
+              <p className="font-light text-lg md:text-xl break-words">
+                {currentInvestment.description}
+              </p>
             </div>
-            <div className="md:w-1/2 flex flex-col gap-4 w-full h-full text-white" style={{ flexWrap: 'wrap', minWidth: '250px' }}>
-              <div className="text-center flex-grow">
-                <p className="text-sm text-white">Target</p>
-                <p className="text-2xl font-medium">{currentInvestment.stats.target}</p>
+            <div className="md:w-1/2 flex flex-col gap-4 text-white min-w-0">
+              <div className="flex flex-col gap-1">
+                <p className="text-sm">Target</p>
+                <p className="text-xl md:text-2xl font-medium">{currentInvestment.stats.target}</p>
               </div>
-              <div className="text-center flex-grow">
-                <p className="text-sm text-white">Target IRR</p>
-                <p className="text-2xl font-medium">{currentInvestment.stats.irr}</p>
+              <div className="flex flex-col gap-1">
+                <p className="text-sm">Target IRR</p>
+                <p className="text-xl md:text-2xl font-medium">{currentInvestment.stats.irr}</p>
               </div>
-              <div className="text-center flex-grow">
-                <p className="text-sm text-white">Vintage</p>
-                <p className="text-2xl font-medium">{currentInvestment.stats.vintage}</p>
+              <div className="flex flex-col gap-1">
+                <p className="text-sm">Vintage</p>
+                <p className="text-xl md:text-2xl font-medium">{currentInvestment.stats.vintage}</p>
               </div>
             </div>
           </div>
-          </motion.div>
-          </AnimatePresence>
-
-          <div className="flex justify-center mt-8 gap-2">
-          {investments.map((_, index) => (
-            <button
-            key={index}
-            onClick={() => {
-              setDirection(index > currentIndex ? 1 : -1)
-              setCurrentIndex(index)
-            }}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              index === currentIndex ? "bg-white" : "bg-white/30"
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   )
 }

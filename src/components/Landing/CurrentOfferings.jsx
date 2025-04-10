@@ -19,7 +19,7 @@ export const CurrentOfferings = () => {
                 </p>
               </motion.div>
 
-              <div className="max-w-5xl mx-auto">
+              <div className="max-w-5xl mx-auto pt-4 pb-8">
                 <InvestmentSlider />
               </div>
             </div>
