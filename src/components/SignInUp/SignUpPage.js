@@ -143,7 +143,7 @@ export const SignUpPage = () => {
     <div className="flex min-h-screen">
       <div className="w-full lg:w-1/2 bg-white p-6 md:p-12 flex items-center">
         <div className="absolute top-0 left-0 space-x-2 mb-4">
-          <Link to="/select-type" className="flex items-center text-gray-600 hover:text-black py-4 px-4">
+          <Link to="/select-type?for=waitlist" className="flex items-center text-gray-600 hover:text-black py-4 px-4">
             <ArrowLeft className="h-5 w-5" />
             <span className="ml-2">Back to Select Type</span>
           </Link>

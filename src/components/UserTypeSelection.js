@@ -14,21 +14,27 @@ export const UserTypeSelection = () => {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white relative overflow-hidden">
-      {/* <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl bg-blue-600/20 animate-pulse-slow" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl bg-purple-600/20 animate-float" />
-      </div> */}
-
-      <button className="absolute top-4 left-4">
+      {/* <button 
+        className="absolute top-4 left-4"
+        onClick={() => navigate('/')}
+      >
         <motion.a 
           whileHover={{ scale: 1.1 }}
-          onClick={() => navigate('/')}
           className="flex items-center text-gray-400 hover:text-white transition-colors"
         >
           <ArrowRight className="rotate-180 mr-2" />
-          <span>Back to Home</span>
+          Back to Home
         </motion.a>
-      </button>
+      </button> */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        className="absolute top-4 left-4 flex items-center text-gray-400 hover:text-white transition-colors"
+        onClick={() => navigate('/')}
+      >
+        <ArrowRight className="rotate-180 mr-2" />
+        Back
+      </motion.button>
+
 
       <div className="relative z-10 container mx-auto px-4 py-32">
         <motion.div 
