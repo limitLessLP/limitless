@@ -9,16 +9,21 @@ import landingBackground from '../../assets/landingBackground.jpg';
 
 const title = "The Future Of Venture Capital";
 
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+const yStart = isMobile ? 200 : 400;
+
 const dataPoints = [5, 10, 15, 20, 25, 20, 25, 30, 35, 30, 40, 45, 60, 65, 70, 60, 75, 80, 75, 80, 85, 90];
 
 const calculateLinePath = (dataPoints) => {
-    const width = 1175;
-    const height = 435;
-    const xStep = width / (dataPoints.length - 1);
+    const width = isMobile? 450: 1175;
+    const height = isMobile? 300 : 435;
+    const xStep = (width) / (dataPoints.length - 1);
+
+    const normalize = isMobile? 200 :100;
 
     return dataPoints
         .map((point, index) => {
-            const normalizedY = height - (point / 100) * height;
+            const normalizedY = height - (point / normalize) * height;
             return `${index === 0 ? "M" : "L"} ${index * xStep} ${normalizedY}`;
         })
         .join(" ");
@@ -77,7 +82,7 @@ const Background = React.memo(() => {
                     strokeLinejoin="round"
                     initial={{
                         pathLength: 0,
-                        y: 400,
+                        y: yStart,
                         x: 0
                     }}
                     animate={{
@@ -90,15 +95,15 @@ const Background = React.memo(() => {
                         ease: "easeOut",
                         delay: 0.5
                     }}
-                />
+                    />
 
-                <motion.path
+                    <motion.path
                     d={`${linePath} L ${window.innerWidth},400 L 0,400 Z`}
                     fill="url(#areaGradient)"
                     opacity="0.2"
                     initial={{
                         opacity: 0,
-                        y: 400,
+                        y: yStart,
                         x: 0
                     }}
                     animate={{
@@ -111,7 +116,8 @@ const Background = React.memo(() => {
                         ease: "easeOut",
                         delay: 0.5
                     }}
-                />
+                    />
+
 
                 {/* Gradient definitions */}
                 <defs>
