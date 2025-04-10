@@ -7,7 +7,7 @@ export const Footer = () => {
       >
       <div className="container mx-auto px-4 py-8">
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 mt-14 md:mt-0">
         <a className="text-gray-400 transition text-sm">
         *Hypothetical examples of investments you might see on Limitless, non-representative of current or future investment opportunities. To learn about currently opened investments, please proceed to <a href="/select-type?for=waitlist" className="font-bold hover:text-black">get started</a>. 
         </a>

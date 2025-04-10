@@ -123,7 +123,7 @@ export function Navbar({ section }) {
 
             {/* Hamburger Menu (Mobile only) */}
             <button
-              className="md:hidden text-white"
+              className={`md:hidden ${getTextColor()}`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
