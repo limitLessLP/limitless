@@ -52,7 +52,7 @@ export const AboutUsPage = () => {
       <Navbar />
 
       {/* ABOUT SECTION */}
-      <section className="relative z-10 py-32 px-8 border-t border-white/10">
+      <section className="relative z-10 pb-32 px-8 border-t border-white/10">
         <div className="text-center mb-20">
           <div className="mt-32">
             <div className="container mx-auto px-4">

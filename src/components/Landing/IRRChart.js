@@ -55,7 +55,7 @@ export function IRRChart() {
 
 
   return (
-    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg z-1000 text-white">
+    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg z-1000 text-white snap-start">
       <div className="mb-8">
         <h3 className="text-2xl font-light mb-4">Internal Rate of Return (IRR) Comparison</h3>
         <p className="text-gray-400 font-light text-white">

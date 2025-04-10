@@ -119,14 +119,15 @@ const ScrollProgress = () => {
 };
 
 export const LearnMorePage = () => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
     <div className="h-screen snap-y snap-mandatory overflow-y-scroll bg-white text-black relative">
-      <Navbar section="learnMoreVc"/>
       <ScrollProgress />
 
-      <ParallaxSection className="pt-32 pb-20 text-center snap-start">
-        <header className="relative z-10">
+      <ParallaxSection className="pb-20 text-center snap-start">
+        <Navbar section="learnMoreVc"/>
+        <header className={`relative z-10 ${isMobile ? "" : "pt-32"}`}>
           <h1 className="text-7xl font-extralight text-green-900 mb-6 bg-gradient-to-r from-black to-gray-400 bg-clip-text text-transparent">
             Partner With Limitless
           </h1>

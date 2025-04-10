@@ -9,13 +9,13 @@ export default function AboutUsPage() {
   useEffect(() => {
     setIsVisible(true);
   }, []);
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      <Navbar />
       
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
+      <div className={`relative overflow-hidden`}>
+        <Navbar />
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20"></div>
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_30%,rgba(59,130,246,0.15),transparent_70%)]"></div>
@@ -40,7 +40,7 @@ export default function AboutUsPage() {
       </div>
       
       {/* Vision Section */}
-      <section id="vision" className="py-24 px-4 md:px-8 max-w-7xl mx-auto">
+      <section id="vision" className="pb-24 pt-12 px-4 md:px-8 max-w-7xl mx-auto">
         <div className={`transition-all duration-1000 transform ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
           <div className="text-center mb-20">
             <div className="inline-block mb-3 px-4 py-1 rounded-full bg-blue-900/30 text-blue-400 text-sm font-medium">

@@ -165,12 +165,11 @@ const ProcessStep = ({ icon: Icon, title, description, step }) => (
 
 export const InvestorEducationPage = () => {
   const [showAssistant, setShowAssistant] = useState(false);
-
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   return (
     <div className="h-screen snap-y snap-mandatory overflow-y-scroll bg-white text-black">
-      <Navbar />
-
-      <main className="relative pt-32 pb-20 snap-start">
+      <main className={`relative pb-20 snap-start ${isMobile ? "" : "pt-32"}`}>
+        <Navbar />
         <div className="container mx-auto px-4">
           <header className="text-center mb-20">
             <h1 className="text-6xl font-extralight text-green-900 mb-6">

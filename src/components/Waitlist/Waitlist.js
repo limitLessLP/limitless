@@ -40,11 +40,11 @@ export const Waitlist = () => {
     >
         <div className="w-full max-w-4xl aspect-video flex items-center justify-center">
             <video
-            ref={videoRef}
-            className="w-full h-full object-contain"
-            autoPlay
-            muted
-            playsInline
+                ref={videoRef}
+                className="w-full h-full object-contain"
+                autoPlay
+                muted
+                playsInline
             >
             <source src={introVideo} type="video/mp4" />
             Your browser does not support the video tag.

@@ -52,6 +52,7 @@ const LandingPage = () => {
     }
   }, [])
 
+  // const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
     <div className="min-h-screen bg-black dark:bg-neutral-950 text-black dark:text-white relative overflow-hidden">
@@ -108,7 +109,7 @@ const LandingPage = () => {
           <CurrentOfferings />
         </section>
 
-        <section className="snap-start relative z-10">
+        <section className="relative z-10">
           <Footer />
         </section>
       </div>

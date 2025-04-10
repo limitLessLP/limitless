@@ -15,11 +15,11 @@ const yStart = isMobile ? 200 : 400;
 const dataPoints = [5, 10, 15, 20, 25, 20, 25, 30, 35, 30, 40, 45, 60, 65, 70, 60, 75, 80, 75, 80, 85, 90];
 
 const calculateLinePath = (dataPoints) => {
-    const width = isMobile? 450: 1175;
-    const height = isMobile? 300 : 435;
+    const width = isMobile ? 600: 1175;
+    const height = isMobile ? 200 : 435;
     const xStep = (width) / (dataPoints.length - 1);
 
-    const normalize = isMobile? 200 :100;
+    const normalize = isMobile? 50 : 100;
 
     return dataPoints
         .map((point, index) => {
@@ -129,7 +129,8 @@ const Background = React.memo(() => {
             </svg>
 
             {/* Centered text */}
-            <div className="absolute inset-0 flex items-center justify-center">
+            {/* <div className="absolute inset-0 flex items-center justify-center"> */}
+            <div className="absolute inset-0 flex items-center justify-center -mt-20 md:-mt-32">
                 <motion.div
                     className="text-center"
                     initial={{ opacity: 0, y: 20 }}
