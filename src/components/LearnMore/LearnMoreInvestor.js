@@ -171,7 +171,7 @@ export const InvestorEducationPage = () => {
       <main className={`relative pb-20 snap-start ${isMobile ? "" : "pt-32"}`}>
         <Navbar />
         <div className="container mx-auto px-4">
-          <header className="text-center mb-20">
+          <section className="mb-20 snap-y snap-start mt-10 text-center">
             <h1 className="text-6xl font-extralight text-green-900 mb-6">
               Your Journey into{' '}
               <strong className="bg-gradient-to-r from-green-900 to-green-900 bg-clip-text text-transparent">
@@ -181,11 +181,11 @@ export const InvestorEducationPage = () => {
             <p className="text-4xl text-black max-w-2xl mx-auto">
               To Consumers: The <strong>first</strong> marketplace to offer access to established VC funds
             </p>
-          </header>
+          </section>
 
-          <section className="mb-20 snap-start">
-            <h2 className="text-3xl text-green-900 mb-10">Market Overview</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <section className="mb-20 snap-y snap-start mt-10">
+            <h2 className="text-3xl text-green-900 my-5">Market Overview</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
               <StatsCard
                 icon={TrendingUp}
                 value="25.3%"
@@ -207,9 +207,9 @@ export const InvestorEducationPage = () => {
             </div>
           </section>
 
-          <section className="mb-20 snap-start">
-            <h2 className="text-3xl text-green-900 mb-10">Investment Process</h2>
-            <div className="space-y-16 bg-white text-black">
+          <section className="mb-20 snap-y snap-start mt-10">
+            <h2 className="text-3xl text-green-900 mb-5">Investment Process</h2>
+            <div className={`${isMobile ? "space-y-4" : "space-y-16"} bg-white text-black`}>
               <ProcessStep
                 icon={CheckCircle2}
                 step={1}

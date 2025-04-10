@@ -61,7 +61,7 @@ export const AboutUsPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
-                className="text-center mb-16"
+                className="text-center mb-8"
               >
                 <h2 className="text-5xl font-extralight mb-8">Our Vision</h2>
                 <p className="text-xl text-gray-400 font-light leading-relaxed max-w-3xl mx-auto">
