@@ -79,7 +79,7 @@ const LandingPage = () => {
               className="text-center mb-4"
             >
               {isBackgroundRendered ? (
-                <h2 className="text-4xl md:text-5xl sm:text-2xl my-8 md:my-16 z-10 text-white">
+                <h2 className="text-4xl md:text-5xl sm:text-2xl my-8 md:my-16 z-10 text-white  font-extralight">
                   Performance is everything.
                 </h2>
               ) : (
