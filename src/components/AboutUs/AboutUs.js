@@ -81,9 +81,9 @@ export const AboutUsPage = () => {
                 },
                 {
                   icon: Activity,
-                  title: "Revolutionizing Returns",
+                  title: "Revolutionizing Fundraising",
                   description:
-                    "Breaking industry norms with higher premium carry and fees, while diversifying LP bases with individuals who become portcos' customers.",
+                    "Revolutionizing fundraising where LP-GP relationships are interactive and dynamic, and checks are all value-added capital.",
                   hoverColor: "text-purple-400",
                 },
                 {

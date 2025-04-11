@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Globe, Activity, Users } from 'lucide-react';
+import { Globe, Activity, Users } from 'lucide-react';
 import { Navbar } from '../Navbar';
 import { Footer } from '../Footer/Footer';
 
@@ -141,7 +141,7 @@ export const LearnMorePage = () => {
           </div>
         </section>
 
-      <section className="relative z-10 pt-8 pb-4 border-t border-black/10 snap-start">
+        <section className="relative z-10 pt-8 pb-4 border-t border-black/10 snap-start">
         <div className="container mx-auto px-4">
             <h2 className={`${isMobile ? 'text-3xl' : 'text-4xl'} tracking-tight`}>Why Partner With Us</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
@@ -152,61 +152,17 @@ export const LearnMorePage = () => {
               />
               <FeatureCard
                 icon={Activity}
-                title="Streamlined Process"
-                description="Efficient investor onboarding and management through our advanced platform."
+                title="Streamline Value"
+                description="Highlight the value LPs can deliver after investment, fostering growth and collaboration."
               />
               <FeatureCard
                 icon={Globe}
-                title="Global Reach"
-                description="Expand your fund's presence beyond traditional geographic boundaries."
+                title="Wider Reach"
+                description="Expand beyond institutional LPs to include domain experts, operators, and engineers."
               />
             </div>
           </div>
         </section>
-
-      <section className="relative z-10 py-4 border-t border-black/10 snap-start">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl mb-4 tracking-tight">Investors</h2>
-          <div className="bg-white/5 backdrop-blur-lg rounded-xl p-8 md:p-12 hover:bg-white/10 transition-all duration-500">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div className="space-y-2">
-              < h2 className="text-4xl mb-4 tracking-tight">Ideal Profile</h2>
-                <ul className="space-y-4 text-black text-3xl">
-                  <li className="flex items-center gap-3 group">
-                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
-                    <span>$200k+ Individual Income</span>
-                  </li>
-                  <li className="flex items-center gap-3 group">
-                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
-                    <span>$300k+ Household Income</span>
-                  </li>
-                  <li className="flex items-center gap-3 group">
-                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
-                    <span>$1M+ in Assets</span>
-                  </li>
-                </ul>
-              </div>
-              <div className="space-y-2 snap-start">
-                <h2 className={`text-4xl ${isMobile ? "my-4" : "mb-4"} tracking-tight`}>Benefits</h2>
-                <ul className="space-y-4 text-black text-3xl">
-                  <li className="flex items-center gap-3 group">
-                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
-                    <span>Direct Access to Premium VC Funds</span>
-                  </li>
-                  <li className="flex items-center gap-3 group">
-                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
-                    <span>Portfolio Company Support Options</span>
-                  </li>
-                  <li className="flex items-center gap-3 group">
-                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
-                    <span>Institutional-Grade Analytics</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section className="snap-start relative z-10">
           <Footer />

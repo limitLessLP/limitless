@@ -76,7 +76,7 @@ export function Navbar({ section }) {
                       }}
                       className="rounded-t-xl block w-full text-left px-4 py-3 text-sm text-black hover:bg-black hover:text-white transition-colors"
                     >
-                      Investors
+                      Retail Investors
                     </button>
                     <button
                       onClick={() => {
@@ -85,7 +85,7 @@ export function Navbar({ section }) {
                       }}
                       className="rounded-b-xl block w-full text-left px-4 py-3 text-sm text-black hover:bg-black hover:text-white transition-colors"
                     >
-                      Partners
+                      VC Partners
                     </button>
                   </div>
                 )}
@@ -143,7 +143,7 @@ export function Navbar({ section }) {
               }}
               className="block w-full text-left text-sm py-2 hover:text-gray-300"
             >
-              Investors
+              Retail Investors
             </button>
             <button
               onClick={() => {
@@ -152,7 +152,7 @@ export function Navbar({ section }) {
               }}
               className="block w-full text-left text-sm py-2 hover:text-gray-300"
             >
-              Partners
+              VC Partners
             </button>
             <button
               onClick={() => {

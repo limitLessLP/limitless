@@ -7,7 +7,8 @@ import {
   TrendingUp,
   Target,
   Users,
-  MessageSquare
+  MessageSquare,
+  ArrowRight
 } from 'lucide-react';
 import { Navbar } from '../Navbar';
 import { Footer } from '../Footer/Footer';
@@ -186,24 +187,24 @@ export const InvestorEducationPage = () => {
           <section className="mb-20 snap-y snap-start mt-10">
             <h2 className="text-3xl text-green-900 my-5">Market Overview</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
-              <StatsCard
-                icon={TrendingUp}
-                value="25.3%"
-                label="Highest avg. IRR Asset Class"
-                delay={400}
-              />
-              <StatsCard
-                icon={Target}
-                value="$590Bn"
-                label="Total Addressable Market"
-                delay={0}
-              />
-              <StatsCard
-                icon={Users}
-                value="900,000+"
-                label="Accredited Investors"
-                delay={200}
-              />
+            <StatsCard
+              icon={TrendingUp}
+              value="25.3%"
+              label="Avg. Annual Returns from VC Investments"
+              delay={400}
+            />
+            <StatsCard
+              icon={Target}
+              value="55%"
+              label="Nasdaq Success Stories Funded by VC"
+              delay={0}
+            />
+            <StatsCard
+              icon={Users}
+              value="70%"
+              label="Unicorn Companies Backed by VC Funds"
+              delay={200}
+            />
             </div>
           </section>
 
@@ -240,6 +241,50 @@ export const InvestorEducationPage = () => {
       </main>
 
       <AIAssistant isOpen={showAssistant} onClose={() => setShowAssistant(false)} />
+
+      <section className="relative z-10 py-4 border-t border-black/10 snap-start">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl mb-4 tracking-tight">Investors</h2>
+          <div className="bg-white/5 backdrop-blur-lg rounded-xl p-8 md:p-12 hover:bg-white/10 transition-all duration-500">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div className="space-y-2">
+              < h2 className="text-4xl mb-4 tracking-tight">Ideal Profile</h2>
+                <ul className="space-y-4 text-black text-3xl">
+                  <li className="flex items-center gap-3 group">
+                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
+                    <span>$200k+ Individual Income</span>
+                  </li>
+                  <li className="flex items-center gap-3 group">
+                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
+                    <span>$300k+ Household Income</span>
+                  </li>
+                  <li className="flex items-center gap-3 group">
+                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
+                    <span>$1M+ in Assets</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="space-y-2 snap-start">
+                <h2 className={`text-4xl ${isMobile ? "my-4" : "mb-4"} tracking-tight`}>Benefits</h2>
+                <ul className="space-y-4 text-black text-3xl">
+                  <li className="flex items-center gap-3 group">
+                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
+                    <span>Direct Access to Premium VC Funds</span>
+                  </li>
+                  <li className="flex items-center gap-3 group">
+                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
+                    <span>Portfolio Company Support Options</span>
+                  </li>
+                  <li className="flex items-center gap-3 group">
+                    <ArrowRight className="text-green-900 group-hover:translate-x-1 transition-transform" />
+                    <span>Institutional-Grade Analytics</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
         
       <section className="snap-start relative z-10">
           <Footer />
