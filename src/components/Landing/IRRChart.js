@@ -80,7 +80,7 @@ export function IRRChart() {
             />
             <Legend 
               onMouseEnter={(e) => setHoveredAsset(e.dataKey)}
-              onMouseLeave={() => setHoveredAsset(null)}
+              onMouseLeave={() => setHoveredAsset("VC")}
             />
             {Object.entries(assetColors).map(([key, color]) => (
               <Line
