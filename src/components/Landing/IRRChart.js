@@ -35,16 +35,8 @@ const averages = [
   { Asset: "Bonds", Average: 3.32 }
 ];
 
-
 export function IRRChart() {
-  const [hoveredAsset, setHoveredAsset] = useState(null)
-
-  // const assetColors = {
-  //   VC: "hsl(var(--chart-1))",
-  //   PE: "hsl(var(--chart-2))",
-  //   Stocks: "hsl(var(--chart-3))",
-  //   Bonds: "hsl(var(--chart-4))",
-  // }
+  const [hoveredAsset, setHoveredAsset] = useState("VC")
 
   const assetColors = {
     VC: "hsl(142, 76%, 36%)", // Green
@@ -53,9 +45,10 @@ export function IRRChart() {
     Bonds: "#ffffff", // White
   }
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
-    <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 shadow-lg z-1000 text-white snap-start">
+    <div className={`bg-white/5 backdrop-blur-sm rounded-xl ${isMobile ? "p-3" : "p-6"} shadow-lg z-1000 text-white snap-start`}>
       <div className="mb-8">
         <h3 className="text-2xl font-light mb-4">Internal Rate of Return (IRR) Comparison</h3>
         <p className="text-gray-400 font-light text-white">
@@ -96,8 +89,8 @@ export function IRRChart() {
                 dataKey={key}
                 stroke={color}
                 strokeWidth={hoveredAsset === key ? 3 : 2}
-                dot={{ r: 4, strokeWidth: 1 }}
-                activeDot={{ r: 6, strokeWidth: 0 }}
+                dot={{ r: isMobile ? 2 : 4, strokeWidth: 1 }}
+                activeDot={{ r: isMobile ? 4 : 6, strokeWidth: 0 }}
                 opacity={hoveredAsset ? (hoveredAsset === key ? 1 : 0.3) : 1}
               />
             ))}
@@ -129,4 +122,4 @@ export function IRRChart() {
       </div>
     </div>
   )
-} 
+}
