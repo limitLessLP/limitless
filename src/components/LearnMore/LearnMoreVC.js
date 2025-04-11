@@ -142,8 +142,8 @@ export const LearnMorePage = () => {
         </section>
 
         <section className="relative z-10 pt-8 pb-4 border-t border-black/10 snap-start">
-        <div className="container mx-auto px-4">
-            <h2 className={`${isMobile ? 'text-3xl' : 'text-4xl'} tracking-tight`}>Why Partner With Us</h2>
+          <div className="container mx-auto px-4">
+            <h2 className={`${isMobile ? 'text-3xl' : 'text-4xl'} tracking-tight my-1`}>Why Partner With Us</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
               <FeatureCard
                 icon={Users}
