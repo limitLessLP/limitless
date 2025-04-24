@@ -22,6 +22,7 @@ import { RepublicVC } from './components/Funds/republic';
 import { UserTypeSelection } from './components/UserTypeSelection';
 import { Waitlist } from './components/Waitlist/Waitlist';
 
+
 function App() {
   return (
     <Router>

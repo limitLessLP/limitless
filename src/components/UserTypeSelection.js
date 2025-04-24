@@ -69,7 +69,7 @@ export const UserTypeSelection = () => {
           >
             <div className="p-8 rounded-[1.15rem] bg-neutral-900 h-full">
               <Users className="w-12 h-12 mb-6" />
-              <h2 className="text-2xl font-medium mb-4">An Investor</h2>
+              <h2 className="text-2xl font-medium mb-4">A Retail Investor</h2>
               <p className="text-gray-400">
                 Seeking access to premium venture capital opportunities
               </p>

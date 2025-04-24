@@ -119,25 +119,25 @@ export const AboutUsPage = () => {
         </div>
 
         {/* Logos carousel */}
-<div className="relative w-full overflow-hidden mb-12">
-  <div
-    ref={scrollRef}
-    className="flex gap-6 whitespace-nowrap will-change-transform transition-transform duration-75 ease-linear"
-  >
-    {[...logos, ...logos].map((logo, i) => (
-      <div
-        key={i}
-        className="p-3 rounded-xl border border-white/10 shadow-md backdrop-blur-sm bg-white/5 flex-shrink-0"
-      >
-        <img
-          src={logo}
-          alt="Logo"
-          className="h-8 w-auto opacity-100 transition grayscale hover:grayscale-0"
-        />
+      <div className="relative w-full overflow-hidden mb-12">
+        <div
+          ref={scrollRef}
+          className="flex gap-6 whitespace-nowrap will-change-transform transition-transform duration-75 ease-linear"
+        >
+          {[...logos, ...logos].map((logo, i) => (
+            <div
+              key={i}
+              className="p-3 rounded-xl border border-white/10 shadow-md backdrop-blur-sm bg-white/5 flex-shrink-0"
+            >
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-8 w-auto opacity-100 transition grayscale hover:grayscale-0"
+              />
+            </div>
+          ))}
+        </div>
       </div>
-    ))}
-  </div>
-</div>
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Jacky */}
