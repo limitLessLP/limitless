@@ -41,19 +41,16 @@ export const PioneerVC = () => {
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center pt-4 space-y-4 md:space-y-0">
                         <div className="pr-4">
                             <p className="text-sm text-gray-500">Total Fund Size</p>
-                            <p className="font-medium">$50MM</p>
+                            <p className="text-sm">$50MM</p>
                         </div>
-                        <div>
+                        <div className="pr-4">
                             <p className="text-sm text-gray-500">Minimum Investment</p>
-                            <p className="font-medium">$25K</p>
+                            <p className="text-sm">$25K</p>
                         </div>
-                        <div>
+                        <div className="pr-4">
                             <p className="text-sm text-gray-500">Fee Structure</p>
-                            <p className="font-medium">3% Management Fee, 20% Carried Interest</p>
+                            <p className="text-sm">3% Management Fee, 20% Carried Interest</p>
                         </div>
-                        <button className="bg-green-950 text-white px-4 py-2 rounded hover:bg-blue-600 transition ml-auto">
-                            View Details →
-                        </button>
                     </div>
 
                     {/* Additional Info */}

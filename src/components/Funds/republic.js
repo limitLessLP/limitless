@@ -23,7 +23,7 @@ export const RepublicVC = () => {
                             Republic VC is an investment fund focused on AI, fintech, and consumer sectors. The fund is managed by experienced professionals.
                         </p>
                         <p>
-                            <strong>Fund Manager(s):</strong> 
+                            <strong>Fund Manager(s): </strong> 
                             <a href="https://www.linkedin.com/in/sophie007/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Sophie Liao</a>, General Partner.
                         </p>
                         <p>
@@ -45,28 +45,25 @@ export const RepublicVC = () => {
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center pt-4 space-y-4 md:space-y-0">
                         <div className="pr-4">
                             <p className="text-sm text-gray-500">Total Fund Size</p>
-                            <p className="font-medium">~$50MM</p>
+                            <p className="font-sm">~$50MM</p>
                         </div>
-                        <div>
+                        <div className="pr-4">
                             <p className="text-sm text-gray-500">Minimum Investment</p>
-                            <p className="font-medium">$25K</p>
+                            <p className="font-sm">$25K</p>
                         </div>
-                        <div>
+                        <div className="pr-4">
                             <p className="text-sm text-gray-500">Fee Structure</p>
-                            <p className="font-medium">3% Management Fee, 20% Carried Interest</p>
+                            <p className="text-sm">3% Management Fee, 20% Carried Interest</p>
                         </div>
-                        <div>
+                        <div className="pr-4">
                             <p className="text-sm text-gray-500">Investor Requirement</p>
-                            <p className="font-medium">
+                            <p className="text-sm">
                                 Qualified purchasers only (5M in assets).{' '}
                                 <a href="https://www.sec.gov/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
                                     Learn more
                                 </a>
                             </p>
                         </div>
-                        <button className="bg-green-950 text-white px-4 py-2 rounded hover:bg-blue-600 transition ml-auto">
-                            View Details →
-                        </button>
                     </div>
 
                     {/* Additional Info */}

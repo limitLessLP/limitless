@@ -23,9 +23,9 @@ export const Lola = () => {
                             LoLa Capital is a life sciences-focused investment fund managed by experienced professionals. The fund targets investments in therapeutics and medical devices.
                         </p>
                         <p>
-                            <strong>Fund Manager(s):</strong> 
+                            <strong>Fund Manager(s): </strong> 
                             <a href="https://www.linkedin.com/in/greg-verdine-b181991/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Greg Verdine</a>, Founding General Manager (emphasized), 
-                            <a href="https://www.linkedin.com/in/circe-lyu-190901a1/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Circe Lyu</a>, Founding General Manager, and Sashank Reddy, Venture Partner.
+                            {' '}<a href="https://www.linkedin.com/in/circe-lyu-190901a1/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Circe Lyu</a>, Founding General Manager, and Sashank Reddy, Venture Partner.
                         </p>
                         <p>
                             The total fund size is $200MM, with $5MM allocated to LimitLess. The fund is set to close by June 30, 2025.
@@ -46,28 +46,25 @@ export const Lola = () => {
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center pt-4 space-y-4 md:space-y-0">
                         <div className="pr-4">
                             <p className="text-sm text-gray-500">Total Fund Size</p>
-                            <p className="font-medium">$200MM</p>
+                            <p className="text-sm">$200MM</p>
                         </div>
-                        <div>
+                        <div className="pr-4">
                             <p className="text-sm text-gray-500">Minimum Investment</p>
-                            <p className="font-medium">$50K</p>
+                            <p className="text-sm">$50K</p>
                         </div>
-                        <div>
+                        <div className="pr-4">
                             <p className="text-sm text-gray-500">Fee Structure</p>
-                            <p className="font-medium">3.5% Management Fee, 20% Carried Interest</p>
+                            <p className="text-sm">3.5% Management Fee, 20% Carried Interest</p>
                         </div>
-                        <div>
+                        <div className="pr-4">
                             <p className="text-sm text-gray-500">Investor Requirement</p>
-                            <p className="font-medium">
+                            <p className="text-sm">
                                 Qualified purchasers only (5M in assets).{' '}
                                 <a href="https://www.sec.gov/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
                                     Learn more
                                 </a>
                             </p>
                         </div>
-                        <button className="bg-green-950 text-white px-4 py-2 rounded hover:bg-blue-600 transition ml-auto">
-                            View Details →
-                        </button>
                     </div>
 
                     {/* Additional Info */}
