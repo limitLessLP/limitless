@@ -108,6 +108,21 @@ export function Navbar({ section }) {
 
           {/* Right side: Get Started + Mobile Menu Toggle */}
           <div className="flex items-center gap-4">
+            {/* Direct LP Access Button */}
+            <button
+              onClick={() => navigate("/direct-signin")}
+              className={`hidden md:block group relative p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 
+                ${
+                  section === "hero"
+                    ? "bg-transparent border border-white text-white hover:bg-white/10"
+                    : "bg-transparent border border-black text-black dark:border-white dark:text-white hover:bg-black/10 dark:hover:bg-white/10"
+                }`}
+            >
+              <span className="inline-block px-6 py-2 rounded-[1.15rem] text-sm font-semibold transition-all duration-300 group-hover:-translate-y-0.5">
+                LP Access
+              </span>
+            </button>
+            
             {/* Get Started Button */}
             <button
               onClick={() => navigate("/select-type?for=waitlist")}
@@ -171,6 +186,15 @@ export function Navbar({ section }) {
               className="block w-full text-left text-sm py-2 hover:text-gray-300"
             >
               FAQ
+            </button>
+            <button
+              onClick={() => {
+                navigate("/direct-signin")
+                setMobileMenuOpen(false)
+              }}
+              className="block w-full text-left text-sm py-2 hover:text-gray-300"
+            >
+              LP Access
             </button>
           </div>
         )}

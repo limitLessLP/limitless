@@ -3,6 +3,8 @@ import { Analytics } from "@vercel/analytics/react";
 import LandingPage from './components/Landing/LandingPage';
 import { SignUpPage } from './components/SignInUp/SignUpPage';
 import { SignInPage } from './components/SignInUp/SignInPage';
+import { DirectSignUpLP } from './components/SignInUp/DirectSignUpLP';
+import { DirectSignInPage } from './components/SignInUp/DirectSignInPage';
 import { AboutUsPage } from './components/AboutUs/AboutUs';
 import { InvestorEducationPage } from './components/LearnMore/LearnMoreInvestor';
 import { LearnMorePage } from './components/LearnMore/LearnMoreVC';
@@ -48,6 +50,10 @@ function App() {
         <Route path="/select-type" element={<UserTypeSelection />} />
         <Route path="/signup" element={<SignUpPage/>} />
         <Route path="/waitlist" element={<Waitlist />} />
+        
+        {/* Direct LP platform access routes */}
+        <Route path="/direct-signup" element={<DirectSignUpLP />} />
+        <Route path="/direct-signin" element={<DirectSignInPage />} />
       </Routes>
       <Analytics />
     </Router>

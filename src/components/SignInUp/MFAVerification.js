@@ -14,6 +14,9 @@ export const MFAVerification = () => {
   const [error, setError] = useState("")
   const [countdown, setCountdown] = useState(30)
   const navigate = useNavigate()
+  
+  // Check if this is a direct access flow
+  const isDirectFlow = localStorage.getItem('directAccess') === 'true'
 
   useEffect(() => {
     if (countdown > 0) {
@@ -26,7 +29,7 @@ export const MFAVerification = () => {
     setIsLoading(true)
     setError("")
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/resend-verification', {
+      const response = await fetch('https://limitless-backend.vercel.app/api/resend-verification', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +58,7 @@ export const MFAVerification = () => {
     setError("")
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/verify-phone', {
+      const response = await fetch('https://limitless-backend.vercel.app/api/verify-phone', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +71,13 @@ export const MFAVerification = () => {
 
       const data = await response.json()
       if (data.success) {
-        navigate("/welcome")
+        // For direct access flow, go straight to dashboard
+        if (isDirectFlow) {
+          localStorage.removeItem('directAccess') // Clear the flag
+          navigate("/dashboard")
+        } else {
+          navigate("/welcome") // Regular waitlist flow
+        }
       } else {
         setError(data.message || "Invalid verification code")
       }
