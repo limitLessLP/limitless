@@ -24,8 +24,11 @@ export const DirectSignInPage = () => {
     setIsLoading(true)
     setError("")
 
+    // Store a timestamp of the sign-in attempt
     try {
-      const response = await fetch('https://limitless-backend.vercel.app/api/signin', {
+      // const endpoint = "http://127.0.0.1:5000/api/signin";
+      const endpoint = 'https://limitless-backend.vercel.app/api/signin';
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +46,7 @@ export const DirectSignInPage = () => {
         // Store the authentication token
         localStorage.setItem('token', data.token || data.accessToken || '')
         // Store user's name and email for dashboard
-        localStorage.setItem('userName', data.firstName || data.user?.firstName || data.name || 'Investor')
+        localStorage.setItem('userName', data.userName || 'Investor')
         localStorage.setItem('userEmail', email)
         
         // For debugging - log all possible verification fields
