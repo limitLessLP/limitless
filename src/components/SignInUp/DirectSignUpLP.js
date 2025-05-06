@@ -7,6 +7,8 @@ import { Button } from "../Common/button"
 import { Input } from "../Common/input"
 import { Label } from "../Common/label"
 import { useNavigate } from "react-router-dom"
+import PhoneInput from 'react-phone-input-2'
+
 
 export const DirectSignUpLP = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -185,14 +187,15 @@ export const DirectSignUpLP = () => {
 
             <div className="space-y-2">
               <Label htmlFor="phone">Phone number</Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="+1 (555) 000-0000"
-                className="h-12 border-gray-300 focus:border-gray-500"
+              <PhoneInput
+                country={'us'}
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
+                onChange={(value) => setPhone(value)}
+                containerClass="border rounded-lg overflow-hidden"
+                inputClass="!w-full !py-2 !px-3 !text-sm !focus:outline-none"
+                specialLabel=""
+                enableSearch={true}
+                disableDropdown={false}
               />
             </div>
 
