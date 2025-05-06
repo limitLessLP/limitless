@@ -6,7 +6,7 @@ export const NewsSection = () => {
   const [news, setNews] = useState([]);
 
   async function getData(pageSize = 20, pageNumber = 1) {
-    const url = new URL('https://limitless-backend.vercel.app/api/news/');
+    const url = new URL('https://limitless-backend.vercel.app/api/news');
     url.searchParams.append('page', pageNumber);
     url.searchParams.append('limit', pageSize);
 
