@@ -15,7 +15,7 @@ import Contact from './pages/Contact';
 import { MFAVerification } from "./components/SignInUp/MFAVerification"
 import { LPDashboard } from "./components/Dashboard/LPDashboard"
 import { WelcomeAnimation } from './components/Dashboard/WelcomeAnimation';
-import { Portfolio } from "./components/Dashboard/Portfolio"
+// import { Portfolio } from "./components/Dashboard/Portfolio"
 import { Offerings } from "./components/Dashboard/Offerings"
 import { Account } from "./components/Dashboard/Account"
 import { Lola } from "./components/Funds/lola"
@@ -41,7 +41,7 @@ function App() {
         <Route path="/mfa-verification" element={<MFAVerification />} />
         <Route path="/dashboard" element={<LPDashboard />} />
         <Route path="/welcome" element={<WelcomeAnimation />} />
-        <Route path="/portfolio" element={<Portfolio />} />
+        {/* <Route path="/portfolio" element={<Portfolio />} /> */}
         <Route path="/offerings" element={<Offerings />} />
         <Route path="/account" element={<Account />} />
         <Route path="/lola" element={<Lola />} />
