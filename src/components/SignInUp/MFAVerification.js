@@ -52,10 +52,26 @@ export const MFAVerification = () => {
     }
   }
 
+  const sendWelcomeEmail = (email, firstName) => {
+    fetch("https://limitless-backend.vercel.app/api/send-welcome-email", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        firstName: firstName,
+        lastName: ""
+      }),
+    })
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
+    const email = localStorage.getItem('userEmail');
+    const firstName = localStorage.getItem('userName');
 
     try {
       const response = await fetch('https://limitless-backend.vercel.app/api/verify-phone', {
@@ -64,7 +80,7 @@ export const MFAVerification = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: localStorage.getItem('userEmail'),
+          email: email,
           verification_code: verificationCode,
         }),
       })
@@ -72,6 +88,7 @@ export const MFAVerification = () => {
       const data = await response.json()
       if (data.success) {
         // For direct access flow, go straight to dashboard
+        sendWelcomeEmail(email, firstName);
         if (isDirectFlow) {
           localStorage.removeItem('directAccess') // Clear the flag
           navigate("/dashboard")

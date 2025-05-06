@@ -48,7 +48,8 @@ export const Portfolio = () => {
               animate={{ opacity: 1, y: 0 }}
               className="text-center"
             >
-              <h1 className="text-4xl font-extralight mb-4">Portfolio Overview</h1>
+              {/* <h1 className="text-4xl font-extralight mb-4">Portfolio Overview </h1> */}
+              <h1 className="text-4xl font-extralight mb-4">Coming Soon</h1>
               <p className="text-gray-400">Track your investments and performance</p>
             </motion.div>
           </div>
@@ -72,7 +73,6 @@ export const Portfolio = () => {
               </div>
             </motion.div>
 
-            {/* Similar stats cards for other metrics */}
           </div>
         </div>
 

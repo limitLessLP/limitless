@@ -23,9 +23,9 @@ export const DashboardNav = ({ currentPage }) => {
               <a href="#" onClick={() => navigate('/dashboard')} className={`${getNavClass('dashboard')} inline-flex items-center px-1 pt-1 text-sm font-medium`}>
                 Home
               </a>
-              <a href="#" onClick={() => navigate('/portfolio')} className={`${getNavClass('portfolio')} inline-flex items-center px-1 pt-1 text-sm font-medium`}>
+              {/* <a href="#" onClick={() => navigate('/portfolio')} className={`${getNavClass('portfolio')} inline-flex items-center px-1 pt-1 text-sm font-medium`}>
                 Portfolio
-              </a>
+              </a> */}
               <a href="#" onClick={() => navigate('/offerings')} className={`${getNavClass('offerings')} inline-flex items-center px-1 pt-1 text-sm font-medium`}>
                 Offerings
               </a>
