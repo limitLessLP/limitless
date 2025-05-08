@@ -110,7 +110,7 @@ export function Navbar({ section }) {
           <div className="flex items-center gap-4">
             {/* Direct LP Access Button */}
             <button
-              onClick={() => navigate("/direct-signin")}
+              onClick={() => navigate("/access-type")}
               className={`hidden md:block group relative p-px rounded-2xl backdrop-blur-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 
                 ${
                   section === "hero"
@@ -119,7 +119,7 @@ export function Navbar({ section }) {
                 }`}
             >
               <span className="inline-block px-6 py-2 rounded-[1.15rem] text-sm font-semibold transition-all duration-300 group-hover:-translate-y-0.5">
-                LP Access
+                Early Access
               </span>
             </button>
             
@@ -189,12 +189,12 @@ export function Navbar({ section }) {
             </button>
             <button
               onClick={() => {
-                navigate("/direct-signin")
+                navigate("/access-type")
                 setMobileMenuOpen(false)
               }}
               className="block w-full text-left text-sm py-2 hover:text-gray-300"
             >
-              LP Access
+              Early Access
             </button>
           </div>
         )}

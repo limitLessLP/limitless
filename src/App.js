@@ -4,7 +4,9 @@ import LandingPage from './components/Landing/LandingPage';
 import { SignUpPage } from './components/SignInUp/SignUpPage';
 import { SignInPage } from './components/SignInUp/SignInPage';
 import { DirectSignUpLP } from './components/SignInUp/DirectSignUpLP';
+import { DirectSignUpGP } from './components/SignInUp/DirectSignUpGP';
 import { DirectSignInPage } from './components/SignInUp/DirectSignInPage';
+import { GPSignInPage } from './components/SignInUp/GPSignInPage';
 import { AboutUsPage } from './components/AboutUs/AboutUs';
 import { InvestorEducationPage } from './components/LearnMore/LearnMoreInvestor';
 import { LearnMorePage } from './components/LearnMore/LearnMoreVC';
@@ -23,6 +25,7 @@ import { PioneerVC } from './components/Funds/pioneer';
 import { RepublicVC } from './components/Funds/republic';
 import { UserTypeSelection } from './components/UserTypeSelection';
 import { Waitlist } from './components/Waitlist/Waitlist';
+import AccessTypePage from './pages/AccessTypePage';
 
 
 function App() {
@@ -51,9 +54,16 @@ function App() {
         <Route path="/signup" element={<SignUpPage/>} />
         <Route path="/waitlist" element={<Waitlist />} />
         
+        {/* Early Access routes */}
+        <Route path="/access-type" element={<AccessTypePage />} />
+        
         {/* Direct LP platform access routes */}
         <Route path="/direct-signup" element={<DirectSignUpLP />} />
         <Route path="/direct-signin" element={<DirectSignInPage />} />
+        
+        {/* GP platform access routes */}
+        <Route path="/gp-signup" element={<DirectSignUpGP />} />
+        <Route path="/gp-signin" element={<GPSignInPage />} />
       </Routes>
       <Analytics />
     </Router>
