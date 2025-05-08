@@ -9,11 +9,12 @@ import { Label } from "../Common/label"
 import { useNavigate } from "react-router-dom"
 import PhoneInput from 'react-phone-input-2'
 
-
-export const DirectSignUpLP = () => {
+export const DirectSignUpGP = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
+  const [firm, setFirm] = useState("")
+  const [position, setPosition] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
   const [password, setPassword] = useState("")
@@ -29,10 +30,12 @@ export const DirectSignUpLP = () => {
     const payload = {
       firstName,
       lastName,
+      firm,
+      position,
       email,
       password,
       phone: phone ? `+${phone}` : "",
-      userType: "lp"
+      userType: "gp"
     }
 
     try {
@@ -53,6 +56,7 @@ export const DirectSignUpLP = () => {
         localStorage.setItem('userEmail', email)
         localStorage.setItem('userId', signupData.userId)
         localStorage.setItem('directAccess', 'true')
+        localStorage.setItem('userType', 'gp')
         
         // Request verification code
         const verificationResponse = await fetch('https://limitless-backend.vercel.app/api/request-verification', {
@@ -99,7 +103,7 @@ export const DirectSignUpLP = () => {
             <motion.path
               d="M0,50 C20,20 50,70 100,50 L100,100 L0,100 Z"
               fill="none"
-              stroke="rgba(255,255,255,0.2)"
+              stroke="rgba(0,0,0,0.1)"
               strokeWidth="0.5"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{
@@ -123,10 +127,10 @@ export const DirectSignUpLP = () => {
 
         <div className="space-y-4 z-10">
           <h2 className="text-4xl font-bold bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
-            Access Premium Investments
+            Partner With Us
           </h2>
           <p className="text-gray-600 max-w-md">
-            Join Limitless as an accredited investor and gain access to elite venture capital opportunities with complete transparency.
+            Join Limitless as a GP/VC partner and expand your reach with our platform, accessing a broader investor base and streamlining your fundraising process.
           </p>
         </div>
       </div>
@@ -136,8 +140,8 @@ export const DirectSignUpLP = () => {
         <div className="w-full max-w-md mx-auto space-y-8">
           <div className="lg:hidden space-y-4 mb-8">
             <h1 className="text-3xl font-bold">Limitless</h1>
-            <h2 className="text-3xl font-bold">Create your investor account</h2>
-            <p className="text-gray-600">Gain access to premium investment opportunities.</p>
+            <h2 className="text-3xl font-bold">Create your GP account</h2>
+            <p className="text-gray-600">Partner with us to expand your reach.</p>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -170,6 +174,30 @@ export const DirectSignUpLP = () => {
                   required
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="firm">Firm name</Label>
+              <Input
+                id="firm"
+                placeholder="Enter your firm name"
+                className="h-12 border-gray-300 focus:border-gray-500"
+                value={firm}
+                onChange={(e) => setFirm(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="position">Position</Label>
+              <Input
+                id="position"
+                placeholder="Enter your position"
+                className="h-12 border-gray-300 focus:border-gray-500"
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
+                required
+              />
             </div>
 
             <div className="space-y-2">
@@ -256,7 +284,7 @@ export const DirectSignUpLP = () => {
                 Already have an account?{" "}
                 <button
                   type="button"
-                  onClick={() => navigate("/direct-signin")}
+                  onClick={() => navigate("/gp-signin")}
                   className="text-blue-500 hover:text-blue-600 font-medium"
                 >
                   Sign in
@@ -268,4 +296,4 @@ export const DirectSignUpLP = () => {
       </div>
     </div>
   )
-}
+} 
