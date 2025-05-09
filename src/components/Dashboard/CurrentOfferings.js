@@ -18,7 +18,7 @@ export const CurrentOfferings = () => {
       investorRequirement: "Qualified purchasers only (5M in assets)",
       capitalCall: "Schedule TBD",
       timeline: "5-10 years before fund exit",
-      redirect: "/pioneer",
+      redirect: "/offerings",
     },
     {
       id: 2,
@@ -32,12 +32,12 @@ export const CurrentOfferings = () => {
       investorRequirement: "Qualified purchasers only (5M in assets)",
       capitalCall: "Schedule TBD",
       timeline: "5-10 years before fund exit",
-      redirect: "/republic",
+      redirect: "/offerings",
     },
     {
       id: 3,
       firm: "LoLa Capital",
-      name: "Fund Managers: Greg Verdine, Circe Lyu, Sashank Reddy",
+      name: "Fund Managers: Greg Verdine (GP), Circe Lyu, Sashank Reddy",
       focus: "Life Sciences, including Therapeutics and Medical Devices",
       target: "200MM (Allocation: 5MM)",
       deadline: "June 30, 2025",
@@ -46,7 +46,7 @@ export const CurrentOfferings = () => {
       investorRequirement: "Qualified purchasers only (5M in assets)",
       capitalCall: "Schedule TBD",
       timeline: "10-12 years before fund exit",
-      redirect: "/lola",
+      redirect: "/offerings",
     },
   ];
 

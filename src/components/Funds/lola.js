@@ -24,8 +24,9 @@ export const Lola = () => {
                         </p>
                         <p>
                             <strong>Fund Manager(s): </strong> 
-                            <a href="https://www.linkedin.com/in/greg-verdine-b181991/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Greg Verdine</a>, Founding General Manager (emphasized), 
-                            {' '}<a href="https://www.linkedin.com/in/circe-lyu-190901a1/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Circe Lyu</a>, Founding General Manager, and Sashank Reddy, Venture Partner.
+                            <a href="https://www.linkedin.com/in/greg-verdine-b181991/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Greg Verdine</a>, Founding General Manager (GP), 
+                            {' '}<a href="https://www.linkedin.com/in/circe-lyu-190901a1/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Circe Lyu</a>, Founding General Manager, and
+                            {' '}<a href="https://www.linkedin.com/in/sashank-reddy-1b4710bb/"  target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Sashank Reddy</a>, Venture Partner.
                         </p>
                         <p>
                             The total fund size is $200MM, with $5MM allocated to LimitLess. The fund is set to close by June 30, 2025.
