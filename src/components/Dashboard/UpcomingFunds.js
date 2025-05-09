@@ -7,14 +7,14 @@ export const UpcomingFunds = () => {
       id: 1,
       name: "Fintech Opportunities Fund",
       firm: "Accel Partners",
-      expectedLaunch: "Q3 2024",
+      expectedLaunch: "Q3 2025",
       targetSize: "$400M",
     },
     {
       id: 2,
       name: "AI & ML Fund II",
       firm: "Benchmark Capital",
-      expectedLaunch: "Q4 2024",
+      expectedLaunch: "Q4 2025",
       targetSize: "$600M",
     },
   ]

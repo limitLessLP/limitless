@@ -8,9 +8,9 @@ export const PioneerVC = () => {
                 <div className="bg-white rounded-2xl shadow-md p-8 space-y-6">
                     <div className="flex items-center justify-between space-x-4">
                         <div className="flex items-center space-x-4">
-                            <img src={pioneerLogo} alt="Logo" className="w-18 h-16 rounded-full" />
+                            <img src={pioneerLogo} alt="Logo" className="w-34 h-10 rounded-full" />
                             <div>
-                                <h3 className="text-2xl font-semibold">Pioneer VC Fund I</h3>
+                                <h3 className="text-2xl font-semibold"> Fund I: Pioneer VC</h3>
                                 <p className="text-sm text-gray-500">Pioneer VC Partners</p>
                             </div>
                         </div>
@@ -21,6 +21,10 @@ export const PioneerVC = () => {
                     <div className="text-sm text-black space-y-4">
                         <p>
                             Pioneer VC is a bio and health-focused investment fund managed by experienced professionals, including Dave Messina, General Partner. The fund targets investments in therapeutics and healthcare companies.
+                        </p>
+                        <p>
+                            <strong>Fund Manager(s): </strong> 
+                            <a href="https://www.linkedin.com/in/davemessina/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Dave Messina</a>, General Partner.
                         </p>
                         <p>
                             The total fund size is $50MM, with $1MM allocated to LimitLess. The fund is set to close by mid-June 2025.
