@@ -1,83 +1,116 @@
 import React from 'react';
+import { FlaskConical, Users, DollarSign, CalendarDays, Clock3 } from 'lucide-react';
 import republic from '../../assets/republic.png';
 
 export const RepublicVC = () => {
     return (
         <div className="min-h-screen bg-[#f8f9fa]">
             <div className="max-w-5xl mx-auto px-4 py-24">
-                <div className="bg-white rounded-2xl shadow-md p-8 space-y-6">
-                    <div className="flex items-center justify-between space-x-4">
-                        <div className="flex items-center space-x-4">
-                            <img src={republic} alt="Logo" className="w-18 h-16 rounded-full" />
+                <div className="bg-white rounded-2xl shadow-md p-8 space-y-8">
+
+                    {/* Header */}
+                    <div className="flex items-center justify-between flex-wrap gap-4">
+                        <div className="flex items-center gap-4">
+                            <img src={republic} alt="Republic VC Logo" className="w-auto h-10 object-contain" />
                             <div>
-                                <h3 className="text-2xl font-semibold">Fund II: Republic VC</h3>
+                                <h3 className="text-2xl font-bold text-gray-900">Fund II: Republic VC</h3>
                                 <p className="text-sm text-gray-500">Republic Ventures</p>
                             </div>
                         </div>
-                        <div className="bg-green-100 text-green-800 px-4 py-2 rounded text-lg">
+                        <div className="bg-green-100 text-green-800 px-3 py-1.5 rounded-md text-sm font-medium">
                             Open
                         </div>
                     </div>
-                    <div className="text-sm text-black space-y-4">
-                        <p>
-                            Republic VC is an investment fund focused on AI, fintech, and consumer sectors. The fund is managed by experienced professionals.
-                        </p>
-                        <p>
-                            <strong>Fund Manager(s): </strong> 
-                            <a href="https://www.linkedin.com/in/sophie007/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Sophie Liao</a>, General Partner.
-                        </p>
-                        <p>
-                            The total fund size is approximately $50MM, with $1MM allocated to LimitLess. The fund closing date is yet to be determined.
-                        </p>
-                        <p>
-                            Republic VC aims to provide significant returns to investors over a targeted timeline of 5-10 years before fund exit.
-                        </p>
+
+                    {/* Summary */}
+                    <div className="text-gray-700 text-sm space-y-4 leading-relaxed">
+                        <ul className="space-y-2">
+                            <li className="flex items-start gap-2">
+                                <FlaskConical className="h-4 w-4 mt-0.5 text-gray-500" />
+                                <span>Focused on AI, fintech, and consumer sectors</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <Users className="h-4 w-4 mt-0.5 text-gray-500" />
+                                <span>
+                                    <strong>Fund Manager:</strong>{' '}
+                                    <a
+                                        href="https://www.linkedin.com/in/sophie007/"
+                                        className="text-blue-600 underline"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Sophie Liao
+                                    </a>, General Partner
+                                </span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <DollarSign className="h-4 w-4 mt-0.5 text-gray-500" />
+                                <span>~$50MM fund size, with $1MM allocated to LimitLess</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <CalendarDays className="h-4 w-4 mt-0.5 text-gray-500" />
+                                <span>Closing date: TBD</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <Clock3 className="h-4 w-4 mt-0.5 text-gray-500" />
+                                <span>Targeted timeline: 5–10 years before fund exit</span>
+                            </li>
+                        </ul>
                     </div>
 
                     {/* Tags */}
-                    <div className="flex flex-wrap gap-2">
-                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">AI</span>
-                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">Fintech</span>
-                        <span className="bg-gray-200 px-3 py-1 rounded-full text-sm">Consumers</span>
+                    <div className="flex flex-wrap gap-2 pt-2">
+                        {["AI", "Fintech", "Consumers"].map((tag) => (
+                            <span
+                                key={tag}
+                                className="bg-gray-100 text-sm text-gray-800 px-3 py-1 rounded-full font-medium"
+                            >
+                                {tag}
+                            </span>
+                        ))}
                     </div>
 
-                    {/* Investment Info and CTA */}
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center pt-4 space-y-4 md:space-y-0">
-                        <div className="pr-4">
-                            <p className="text-sm text-gray-500">Total Fund Size</p>
-                            <p className="font-sm">~$50MM</p>
+                    {/* Investment Info Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 text-sm pt-2">
+                        <div>
+                            <p className="text-gray-500">Total Fund Size</p>
+                            <p className="font-medium text-gray-900">~$50MM</p>
                         </div>
-                        <div className="pr-4">
-                            <p className="text-sm text-gray-500">Minimum Investment</p>
-                            <p className="font-sm">$25K</p>
+                        <div>
+                            <p className="text-gray-500">Minimum Investment</p>
+                            <p className="font-medium text-gray-900">$25K</p>
                         </div>
-                        <div className="pr-4">
-                            <p className="text-sm text-gray-500">Fee Structure</p>
-                            <p className="text-sm">3% Management Fee, 20% Carried Interest</p>
+                        <div>
+                            <p className="text-gray-500">Fee Structure</p>
+                            <p className="font-medium text-gray-900">3% Management Fee, 20% Carried Interest</p>
                         </div>
-                        <div className="pr-4">
-                            <p className="text-sm text-gray-500">Investor Requirement</p>
-                            <p className="text-sm">
+                        <div>
+                            <p className="text-gray-500">Investor Requirement</p>
+                            <p className="font-medium text-gray-900">
                                 Qualified purchasers only (5M in assets).{' '}
-                                <a href="https://www.sec.gov/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                                <a
+                                    href="https://www.sec.gov/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 underline"
+                                >
                                     Learn more
                                 </a>
                             </p>
                         </div>
+                        <div>
+                            <p className="text-gray-500">Capital Call</p>
+                            <p className="font-medium text-gray-900">Schedule TBD</p>
+                        </div>
+                        <div>
+                            <p className="text-gray-500">Targeted Timeline</p>
+                            <p className="font-medium text-gray-900">5–10 years before fund exit</p>
+                        </div>
                     </div>
 
-                    {/* Additional Info */}
-                    <div className="pt-6 space-y-4">
-                        <p className="text-sm text-gray-500">
-                            <strong>Capital Call:</strong> Schedule TBD
-                        </p>
-                        <p className="text-sm text-gray-500">
-                            <strong>Targeted Timeline:</strong> 5-10 years before fund exit
-                        </p>
-                    </div>
-
-                    <footer className="text-sm text-gray-500">
-                        *2/20 structure paid to fund manager (standard across industry), plus a 1% management fee to LimitLess to support platform, service, security, and operations.
+                    {/* Footer */}
+                    <footer className="text-xs text-gray-500 pt-4 border-t border-gray-200">
+                        *2/20 structure paid to fund manager, plus a 1% management fee to LimitLess to support platform, service, security, and operations.
                     </footer>
                 </div>
             </div>
