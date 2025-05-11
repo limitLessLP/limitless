@@ -45,52 +45,34 @@ export const Offerings = () => {
         </div> */}
 
         {/* Offerings Grid */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <motion.div
+        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div
               key="pioneer"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              className="bg-white rounded-xl shadow-lg p-2 hover:shadow-xl transition-shadow"
             >
-              <div className="p-6">
-                <PioneerVC />
-                {/* <button className="mt-6 w-full bg-black text-white py-3 rounded-lg flex items-center justify-center hover:bg-gray-900 transition-colors" onClick={() => navigate('/pioneer')}>
-                  View Details
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </button> */}
-              </div>
+              <PioneerVC />
             </motion.div>
             <motion.div
               key="republic"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-xl shadow-lg p-2 hover:shadow-xl transition-shadow"
             >
-              <div className="p-6">
-                <RepublicVC />
-                {/* <button className="mt-6 w-full bg-black text-white py-3 rounded-lg flex items-center justify-center hover:bg-gray-900 transition-colors" onClick={() => navigate('/republic')}>
-                  View Details
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </button> */}
-              </div>
+              <RepublicVC />
             </motion.div>
             <motion.div
               key="lola"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              transition={{ delay: 0.3 }}
+              className="bg-white rounded-xl shadow-lg p-2 hover:shadow-xl transition-shadow"
             >
-              <div className="p-6">
-                <Lola />
-                {/* <button className="mt-6 w-full bg-black text-white py-3 rounded-lg flex items-center justify-center hover:bg-gray-900 transition-colors" onClick={() => navigate('/lola')}>
-                  View Details
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </button> */}
-              </div>
+              <Lola />
             </motion.div>
           </div>
         </div>

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { DashboardNav } from "./DashboardNav"
 import { CurrentOfferings } from "./CurrentOfferings"
-import { UpcomingFunds } from "./UpcomingFunds"
+// import { UpcomingFunds } from "./UpcomingFunds"
 import { LearnVC } from "./LearnVC"
 import { NewsSection } from "./NewsSection"
 import { Footer } from "../Common/Footer"
@@ -170,11 +170,11 @@ export const LPDashboard = () => {
       </section>
 
       {/* Upcoming Funds */}
-      <section className="py-20 bg-white">
+      {/* <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <UpcomingFunds />
         </div>
-      </section>
+      </section> */}
 
       {/* News Section */}
       <section className="py-20 bg-gray-50">
