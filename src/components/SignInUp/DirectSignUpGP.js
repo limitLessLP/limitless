@@ -54,25 +54,8 @@ export const DirectSignUpGP = () => {
         localStorage.setItem('userEmail', email)
         localStorage.setItem('directAccess', 'true')
         
-        // Request verification code
-        const verificationResponse = await fetch('https://limitless-backend.vercel.app/api/request-verification', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: email
-          }),
-        })
-        
-        const verificationData = await verificationResponse.json()
-        
-        if (verificationData.success) {
-          // Navigate to verification
-          navigate("/mfa-verification")
-        } else {
-          setError(verificationData["error"] || "Failed to send verification code. Please try again.")
-        }
+        // Navigate to phone verification
+        navigate("/verify-phone")
       } else {
         setError(data["error"] || "Sign up failed. Please try again.")
       }
