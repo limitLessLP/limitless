@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../Common/button';
 
 const Profile = () => {
-    // const userId = localStorage.getItem('userId') || "6822617a6022fe11479d965d";
-    const userId = "6822617a6022fe11479d965d";
+    const userId = localStorage.getItem('userId') || "6822617a6022fe11479d965d";
+    // const userId = "6822617a6022fe11479d965d";
     const [user, setUser] = useState({});
 
     useEffect(() => {
