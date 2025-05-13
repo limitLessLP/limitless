@@ -75,10 +75,10 @@ export const DirectSignUpGP = () => {
           // Navigate to verification
           navigate("/mfa-verification")
         } else {
-          setError(verificationData.message || "Failed to send verification code. Please try again.")
+          setError(verificationData["error"] || "Failed to send verification code. Please try again.")
         }
       } else {
-        setError(signupData.message || "Sign up failed. Please try again.")
+        setError(signupData["error"] || "Sign up failed. Please try again.")
       }
     } catch (err) {
       setError("Connection error. Please try again later.")
