@@ -5,13 +5,13 @@ import pioneerLogo from '../../assets/pioneer.png';
 export const PioneerVC = () => {
     return (
         <div className="min-h-screen bg-[#f8f9fa]">
-            <div className="max-w-5xl mx-auto px-4 py-24">
-                <div className="bg-white rounded-2xl shadow-md p-8 space-y-8">
+        <div className="max-w-5xl mx-auto px-4 py-24">
+            <div className="bg-white rounded-2xl shadow-md p-8 space-y-8">
 
                     {/* Header */}
                     <div className="flex items-center justify-between flex-wrap gap-4">
                         <div className="flex items-center gap-4">
-                            <img src={pioneerLogo} alt="Pioneer VC Logo" className="w-auto h-10 object-contain" />
+                            <img src={pioneerLogo} alt="Pioneer VC Logo" className="w-24 h-6" />
                             <div>
                                 <h3 className="text-2xl font-bold text-gray-900">Fund I: Pioneer VC</h3>
                                 <p className="text-sm text-gray-500">Pioneer VC Partners</p>

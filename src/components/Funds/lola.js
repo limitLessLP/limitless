@@ -18,7 +18,7 @@ export const Lola = () => {
                     {/* Header */}
                     <div className="flex items-center justify-between flex-wrap gap-4">
                         <div className="flex items-center gap-4">
-                            <img src={lola} alt="Logo" className="w-16 h-16 rounded-full object-cover" />
+                            <img src={lola} alt="Logo" className="w-16 h-8" />
                             <div>
                                 <h3 className="text-2xl font-bold text-gray-900">Fund III: LoLa Capital</h3>
                                 <p className="text-sm text-gray-500">LoLaCap Partners</p>
@@ -61,7 +61,7 @@ export const Lola = () => {
 
                     {/* Tags */}
                     <div className="flex flex-wrap gap-2 pt-2">
-                        {["Life Sciences", "Therapeutics", "Medical Devices"].map((tag) => (
+                        {["Life Sciences", "Therapeutics", "Devices"].map((tag) => (
                             <span
                                 key={tag}
                                 className="bg-gray-100 text-sm text-gray-800 px-3 py-1 rounded-full font-medium"
@@ -72,7 +72,7 @@ export const Lola = () => {
                     </div>
 
                     {/* Investment Info Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 text-sm pt-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 text-sm pt-2">
                         <div>
                             <p className="text-gray-500">Total Fund Size</p>
                             <p className="font-medium text-gray-900">$200MM</p>

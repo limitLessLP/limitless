@@ -47,10 +47,10 @@ export const DashboardNav = ({ currentPage }) => {
                 <a href="#" onClick={() => navigate('/profile')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                   Profile
                 </a>
-                <a href="#" onClick={() => navigate('/settings')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                {/* <a href="#" onClick={() => navigate('/settings')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                   Settings
-                </a>
-                <a href="#" onClick={() => { localStorage.clear(); navigate('/login'); }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                </a> */}
+                <a href="#" onClick={() => { localStorage.clear(); navigate('/'); }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                   Sign Out
                 </a>
               </div>}
