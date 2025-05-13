@@ -26,6 +26,7 @@ import { RepublicVC } from './components/Funds/republic';
 import { UserTypeSelection } from './components/UserTypeSelection';
 import { Waitlist } from './components/Waitlist/Waitlist';
 import AccessTypePage from './pages/AccessTypePage';
+import Profile from './components/Dashboard/Profile';
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
         <Route path="/select-type" element={<UserTypeSelection />} />
         <Route path="/signup" element={<SignUpPage/>} />
         <Route path="/waitlist" element={<Waitlist />} />
+        <Route path="/profile" element={<Profile />} />
         
         {/* Early Access routes */}
         <Route path="/access-type" element={<AccessTypePage />} />
