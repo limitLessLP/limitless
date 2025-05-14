@@ -4,9 +4,11 @@ import { motion } from "framer-motion"
 import { DashboardNav } from "./DashboardNav"
 import { NewsSection } from "./NewsSection"
 import { Footer } from "../Common/Footer"
+import { useState } from "react"
 
 export const LPDashboard = () => {
   const userName = localStorage.getItem('userName') || 'Investor'
+  const [showAllNews, setShowAllNews] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
@@ -389,12 +391,12 @@ export const LPDashboard = () => {
           <div className="bg-[#111111] rounded-xl p-8 border border-[#222222] hover:border-[#333333] transition duration-300">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Market Insights</h2>
-              <a href="#" className="text-sm font-medium text-white hover:opacity-80">View All</a>
+              <button onClick={() => setShowAllNews(!showAllNews)} className="text-sm font-medium bg-[#222222] px-4 py-2 rounded-md hover:bg-[#333333] transition">{!showAllNews ? "View All" : "Show Less"}</button>
             </div>
             
             {/* Using the original NewsSection component with custom styling */}
             <div className="news-dark-theme">
-              <NewsSection customTitle="hidden" />
+              <NewsSection customTitle="hidden" showAll={showAllNews} setShowAll={setShowAllNews} />
             </div>
             
             <style>
