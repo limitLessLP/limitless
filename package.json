@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@radix-ui/themes": "^3.2.1",
     "@react-spring/web": "^9.7.5",
     "@tailwindcss/cli": "^4.0.13",
     "@testing-library/jest-dom": "^5.17.0",
@@ -12,6 +13,7 @@
     "caniuse-lite": "^1.0.30001707",
     "canvas-confetti": "^1.9.3",
     "chalk": "^5.4.1",
+    "class-variance-authority": "^0.7.1",
     "es-abstract": "^1.23.9",
     "framer-motion": "^12.5.0",
     "lucide-react": "^0.263.1",

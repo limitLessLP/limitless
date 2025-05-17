@@ -27,12 +27,16 @@ import { UserTypeSelection } from './components/UserTypeSelection';
 import { Waitlist } from './components/Waitlist/Waitlist';
 import AccessTypePage from './pages/AccessTypePage';
 import Profile from './components/Dashboard/Profile';
+import GPDashboard from './components/GpDashboard/page';
+import NewAnnouncement from './components/GpDashboard/announcement';
+import DealFlow from './components/GpDashboard/dealFlow';
 
 
 function App() {
   return (
     <Router>
       <Routes>
+        {/*Marketing*/}
         <Route path="/" element={<LandingPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/about" element={<AboutUsPage />} />
@@ -42,10 +46,11 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/contact" element={<Contact />} />
+
+        {/*LP Platform*/}
         <Route path="/mfa-verification" element={<MFAVerification />} />
         <Route path="/dashboard" element={<LPDashboard />} />
         <Route path="/welcome" element={<WelcomeAnimation />} />
-        {/* <Route path="/portfolio" element={<Portfolio />} /> */}
         <Route path="/offerings" element={<Offerings />} />
         <Route path="/account" element={<Account />} />
         <Route path="/lola" element={<Lola />} />
@@ -66,6 +71,11 @@ function App() {
         {/* GP platform access routes */}
         <Route path="/gp-signup" element={<DirectSignUpGP />} />
         <Route path="/gp-signin" element={<GPSignInPage />} />
+        
+        {/* GP Platform Routes */}
+        <Route path="/gp-dashboard" element={<GPDashboard />} />
+        <Route path="/gp-announcements" element={<NewAnnouncement />} />
+        <Route path="/gp-deal-flow" element={<DealFlow />} />
       </Routes>
       <Analytics />
     </Router>
