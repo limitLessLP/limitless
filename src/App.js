@@ -30,6 +30,8 @@ import Profile from './components/Dashboard/Profile';
 import GPDashboard from './components/GpDashboard/page';
 import NewAnnouncement from './components/GpDashboard/announcement';
 import DealFlow from './components/GpDashboard/dealFlow';
+import Portfolio from './components/GpDashboard/portfolio';
+import { GpMfaVerification } from './components/SignInUp/GpMfaVerification';
 
 
 function App() {
@@ -71,11 +73,14 @@ function App() {
         {/* GP platform access routes */}
         <Route path="/gp-signup" element={<DirectSignUpGP />} />
         <Route path="/gp-signin" element={<GPSignInPage />} />
+        <Route path="/gp-mfa-verification" element={<GpMfaVerification />} />
         
         {/* GP Platform Routes */}
         <Route path="/gp-dashboard" element={<GPDashboard />} />
         <Route path="/gp-announcements" element={<NewAnnouncement />} />
         <Route path="/gp-deal-flow" element={<DealFlow />} />
+        <Route path="/gp-portfolio" element={<Portfolio />} />
+        
       </Routes>
       <Analytics />
     </Router>

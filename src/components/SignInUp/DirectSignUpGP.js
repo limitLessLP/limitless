@@ -40,7 +40,7 @@ export const DirectSignUpGP = () => {
 
     try {
       // Use the signup endpoint from backend
-      const signupResponse = await fetch('https://limitless-backend.vercel.app/api/signup', {
+      const signupResponse = await fetch('https://limitless-backend.vercel.app/api/gp-signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +50,10 @@ export const DirectSignUpGP = () => {
 
       const signupData = await signupResponse.json()
 
+      console.log("Signup response:", signupData)
+
       if (signupData.success) {
+        console.log("Signup successful:", signupData)
         // Store user information in localStorage
         localStorage.setItem('userName', firstName)
         localStorage.setItem('userEmail', email)
@@ -73,7 +76,7 @@ export const DirectSignUpGP = () => {
         
         if (verificationData.success) {
           // Navigate to verification
-          navigate("/mfa-verification")
+          navigate("/gp-mfa-verification")
         } else {
           setError(verificationData["error"] || "Failed to send verification code. Please try again.")
         }

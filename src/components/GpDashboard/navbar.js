@@ -43,6 +43,11 @@ export const Navbar = ({ currentPage }) => {
             href: "/gp-deal-flow",
             icon: TrendingUp,
         },
+        {
+            title: "Portfolio Companies",
+            href: "/gp-portfolio",
+            icon: LayoutDashboard,
+        }
     ];
 
     return (

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { SectionHeader } from "../../ui/sectionHeader.tsx"
 import { Button } from "../../ui/button.tsx"
-import { Card, CardContent, CardFooter } from "../..//ui/card.tsx"
+import { Card, CardContent } from "../..//ui/card.tsx"
 import { Input } from "../../ui/input.jsx"
 import { Label } from "../../ui/label.jsx"
 import { Textarea } from "../../ui/textarea.jsx"
@@ -104,14 +104,16 @@ export default function NewAnnouncement() {
                 <p className="text-xs text-muted-foreground">You can attach up to 5 files (PDF, DOCX, XLSX, JPG, PNG)</p>
               </div> */}
             </CardContent>
-            <CardFooter className="flex justify-between border-t px-6 py-4">
-              <Button type="button" variant="outline" onClick={() => navigate("/gp-dashboard")}>
+            <CardContent className="flex justify-between">
+              <>
+              <Button type="button" className="bg-black hover:bg-gray-800 text-white" onClick={() => navigate("/gp-dashboard")}>
                 Cancel
               </Button>
               <Button type="submit" className="bg-black hover:bg-gray-800 text-white" disabled={isSubmitting}>
                 {isSubmitting ? "Sending..." : "Send Announcement"}
               </Button>
-            </CardFooter>
+              </>
+            </CardContent>
           </form>
         </Card>
       </div>
