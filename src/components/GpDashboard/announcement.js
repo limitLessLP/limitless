@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { SectionHeader } from "../../ui/sectionHeader.tsx"
 import { Button } from "../../ui/button.tsx"
 import { Card, CardContent } from "../..//ui/card.tsx"
@@ -8,30 +8,99 @@ import { Textarea } from "../../ui/textarea.jsx"
 import { useNavigate } from "react-router-dom"
 import { Navbar } from "./navbar.js"
 import { Footer } from "../Common/Footer.js"
+import { SkeletonWrapper } from "../Common/skeleton";
 
 export default function NewAnnouncement() {
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [announcementRequest, setAnnouncementRequest] = useState({
     title: "",
     content: "",
-    category: "performance"
+    subject: "",
   })
+  const [announcements, setAnnouncements] = useState([])
+  const [filteredAnnouncements, setFilteredAnnouncements] = useState([])
+  const [loading, setLoading] = useState(false)
+  const fund = localStorage.getItem("fund");
 
+  const fetchAnnouncements = async () => {
+    try {
+      const endpoint = 'https://limitless-backend.vercel.app/api/get-fund-announcements';
+      setLoading(true);
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: fund
+        })
+      });
+      const data = await response.json();
+      if (data) {
+        setAnnouncements(data.announcements);
+      } else {
+        console.error('Failed to fetch announcements:', data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching announcements:', error);
+    }
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, [])
+
+  useEffect(() => {
+    if (announcements && announcements.length > 0) {
+      setFilteredAnnouncements(announcements);
+    }
+  }, [announcements]);
+
+  const makeAnnouncement = (title, content, subject) => {
+    const body = {
+      title: title,
+      message: content,
+      subject: subject,
+      fundId: fund,
+      userId: userId,
+    }
+    fetch('https://limitless-backend.vercel.app/api/make-announcement', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Announcement created:', data);
+        fetchAnnouncements();
+        setAnnouncementRequest({
+          title: "",
+          content: "",
+          subject: "",
+        });
+      })
+      .catch(error => {
+        console.error('Error making announcement:', error);
+      });
+  }
+  
   const handleSubmit = (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    console.log(announcementRequest)
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      const message = {
-        title: "Announcement created",
-        description: "Your announcement has been sent to all LPs",
-      };
-      console.log(message);
-      navigate("/gp-announcements");
-    }, 1500)
+    e.preventDefault();
+    setIsSubmitting(true);
+    const { title, content, subject } = announcementRequest;
+
+    if (title && content && subject) {
+      makeAnnouncement(title, content, subject);
+    } else {
+      alert("Please fill in all fields.");
+    }
+    
+    setIsSubmitting(false);
   }
 
   return (
@@ -53,38 +122,13 @@ export default function NewAnnouncement() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
-                <div className="relative">
-                  <select
-                    id="category"
-                    name="category"
-                    className="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-black focus:border-black appearance-none bg-white px-4 py-2 pr-10 text-gray-700 hover:border-gray-400"
-                    required
-                    defaultValue="performance"
-                    onChange={(e) => setAnnouncementRequest({ ...announcementRequest, category: e.target.value })}
-                  >
-                    <option value="performance">Performance</option>
-                    <option value="portfolio">Portfolio</option>
-                    <option value="event">Event</option>
-                    <option value="request">Request</option>
-                    <option value="fund">Fund</option>
-                    <option value="other">Other</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-gray-500"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
+                <Label htmlFor="subject">Subject</Label>
+                <Input 
+                  id="subject" 
+                  placeholder="Enter a subject for the announcement" 
+                  required 
+                  onChange={(e) => setAnnouncementRequest({...announcementRequest, subject: e.target.value})}
+                />
               </div>
 
               <div className="space-y-2">
@@ -97,12 +141,6 @@ export default function NewAnnouncement() {
                   onChange={(e) => setAnnouncementRequest({ ...announcementRequest, content: e.target.value })}
                 />
               </div>
-
-              {/* <div className="space-y-2">
-                <Label htmlFor="attachments">Attachments (Optional)</Label>
-                <Input id="attachments" type="file" multiple />
-                <p className="text-xs text-muted-foreground">You can attach up to 5 files (PDF, DOCX, XLSX, JPG, PNG)</p>
-              </div> */}
             </CardContent>
             <CardContent className="flex justify-between">
               <>
@@ -115,6 +153,50 @@ export default function NewAnnouncement() {
               </>
             </CardContent>
           </form>
+        </Card>
+        <Card className="mt-8 max-w-3xl mx-auto">
+          <CardContent className="space-y-4 pt-6">
+            <Input 
+              id="search" 
+              placeholder="Search announcements..." 
+              className="w-full mb-4"
+              onChange={(e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filtered = announcements.filter(announcement => 
+                  announcement.title.toLowerCase().includes(searchTerm) ||
+                  announcement.subject.toLowerCase().includes(searchTerm) ||
+                  announcement.message.toLowerCase().includes(searchTerm)
+                );
+                setFilteredAnnouncements(filtered);
+              }}
+              disabled={loading || !announcements}
+            />
+            <SkeletonWrapper loading={loading} rows={3} height="h-32" />
+            {(filteredAnnouncements && filteredAnnouncements.length > 0 && !loading) ? (
+              <div className="space-y-4">
+                {filteredAnnouncements.map((announcement, index) => (
+                  <Card
+                    key={index}
+                    className="border border-gray-200 shadow-md rounded-2xl p-4 bg-white transition hover:shadow-lg"
+                  >
+                    <CardContent className="space-y-4">
+                      <div className="pt-2">
+                        <p className="py-2 text-lg font-semibold text-gray-800">{announcement.title}</p>
+                        <p className="py-2 text-base text-gray-700">{announcement.subject}</p>
+                        <p className="py-2 text-base text-gray-700 whitespace-pre-line">{announcement.message}</p>
+                        <p className="py-2 text-sm text-gray-600">{announcement.date ? new Date(announcement.date).toDateString() : "N/A"}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              !loading && 
+              <CardContent className="space-y-4 pt-6 h-32">
+                <Label htmlFor="category">Data not found</Label>
+              </CardContent>
+            )}
+          </CardContent>
         </Card>
       </div>
       <Footer />

@@ -26,7 +26,6 @@ export const DirectSignInPage = () => {
 
     // Store a timestamp of the sign-in attempt
     try {
-      // const endpoint = "http://127.0.0.1:5000/api/signin";
       const endpoint = 'https://limitless-backend.vercel.app/api/signin';
       const response = await fetch(endpoint, {
         method: 'POST',

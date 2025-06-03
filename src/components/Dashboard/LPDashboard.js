@@ -7,6 +7,7 @@ import { CurrentOfferings } from "./CurrentOfferings"
 import { LearnVC } from "./LearnVC"
 import { NewsSection } from "./NewsSection"
 import { Footer } from "../Common/Footer"
+import { UserInvestments } from "./UserInvestments"
 
 export const LPDashboard = () => {
   const userName = localStorage.getItem('userName') || 'Investor'
@@ -153,6 +154,13 @@ export const LPDashboard = () => {
             100% { background-position: 0% center; }
           }
         `}</style>
+      </section>
+
+      {/* Available Investments */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <UserInvestments />
+        </div>
       </section>
 
       {/* Available Investments */}
