@@ -54,10 +54,16 @@ export const DirectSignUpGP = () => {
         localStorage.setItem('userEmail', email)
         localStorage.setItem('directAccess', 'true')
         
-        // Navigate to phone verification
-        navigate("/verify-phone")
+        const verificationData = await verificationResponse.json()
+        
+        if (verificationData.success) {
+          // Navigate to verification
+          navigate("/mfa-verification")
+        } else {
+          setError(verificationData["error"] || "Failed to send verification code. Please try again.")
+        }
       } else {
-        setError(data["error"] || "Sign up failed. Please try again.")
+        setError(signupData["error"] || "Sign up failed. Please try again.")
       }
     } catch (err) {
       setError("Connection error. Please try again later.")
