@@ -3,7 +3,7 @@ import { ExternalLink } from "lucide-react"
 import { useEffect, useState } from "react"
 import { SkeletonWrapper } from "../Common/skeleton"
 
-export const NewsSection = () => {
+export const NewsSection = ({ showAll }) => {
   const [news, setNews] = useState([]);
   const [newsLoading, setNewsLoading] = useState(false);
 
@@ -38,22 +38,14 @@ export const NewsSection = () => {
     getData()
   }, [])
 
-  const [showAll, setShowAll] = useState(false);
-
   const displayedNews = showAll ? news : news.slice(0, 5);
 
   return (
-    <div className="mt-8 bg-white shadow-lg rounded-lg p-6">
+    <div className="mt-8 bg-[#0A0A0A] border border-[#222222] rounded-lg p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900 ">Latest News & Insights</h2>
-        <button
-          className="text-gray-500 hover:text-gray-700"
-          onClick={() => setShowAll(!showAll)}
-        >
-          {showAll ? "Show Less" : "View All"}
-        </button>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4" style={{ maxHeight: '400px', overflowY: 'auto' }}>
         <SkeletonWrapper loading={newsLoading} rows={5}>
           {(displayedNews ?? []).map((item, index) => (
             <motion.a
@@ -62,7 +54,7 @@ export const NewsSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="block border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+              className="block border border-[#222222] rounded-lg p-4 hover:shadow-md transition-shadow"
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -7,17 +7,11 @@ import { Button } from "../Common/button"
 import { Input } from "../Common/input"
 import { Label } from "../Common/label"
 import { useNavigate } from "react-router-dom"
-import PhoneInput from 'react-phone-input-2'
 
-export const DirectSignUpGP = () => {
+export const DirectSignInGP = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("")
   const [password, setPassword] = useState("")
-  const [firm, setFirm] = useState("")
-  const [position, setPosition] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const navigate = useNavigate()
@@ -28,17 +22,12 @@ export const DirectSignUpGP = () => {
     setError("")
 
     const payload = {
-      firstName,
-      lastName,
       email,
-      password,
-      phone: phone ? `+${phone}` : "",
-      firm,
-      position
+      password
     }
 
     try {
-      const response = await fetch('https://limitless-backend.vercel.app/api/gp-signup', {
+      const response = await fetch('https://limitless-backend.vercel.app/api/gp-signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,22 +37,23 @@ export const DirectSignUpGP = () => {
 
       const data = await response.json()
 
-      if (response.status === 201) {
+      if (data.success) {
         // Store user information in localStorage
-        localStorage.setItem('userName', firstName)
+        localStorage.setItem('userName', data.userName)
         localStorage.setItem('userEmail', email)
+        localStorage.setItem('firm', data.firm)
+        localStorage.setItem('position', data.position)
+        localStorage.setItem('token', data.token)
         localStorage.setItem('directAccess', 'true')
         
-        const verificationData = await verificationResponse.json()
-        
-        if (verificationData.success) {
-          // Navigate to verification
-          navigate("/mfa-verification")
+        // Navigate based on the next step
+        if (data.next === 'gp-verify-phone') {
+          navigate("/gp-verify-phone")
         } else {
-          setError(verificationData["error"] || "Failed to send verification code. Please try again.")
+          navigate("/gp-platform")
         }
       } else {
-        setError(signupData["error"] || "Sign up failed. Please try again.")
+        setError(data.message || "Sign in failed. Please try again.")
       }
     } catch (err) {
       setError("Connection error. Please try again later.")
@@ -112,10 +102,10 @@ export const DirectSignUpGP = () => {
 
         <div className="space-y-4 z-10">
           <h2 className="text-4xl font-bold bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
-            Join as a General Partner
+            Welcome Back
           </h2>
           <p className="text-gray-600 max-w-md">
-            Create your GP account to manage and showcase your investment opportunities to accredited investors.
+            Sign in to your GP account to manage your investment opportunities and connect with accredited investors.
           </p>
         </div>
       </div>
@@ -125,8 +115,8 @@ export const DirectSignUpGP = () => {
         <div className="w-full max-w-md mx-auto space-y-8">
           <div className="lg:hidden space-y-4 mb-8">
             <h1 className="text-3xl font-bold">Limitless</h1>
-            <h2 className="text-3xl font-bold">Create your GP account</h2>
-            <p className="text-gray-600">Join as a General Partner to manage your investment opportunities.</p>
+            <h2 className="text-3xl font-bold">Sign in to your GP account</h2>
+            <p className="text-gray-600">Access your investment opportunities and investor network.</p>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -135,31 +125,6 @@ export const DirectSignUpGP = () => {
                 {error}
               </div>
             )}
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First name</Label>
-                <Input
-                  id="firstName"
-                  placeholder="Enter your first name"
-                  className="h-12 border-gray-300 focus:border-gray-500"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last name</Label>
-                <Input
-                  id="lastName"
-                  placeholder="Enter your last name"
-                  className="h-12 border-gray-300 focus:border-gray-500"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
 
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -175,44 +140,6 @@ export const DirectSignUpGP = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone number</Label>
-              <PhoneInput
-                country={'us'}
-                value={phone}
-                onChange={(value) => setPhone(value)}
-                containerClass="border rounded-lg overflow-hidden"
-                inputClass="!w-full !py-2 !px-3 !text-sm !focus:outline-none"
-                specialLabel=""
-                enableSearch={true}
-                disableDropdown={false}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="firm">Firm Name</Label>
-              <Input
-                id="firm"
-                placeholder="Enter your firm name"
-                className="h-12 border-gray-300 focus:border-gray-500"
-                value={firm}
-                onChange={(e) => setFirm(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="position">Position</Label>
-              <Input
-                id="position"
-                placeholder="Enter your position"
-                className="h-12 border-gray-300 focus:border-gray-500"
-                value={position}
-                onChange={(e) => setPosition(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <Label htmlFor="password">Password</Label>
               </div>
@@ -220,7 +147,7 @@ export const DirectSignUpGP = () => {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Create a secure password"
+                  placeholder="Enter your password"
                   className="h-12 border-gray-300 focus:border-gray-500 pr-10"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -238,9 +165,6 @@ export const DirectSignUpGP = () => {
                   )}
                 </button>
               </div>
-              <p className="text-xs text-gray-500">
-                Password must be at least 8 characters with at least one number and special character.
-              </p>
             </div>
 
             <Button
@@ -249,10 +173,10 @@ export const DirectSignUpGP = () => {
               className="w-full h-12 bg-gradient-to-r from-black to-gray-800 hover:from-gray-900 hover:to-black text-white transition-all duration-300 shadow-md hover:shadow-lg"
             >
               {isLoading ? (
-                "Creating Account..."
+                "Signing in..."
               ) : (
                 <>
-                  <span>Create Account</span>
+                  <span>Sign in</span>
                   <motion.div
                     className="ml-2 inline-flex"
                     animate={{ x: [0, 5, 0] }}
@@ -266,13 +190,13 @@ export const DirectSignUpGP = () => {
 
             <div className="text-center mt-4">
               <p className="text-sm text-gray-600">
-                Already have an account?{" "}
+                Don't have an account?{" "}
                 <button
                   type="button"
-                  onClick={() => navigate("/direct-signin")}
+                  onClick={() => navigate("/direct-signup-gp")}
                   className="text-blue-500 hover:text-blue-600 font-medium"
                 >
-                  Sign in
+                  Sign up
                 </button>
               </p>
             </div>
