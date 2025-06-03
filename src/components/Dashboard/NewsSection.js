@@ -54,7 +54,7 @@ export const NewsSection = () => {
         </button>
       </div>
       <div className="space-y-4">
-        <SkeletonWrapper loading={newsLoading} rows={5}>
+        <SkeletonWrapper loading={newsLoading} rows={5}  height={"h-12"}>
           {(displayedNews ?? []).map((item, index) => (
             <motion.a
               key={item.id}

@@ -62,7 +62,7 @@ export const UserInvestments = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Your Investments</h2>
         <button
-          onClick={() => navigate("/portfolio")}
+          onClick={() => navigate("/gp-portfolio")}
           className="text-sm text-gray-500 hover:text-gray-700"
         >
           View Portfolio
@@ -89,7 +89,7 @@ export const UserInvestments = () => {
               </div>
               <ArrowRight
                 className="h-5 w-5 text-gray-700 cursor-pointer"
-                onClick={() => navigate("/portfolio")}
+                onClick={() => navigate("/lp-portfolio")}
               />
             </div>
 

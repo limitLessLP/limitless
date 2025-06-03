@@ -32,6 +32,7 @@ import NewAnnouncement from './components/GpDashboard/announcement';
 import DealFlow from './components/GpDashboard/dealFlow';
 import Portfolio from './components/GpDashboard/portfolio';
 import { GpMfaVerification } from './components/SignInUp/GpMfaVerification';
+import { LPPortfolio } from './components/Dashboard/LPPortfolio';
 
 
 function App() {
@@ -62,6 +63,7 @@ function App() {
         <Route path="/signup" element={<SignUpPage/>} />
         <Route path="/waitlist" element={<Waitlist />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/lp-portfolio" element={<LPPortfolio />} />
         
         {/* Early Access routes */}
         <Route path="/access-type" element={<AccessTypePage />} />
