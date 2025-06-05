@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { LayoutDashboard, MessageSquare, TrendingUp } from "lucide-react"
+import { LayoutDashboard, MessageSquare, TrendingUp, Bot } from "lucide-react"
 
 export const Navbar = ({ currentPage }) => {
     const userName = localStorage.getItem('userName') || 'GP';
@@ -9,7 +9,9 @@ export const Navbar = ({ currentPage }) => {
     const [showMenu, setShowMenu] = useState(false);
 
     const getNavClass = (page) => {
-        return currentPage === page ? 'border-b-2 border-black text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700';
+        const normalizedPage = page.toLowerCase().replace(/\s+/g, '-');
+        const normalizedCurrentPage = currentPage ? currentPage.toLowerCase().replace(/\s+/g, '-') : '';
+        return normalizedCurrentPage === normalizedPage ? 'border-b-2 border-black text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700';
     };
 
     const navItems = [
@@ -17,11 +19,19 @@ export const Navbar = ({ currentPage }) => {
             title: "Dashboard",
             href: "/gp-dashboard",
             icon: LayoutDashboard,
+            pageKey: "dashboard"
         },
         {
             title: "Announcements",
             href: "/gp-announcements",
             icon: MessageSquare,
+            pageKey: "announcements"
+        },
+        {
+            title: "GP Copilot",
+            href: "/gp-copilot",
+            icon: Bot,
+            pageKey: "copilot"
         },
         // {
         //     title: "LP Value-Add Reports",
@@ -42,11 +52,13 @@ export const Navbar = ({ currentPage }) => {
             title: "LP-Referred Deal Flow",
             href: "/gp-deal-flow",
             icon: TrendingUp,
+            pageKey: "deal-flow"
         },
         {
             title: "Portfolio Companies",
             href: "/gp-portfolio",
             icon: LayoutDashboard,
+            pageKey: "portfolio"
         }
     ];
 
@@ -66,7 +78,7 @@ export const Navbar = ({ currentPage }) => {
                                     key={item.title}
                                     href="#"
                                     onClick={() => navigate(item.href)}
-                                    className={`${getNavClass(item.title.toLowerCase())} inline-flex items-center px-1 pt-1 text-sm font-medium`}
+                                    className={`${getNavClass(item.pageKey || item.title)} inline-flex items-center px-1 pt-1 text-sm font-medium`}
                                 >
                                     {item.title}
                                 </a>

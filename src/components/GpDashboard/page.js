@@ -5,6 +5,7 @@ import { Badge } from "../../ui/badge.tsx"
 import { ArrowRight, MessageSquare, Users, Briefcase, TrendingUp } from "lucide-react"
 import { Navbar } from "./navbar.js"
 import { Footer } from "../Common/Footer.js"
+import { GPCopilotWidget } from "./GPCopilotWidget.js"
 
 export default function GPDashboard() {
   return (
@@ -211,6 +212,7 @@ export default function GPDashboard() {
             </div>
         </div>
         <Footer />
+        <GPCopilotWidget />
     </>
   )
 }

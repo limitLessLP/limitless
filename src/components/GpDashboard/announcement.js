@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"
 import { Navbar } from "./navbar.js"
 import { Footer } from "../Common/Footer.js"
 import { SkeletonWrapper } from "../Common/skeleton";
+import { GPCopilotWidget } from "./GPCopilotWidget.js"
 
 export default function NewAnnouncement() {
   const navigate = useNavigate();
@@ -200,6 +201,7 @@ export default function NewAnnouncement() {
         </Card>
       </div>
       <Footer />
+      <GPCopilotWidget />
     </>
   )
 }

@@ -6,6 +6,7 @@ import { Footer } from "../Common/Footer.js";
 import { SectionHeader } from "../../ui/sectionHeader.tsx";
 import { SkeletonWrapper } from "../Common/skeleton";
 import { Button } from "../../ui/button.tsx";
+import { GPCopilotWidget } from "./GPCopilotWidget.js";
 
 const Portfolio = () => {
     const [portfolioCompanies, setPortfolioCompanies] = useState([]);
@@ -102,6 +103,7 @@ const Portfolio = () => {
                 </Card>
             </div>
             <Footer />
+            <GPCopilotWidget />
         </>
     );
 };

@@ -8,6 +8,7 @@ import { Button } from "../../ui/button.tsx"
 import { Search } from "lucide-react"
 import { Navbar } from "./navbar.js"
 import { Footer } from "../Common/Footer.js"
+import { GPCopilotWidget } from "./GPCopilotWidget.js"
 
 export default function DealFlow() {
   const deals = [
@@ -178,6 +179,7 @@ export default function DealFlow() {
         </div>
       </div>
     <Footer />
+    <GPCopilotWidget />
     </>
     
   )
