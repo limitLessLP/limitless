@@ -25,7 +25,7 @@ export const GPSignInPage = () => {
     setError("")
 
     try {
-      const endpoint = 'https://limitless-backend.vercel.app/api/signin';
+      const endpoint = 'https://limitless-backend.vercel.app/api/gp-signin';
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -48,6 +48,7 @@ export const GPSignInPage = () => {
         localStorage.setItem('userName', data.userName || 'GP Partner')
         localStorage.setItem('userEmail', email)
         localStorage.setItem('userType', 'gp')
+        localStorage.setItem('fund', data.fund || '')
         
         // For debugging - log all possible verification fields
         console.log("Verification status check:", {

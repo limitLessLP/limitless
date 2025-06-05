@@ -8,7 +8,7 @@ import { Input } from "../Common/input"
 import { Label } from "../Common/label"
 import { useNavigate } from "react-router-dom"
 
-export const MFAVerification = () => {
+export const GpMfaVerification = () => {
   const [verificationCode, setVerificationCode] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
@@ -74,7 +74,7 @@ export const MFAVerification = () => {
     const firstName = localStorage.getItem('userName');
 
     try {
-      const response = await fetch('https://limitless-backend.vercel.app/api/verify-phone', {
+      const response = await fetch('https://limitless-backend.vercel.app/api/gp-verify-phone', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
