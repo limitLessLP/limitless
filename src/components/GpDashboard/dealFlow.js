@@ -14,7 +14,7 @@ import { SkeletonWrapper } from "../Common/skeleton.js"
 
 export default function DealFlow() {
   const [deals, setDeals] = useState([]);
-  const fund = localStorage.getItem("fund");
+  const gp_uuid = localStorage.getItem("gp_uuid");
   const [loading, setLoading] = useState(false);
 
   const getDeals = () => {
@@ -26,7 +26,7 @@ export default function DealFlow() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ gp_uuid: fund }),
+          body: JSON.stringify({ gp_uuid: gp_uuid }),
         }
       )
       .then(response => response.json())

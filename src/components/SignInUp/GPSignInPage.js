@@ -49,6 +49,7 @@ export const GPSignInPage = () => {
         localStorage.setItem('userEmail', email)
         localStorage.setItem('userType', 'gp')
         localStorage.setItem('fund', data.fund || '')
+        localStorage.setItem('gp_uuid', data.id || '')
         
         // For debugging - log all possible verification fields
         console.log("Verification status check:", {
