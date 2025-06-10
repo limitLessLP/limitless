@@ -9,70 +9,40 @@ import { Search } from "lucide-react"
 import { Navbar } from "./navbar.js"
 import { Footer } from "../Common/Footer.js"
 import { GPCopilotWidget } from "./GPCopilotWidget.js"
+import { useEffect, useState } from "react"
+import { SkeletonWrapper } from "../Common/skeleton.js"
 
 export default function DealFlow() {
-  const deals = [
-    {
-      id: "1",
-      company: "NeuralTech AI",
-      industry: "Artificial Intelligence",
-      stage: "Series A",
-      referrer: "Sarah Johnson",
-      date: "Mar 15, 2025",
-      status: "New",
-      description: "Building next-generation neural interfaces for human-computer interaction.",
-    },
-    {
-      id: "2",
-      company: "GreenEnergy Solutions",
-      industry: "CleanTech",
-      stage: "Seed",
-      referrer: "Michael Chen",
-      date: "Mar 12, 2025",
-      status: "Reviewing",
-      description: "Developing sustainable energy solutions for residential buildings.",
-    },
-    {
-      id: "3",
-      company: "HealthSync",
-      industry: "HealthTech",
-      stage: "Pre-seed",
-      referrer: "Emily Williams",
-      date: "Mar 10, 2025",
-      status: "Meeting Scheduled",
-      description: "Creating a platform for seamless healthcare data integration.",
-    },
-    {
-      id: "4",
-      company: "FinSecure",
-      industry: "FinTech",
-      stage: "Seed",
-      referrer: "David Thompson",
-      date: "Mar 8, 2025",
-      status: "Interested",
-      description: "Building advanced security solutions for financial institutions.",
-    },
-    {
-      id: "5",
-      company: "LogisticsAI",
-      industry: "Supply Chain",
-      stage: "Series A",
-      referrer: "Jennifer Lee",
-      date: "Mar 5, 2025",
-      status: "Passed",
-      description: "Using AI to optimize logistics and supply chain operations.",
-    },
-    {
-      id: "6",
-      company: "EdTech Innovators",
-      industry: "Education",
-      stage: "Seed",
-      referrer: "Robert Garcia",
-      date: "Mar 3, 2025",
-      status: "New",
-      description: "Revolutionizing education with adaptive learning technologies.",
-    },
-  ]
+  const [deals, setDeals] = useState([]);
+  const fund = localStorage.getItem("fund");
+  const [loading, setLoading] = useState(false);
+
+  const getDeals = () => {
+    setLoading(true);
+    const endpoint = "https://limitless-backend.vercel.app/api/get-gp-deal-flow-referrals";
+      return fetch(endpoint,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ gp_uuid: fund }),
+        }
+      )
+      .then(response => response.json())
+      .then(data => {
+        setDeals(data.referrals || [])
+        setLoading(false)
+      })
+      .catch(error => {
+        console.error("Error fetching deals:", error)
+        setLoading(false)
+      });
+  }
+
+  useEffect(() => {
+    getDeals();
+  }, [])
 
   return (
     <>
@@ -139,20 +109,27 @@ export default function DealFlow() {
                 </div>
             </CardHeader>
             <CardContent>
-                <Tabs defaultValue="all">
+                <Tabs defaultValue="All">
                 <TabsList>
-                    <TabsTrigger value="all">All</TabsTrigger>
-                    <TabsTrigger value="new">New</TabsTrigger>
-                    <TabsTrigger value="reviewing">Reviewing</TabsTrigger>
-                    <TabsTrigger value="meeting">Meeting</TabsTrigger>
-                    <TabsTrigger value="interested">Interested</TabsTrigger>
-                    <TabsTrigger value="passed">Passed</TabsTrigger>
+                    <TabsTrigger value="All">All</TabsTrigger>
+                    <TabsTrigger value="New">New</TabsTrigger>
+                    <TabsTrigger value="Reviewing">Reviewing</TabsTrigger>
+                    <TabsTrigger value="Meeting">Meeting</TabsTrigger>
+                    <TabsTrigger value="Interested">Interested</TabsTrigger>
+                    <TabsTrigger value="Passed">Passed</TabsTrigger>
                 </TabsList>
-                <TabsContent value="all" className="mt-4">
+                <TabsContent value="All" className="mt-4">
                     <div className="space-y-4">
-                    {deals.map((deal) => (
-                        <DealCard key={deal.id} deal={deal} />
-                    ))}
+                    {loading ? (
+                        <SkeletonWrapper loading={loading} rows={3} width="w-full" height="h-24" />
+                    ) : deals.length === 0 ? (
+                        <div className="text-center text-muted-foreground">
+                            No referrals found. Start building your network!
+                        </div>
+                    ) : (
+                    deals.map((deal) => (
+                          <DealCard key={deal.id} deal={deal} />
+                    )))}
                     </div>
                 </TabsContent>
                 {["new", "reviewing", "meeting", "interested", "passed"].map((status) => (
@@ -190,36 +167,36 @@ function DealCard({ deal }) {
     <div className="flex flex-col rounded-lg border p-4 transition-all hover:bg-accent/50 sm:flex-row sm:items-center">
       <div className="flex-1">
         <div className="flex items-center">
-          <h3 className="font-medium">{deal.company}</h3>
+          <h3 className="font-medium">{deal.companyInfo.companyName}</h3>
           <Badge
             className={`ml-2 ${
-              deal.status === "New"
+              deal.state === "New"
                 ? "bg-blue-900/30 text-blue-300 hover:bg-blue-900/30"
-                : deal.status === "Reviewing"
+                : deal.state === "Reviewing"
                   ? "bg-yellow-900/30 text-yellow-300 hover:bg-yellow-900/30"
-                  : deal.status === "Meeting Scheduled"
+                  : deal.state === "Meeting Scheduled"
                     ? "bg-purple-900/30 text-purple-300 hover:bg-purple-900/30"
-                    : deal.status === "Interested"
+                    : deal.state === "Interested"
                       ? "bg-green-900/30 text-green-300 hover:bg-green-900/30"
                       : "bg-gray-900/30 text-gray-300 hover:bg-gray-900/30"
             }`}
           >
-            {deal.status}
+            {deal.state}
           </Badge>
         </div>
-        <p className="mt-1 text-sm">{deal.description}</p>
+        <p className="mt-1 text-sm">{deal.LPRelationshipDesc}</p>
         <div className="mt-2 flex flex-wrap gap-2">
-          <Badge variant="outline">{deal.industry}</Badge>
-          <Badge variant="outline">{deal.stage}</Badge>
+          <Badge variant="outline">{deal.companyInfo.companyWebsite}</Badge>
+          <Badge variant="outline">{deal.companyInfo.linkedinURL}</Badge>
         </div>
       </div>
       <div className="mt-4 sm:mt-0 sm:ml-4 flex flex-col items-start sm:items-end">
         <p className="text-sm">
-          Referred by <span className="font-medium">{deal.referrer}</span>
+          Referred by <span className="font-medium">{deal.companyInfo.founders[0]?.name}</span>
         </p>
-        <p className="text-xs text-muted-foreground">{deal.date}</p>
+        <p className="text-xs text-muted-foreground">{new Date(deal.createdAt).toLocaleDateString()}</p>
         <div className="mt-2 flex gap-2">
-          <Select defaultValue={deal.status.toLowerCase().replace(" ", "-")}>
+          <Select defaultValue={deal.state.toLowerCase().replace(" ", "-")}>
             <SelectTrigger className="h-8 w-[130px]">
               <SelectValue placeholder="Update status" />
             </SelectTrigger>

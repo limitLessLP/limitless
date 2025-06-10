@@ -137,7 +137,7 @@ export const LPPortfolio = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(dealData),
+          body: JSON.stringify({...dealData, action: "create_new_deal_flow"}),
         }
       );
 
