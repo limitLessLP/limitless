@@ -34,6 +34,7 @@ import Portfolio from './components/GpDashboard/portfolio';
 import { GpMfaVerification } from './components/SignInUp/GpMfaVerification';
 import { LPPortfolio } from './components/Dashboard/LPPortfolio';
 import { GPCopilot } from './components/GpDashboard/GPCopilot';
+import GpProfile from './components/GpDashboard/gpProfile';
 
 
 function App() {
@@ -84,6 +85,7 @@ function App() {
         <Route path="/gp-copilot" element={<GPCopilot />} />
         <Route path="/gp-deal-flow" element={<DealFlow />} />
         <Route path="/gp-portfolio" element={<Portfolio />} />
+        <Route path="/gp-profile" element={<GpProfile />} />
         
       </Routes>
       <Analytics />
