@@ -107,7 +107,7 @@ export default function DealFlow() {
 
   const updateReferralState = async (referralId, newState) => {
     try {
-      const response = await fetch("https://limitless-backend.vercel.app/api/update-referral-state", {
+      const response = await fetch("https://limitless-backend.vercel.app/api/update-deal-flow-referral-state", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
