@@ -10,6 +10,7 @@ import { Navbar } from "./navbar.js"
 import { Footer } from "../Common/Footer.js"
 import { SkeletonWrapper } from "../Common/skeleton";
 import { GPCopilotWidget } from "./GPCopilotWidget.js"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 export default function NewAnnouncement() {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ export default function NewAnnouncement() {
   const [announcements, setAnnouncements] = useState([])
   const [filteredAnnouncements, setFilteredAnnouncements] = useState([])
   const [loading, setLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const announcementsPerPage = 5
   const fund = localStorage.getItem("fund");
 
   const fetchAnnouncements = async () => {
@@ -57,6 +60,7 @@ export default function NewAnnouncement() {
   useEffect(() => {
     if (announcements && announcements.length > 0) {
       setFilteredAnnouncements(announcements);
+      setCurrentPage(1); // Reset to first page when announcements change
     }
   }, [announcements]);
 
@@ -104,10 +108,26 @@ export default function NewAnnouncement() {
     setIsSubmitting(false);
   }
 
+  // Get current announcements
+  const indexOfLastAnnouncement = currentPage * announcementsPerPage;
+  const indexOfFirstAnnouncement = indexOfLastAnnouncement - announcementsPerPage;
+  const currentAnnouncements = filteredAnnouncements.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
+  const totalPages = Math.ceil(filteredAnnouncements.length / announcementsPerPage);
+
+  const handleSearch = (searchTerm) => {
+    const filtered = announcements.filter(announcement => 
+      announcement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      announcement.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      announcement.message.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredAnnouncements(filtered);
+    setCurrentPage(1); // Reset to first page when search changes
+  };
+
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="mx-auto px-12 py-24">
+      <div className="flex-grow mx-auto px-12 py-24 w-full">
         <SectionHeader title="New Announcement" description="Create a new broadcast message for your LPs" />
         <Card className="mt-8 max-w-3xl mx-auto">
           <form onSubmit={handleSubmit}>
@@ -118,6 +138,7 @@ export default function NewAnnouncement() {
                   id="title" 
                   placeholder="Enter a clear, concise title" 
                   required 
+                  value={announcementRequest.title}
                   onChange={(e) => setAnnouncementRequest({...announcementRequest, title: e.target.value})}
                 />
               </div>
@@ -128,6 +149,7 @@ export default function NewAnnouncement() {
                   id="subject" 
                   placeholder="Enter a subject for the announcement" 
                   required 
+                  value={announcementRequest.subject}
                   onChange={(e) => setAnnouncementRequest({...announcementRequest, subject: e.target.value})}
                 />
               </div>
@@ -139,6 +161,7 @@ export default function NewAnnouncement() {
                   placeholder="Enter the details of your announcement"
                   className="min-h-[200px]"
                   required
+                  value={announcementRequest.content}
                   onChange={(e) => setAnnouncementRequest({ ...announcementRequest, content: e.target.value })}
                 />
               </div>
@@ -161,36 +184,53 @@ export default function NewAnnouncement() {
               id="search" 
               placeholder="Search announcements..." 
               className="w-full mb-4"
-              onChange={(e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const filtered = announcements.filter(announcement => 
-                  announcement.title.toLowerCase().includes(searchTerm) ||
-                  announcement.subject.toLowerCase().includes(searchTerm) ||
-                  announcement.message.toLowerCase().includes(searchTerm)
-                );
-                setFilteredAnnouncements(filtered);
-              }}
+              onChange={(e) => handleSearch(e.target.value)}
               disabled={loading || !announcements}
             />
             <SkeletonWrapper loading={loading} rows={3} height="h-32" />
-            {(filteredAnnouncements && filteredAnnouncements.length > 0 && !loading) ? (
-              <div className="space-y-4">
-                {filteredAnnouncements.map((announcement, index) => (
-                  <Card
-                    key={index}
-                    className="border border-gray-200 shadow-md rounded-2xl p-4 bg-white transition hover:shadow-lg"
-                  >
-                    <CardContent className="space-y-4">
-                      <div className="pt-2">
-                        <p className="py-2 text-lg font-semibold text-gray-800">{announcement.title}</p>
-                        <p className="py-2 text-base text-gray-700">{announcement.subject}</p>
-                        <p className="py-2 text-base text-gray-700 whitespace-pre-line">{announcement.message}</p>
-                        <p className="py-2 text-sm text-gray-600">{announcement.date ? new Date(announcement.date).toDateString() : "N/A"}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+            {(currentAnnouncements.length > 0 && !loading) ? (
+              <>
+                <div className="space-y-4">
+                  {currentAnnouncements.map((announcement, index) => (
+                    <Card
+                      key={index}
+                      className="border border-gray-200 shadow-md rounded-2xl p-4 bg-white transition hover:shadow-lg"
+                    >
+                      <CardContent className="space-y-4">
+                        <div className="pt-2">
+                          <p className="py-2 text-lg font-semibold text-gray-800">{announcement.title}</p>
+                          <p className="py-2 text-base text-gray-700">{announcement.subject}</p>
+                          <p className="py-2 text-base text-gray-700 whitespace-pre-line">{announcement.message}</p>
+                          <p className="py-2 text-sm text-gray-600">{announcement.date ? new Date(announcement.date).toDateString() : "N/A"}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center space-x-2 pt-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <span className="text-sm text-gray-600">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+              </>
             ) : (
               !loading && 
               <CardContent className="space-y-4 pt-6 h-32">
@@ -202,6 +242,6 @@ export default function NewAnnouncement() {
       </div>
       <Footer />
       <GPCopilotWidget />
-    </>
+    </div>
   )
 }

@@ -7,6 +7,7 @@ import { Footer } from "../Common/Footer"
 import { useEffect, useState } from "react"
 import { Fragment } from "react"
 import { useNavigate } from "react-router-dom"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '../../ui/dialog'
 
 export const LPPortfolio = () => {
   const userId = localStorage.getItem("userId")
@@ -17,10 +18,12 @@ export const LPPortfolio = () => {
     activeInvestments: "0"
   })
   const [investments, setInvestments] = useState([])
-  const [investmentsLoading , setInvestmentsLoading] = useState(true)
+  const [investmentsLoading, setInvestmentsLoading] = useState(true)
+  const [isReferralOpen, setIsReferralOpen] = useState(false)
+  const [currentFundId, setCurrentFundId] = useState("")
   const [dealFlow, setDealFlow] = useState({
     lp_uuid: localStorage.getItem("userId") || "",
-    gp_uuid: localStorage.getItem("fund") || "",
+    gp_uuid: "",
     company_name: "",
     founders: [
       { name: "", linkedin: "", email: "" }
@@ -32,6 +35,26 @@ export const LPPortfolio = () => {
   });
 
   const navigate = useNavigate();
+
+  const getPortfolioCompanies = async (fundId) => {
+    try {
+      const response = await fetch('https://limitless-backend.vercel.app/api/get-fund-portcos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: fundId }),
+      });
+      const data = await response.json();
+      if (data) {
+        return data.portCos || [];
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching portfolio companies:', error);
+      return [];
+    }
+  };
 
   const fetchInvestments = async () => {
       try {
@@ -57,6 +80,8 @@ export const LPPortfolio = () => {
               totalInvested = totalInvested + investmentDetails.commitment_amount;
               
               return {
+                  fundId: investmentDetails.fund_id,
+                  gpUUID: fund.gpUUID,
                   fundName: fund.fundName,
                   categories: fund.categories,
                   investedAmount: `$${investmentDetails.commitment_amount.toLocaleString()}`,
@@ -68,7 +93,8 @@ export const LPPortfolio = () => {
                   : "N/A",
                   announcements: [],
                   announcementIds: fund.announcements || [],
-                  expanded: false
+                  expanded: false,
+                  portfolioCompanies: []
               };
         });
         setInvestments(mappedInvestments);
@@ -114,9 +140,14 @@ export const LPPortfolio = () => {
   const handleRowExpand = async (index) => {
     const investment = investments[index];
     if (!investment.expanded) {
-      const announcements = await fetchAnnouncements(investment.announcementIds);
+      setCurrentFundId(investment.gpUUID);
+      const [announcements, portCos] = await Promise.all([
+        fetchAnnouncements(investment.announcementIds),
+        getPortfolioCompanies(investment.fundId)
+      ]);
+
       const updatedInvestments = investments.map((inv, i) =>
-        i === index ? { ...inv, announcements, expanded: true } : inv
+        i === index ? { ...inv, announcements, portfolioCompanies: portCos, expanded: true } : inv
       );
       setInvestments(updatedInvestments);
     } else {
@@ -124,11 +155,12 @@ export const LPPortfolio = () => {
         i === index ? { ...inv, expanded: false } : inv
       );
       setInvestments(updatedInvestments);
+      setCurrentFundId("");
     }
   };
 
    // Deal Submission Logic
-   const handleDealSubmission = async (dealData) => {
+   const handleDealSubmission = async (dealData, fundId) => {
     try {
       const response = await fetch(
         "https://limitless-backend.vercel.app/api/provide-referral-deal-flow",
@@ -137,7 +169,7 @@ export const LPPortfolio = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(dealData),
+          body: JSON.stringify({...dealData, action: "create_new_deal_flow", gp_uuid: fundId}),
         }
       );
 
@@ -145,7 +177,7 @@ export const LPPortfolio = () => {
         const result = await response.json();
         console.log("Deal submitted successfully:", result);
         alert("Deal submitted successfully!");
-        navigate("lp-portfolio"); // Redirect to the portfolio page after submission
+        navigate("/lp-portfolio"); // Redirect to the portfolio page after submission
       } else {
         console.error("Failed to submit deal:", response.statusText);
         // alert("Failed to submit deal. Please try again.");
@@ -186,62 +218,86 @@ export const LPPortfolio = () => {
         {/* Stats Grid */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white rounded-xl shadow-lg p-6"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-500">Total Invested</p>
-                  <h3 className="text-2xl font-semibold">{portfolioStats.totalInvested}</h3>
-                </div>
-                <PieChart className="h-8 w-8 text-gray-400" />
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-white rounded-xl shadow-lg p-6"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-500">Total Value</p>
-                  <h3 className="text-2xl font-semibold">{portfolioStats.totalValue}</h3>
-                </div>
-                <PieChart className="h-8 w-8 text-gray-400" />
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-white rounded-xl shadow-lg p-6"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-500">Total Return</p>
-                  <h3 className="text-2xl font-semibold">{portfolioStats.totalReturn}</h3>
-                </div>
-                <PieChart className="h-8 w-8 text-gray-400" />
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-white rounded-xl shadow-lg p-6"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-500">Active Investments</p>
-                  <h3 className="text-2xl font-semibold">{portfolioStats.activeInvestments}</h3>
-                </div>
-                <PieChart className="h-8 w-8 text-gray-400" />
-              </div>
-            </motion.div>
+            {investmentsLoading ? (
+              <>
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 * index }}
+                    className="bg-white rounded-xl shadow-lg p-6"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-2 flex-1">
+                        <div className="h-4 bg-gray-200 rounded animate-pulse w-24"></div>
+                        <div className="h-6 bg-gray-300 rounded animate-pulse w-32"></div>
+                      </div>
+                      <div className="h-8 w-8 bg-gray-200 rounded animate-pulse"></div>
+                    </div>
+                  </motion.div>
+                ))}
+              </>
+            ) : (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="bg-white rounded-xl shadow-lg p-6"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-500">Total Invested</p>
+                      <h3 className="text-2xl font-semibold">{portfolioStats.totalInvested}</h3>
+                    </div>
+                    <PieChart className="h-8 w-8 text-gray-400" />
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-white rounded-xl shadow-lg p-6"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-500">Total Value</p>
+                      <h3 className="text-2xl font-semibold">{portfolioStats.totalValue}</h3>
+                    </div>
+                    <PieChart className="h-8 w-8 text-gray-400" />
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-white rounded-xl shadow-lg p-6"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-500">Total Return</p>
+                      <h3 className="text-2xl font-semibold">{portfolioStats.totalReturn}</h3>
+                    </div>
+                    <PieChart className="h-8 w-8 text-gray-400" />
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="bg-white rounded-xl shadow-lg p-6"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-500">Active Investments</p>
+                      <h3 className="text-2xl font-semibold">{portfolioStats.activeInvestments}</h3>
+                    </div>
+                    <PieChart className="h-8 w-8 text-gray-400" />
+                  </div>
+                </motion.div>
+              </>
+            )}
           </div>
         </div>
 
@@ -253,15 +309,15 @@ export const LPPortfolio = () => {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fund</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invested</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Value</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Return</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expected Exit</th>
+                    <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-10"></th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fund</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invested</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Value</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Return</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expected Exit</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-gray-200">
                 {investmentsLoading ? (
                     <>
                       {Array.from({ length: 5 }).map((_, index) => (
@@ -294,43 +350,44 @@ export const LPPortfolio = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3 }}
-                        className="hover:bg-gray-50 cursor-pointer"
+                        className="group hover:bg-gray-50 transition-colors duration-150 ease-in-out cursor-pointer"
                         onClick={() => handleRowExpand(index)}
                       >
-                        <td className="px-6 py-4 text-center">
+                        <td className="px-6 py-4 text-center whitespace-nowrap">
                           <motion.div
-                          initial={{ rotate: investment.expanded ? 0 : -90 }}
-                          animate={{ rotate: investment.expanded ? 90 : 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="inline-block transform"
+                            initial={{ rotate: investment.expanded ? 0 : -90 }}
+                            animate={{ rotate: investment.expanded ? 90 : 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="inline-block transform"
                           >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                            />
-                          </svg>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5 text-gray-500"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
                           </motion.div>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 whitespace-nowrap">
                           <div>
                             <div className="font-medium text-gray-900">{investment.fundName}</div>
                             <div className="text-sm text-gray-500">{investment.firm}</div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-gray-900">{investment.investedAmount}</td>
-                        <td className="px-6 py-4">
-                          <span className="text-green-600">{investment.return}</span>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.investedAmount}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.investedAmount}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="text-green-600">{investment.return || "N/A"}</span>
                         </td>
-                        <td className="px-6 py-4 text-gray-900">{investment.exitDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.exitDate || "N/A"}</td>
                       </motion.tr>
                       {investment.expanded && (
                         <tr className="bg-gray-100">
@@ -338,7 +395,7 @@ export const LPPortfolio = () => {
                             <div className="flex flex-wrap gap-6">
                               {/* Left Section: Stats */}
                               <div className="flex-1">
-                              <h4 className="text-lg font-bold text-gray-700 mb-4">Info</h4>
+                                <h4 className="text-lg font-bold text-gray-700 mb-4">Fund Info</h4>
                                 <div className="grid grid-cols-1 gap-4">
                                   <div className="bg-white shadow rounded-lg p-4">
                                     <h4 className="text-sm font-medium text-gray-700">Categories</h4>
@@ -363,6 +420,41 @@ export const LPPortfolio = () => {
                                 </div>
                               </div>
 
+                              {/* Middle Section: Portfolio Companies */}
+                              <div className="flex-1">
+                                <h4 className="text-lg font-bold text-gray-700 mb-4">Portfolio Companies</h4>
+                                <div className="grid grid-cols-1 gap-4">
+                                  {investment?.portfolioCompanies?.length > 0 ? (
+                                    investment.portfolioCompanies.map((company, i) => (
+                                      <div key={i} className="bg-white shadow rounded-lg p-4">
+                                        <h5 className="text-sm font-medium text-gray-900">{company.name}</h5>
+                                        <p className="text-sm text-gray-500 mt-1">{company.description}</p>
+                                        <div className="mt-2 flex gap-2">
+                                          {company.website && (
+                                            <a href={company.website} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:text-blue-800">
+                                              Website
+                                            </a>
+                                          )}
+                                          {company.linkedin && (
+                                            <a href={company.linkedin} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:text-blue-800">
+                                              LinkedIn
+                                            </a>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))
+                                  ) : (
+                                    <p className="text-gray-500">No portfolio companies available.</p>
+                                  )}
+                                </div>
+                                <button
+                                  onClick={() => setIsReferralOpen(true)}
+                                  className="mt-4 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                >
+                                  + Refer Company
+                                </button>
+                              </div>
+
                               {/* Right Section: Announcements */}
                               <div className="flex-1">
                                 <h4 className="text-lg font-bold text-gray-700 mb-4">Announcements</h4>
@@ -380,185 +472,7 @@ export const LPPortfolio = () => {
                                   <p className="text-gray-500">No announcements available.</p>
                                 )}
                               </div>
-
-                              {/* Deal Flow Section */}
-                              <div className="flex-1">
-                                <h4 className="text-lg font-bold text-gray-700 mb-4">Company Referral</h4>
-                                <div className="bg-white shadow rounded-lg p-4 space-y-2">
-                                    <div>
-                                      <label htmlFor="company_name" className="block text-sm font-medium text-gray-700">
-                                        Company Name
-                                      </label>
-                                      <input
-                                        value={dealFlow.company_name}
-                                        onChange={(e) => setDealFlow({ ...dealFlow, company_name: e.target.value })}
-                                        className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 
-                                                  rounded-lg p-1 m-1 text-sm text-black dark:text-white placeholder:text-gray-500
-                                                  focus:outline-none focus:border-blue-500/50 transition-colors"
-                                      />
-                                    </div>
-                                    <div className="w-full ml-1 my-2 p-4 border border-gray-300 rounded-lg shadow-md bg-white dark:bg-gray-800">
-                                    {dealFlow.founders.map((founder, index) => (
-                                        <div key={index} className="mb-4 ml-1 mt-1 p-4 border border-gray-300 rounded-lg shadow-md bg-white dark:bg-gray-800">
-                                        <div>
-                                          <label htmlFor={`founder${index}Name`} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Founder {index + 1} Name
-                                          </label>
-                                          <input
-                                            type="text"
-                                            name={`founder${index}Name`}
-                                            id={`founder${index}Name`}
-                                            value={founder.name}
-                                            onChange={(e) =>
-                                              setDealFlow((prevDealFlow) => ({
-                                                ...prevDealFlow,
-                                                founders: prevDealFlow.founders.map((f, i) =>
-                                                  i === index ? { ...f, name: e.target.value } : f
-                                                ),
-                                              }))
-                                            }
-                                            required
-                                            className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 
-                                            rounded-lg p-1 m-1 text-sm text-black dark:text-white placeholder:text-gray-500
-                                            focus:outline-none focus:border-blue-500/50 transition-colors"
-                                          />
-                                        </div>
-                                        <div>
-                                          <label htmlFor={`founder${index}Linkedin`} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Founder {index + 1} LinkedIn
-                                          </label>
-                                          <input
-                                            type="url"
-                                            name={`founder${index}Linkedin`}
-                                            id={`founder${index}Linkedin`}
-                                            value={founder.linkedin}
-                                            onChange={(e) =>
-                                              setDealFlow((prevDealFlow) => ({
-                                                ...prevDealFlow,
-                                                founders: prevDealFlow.founders.map((f, i) =>
-                                                  i === index ? { ...f, linkedin: e.target.value } : f
-                                                ),
-                                              }))
-                                            }
-                                            required
-                                            className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 
-                                            rounded-lg p-1 m-1 text-sm text-black dark:text-white placeholder:text-gray-500
-                                            focus:outline-none focus:border-blue-500/50 transition-colors"
-                                          />
-                                        </div>
-                                        <div>
-                                          <label htmlFor={`founder${index}Email`} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Founder {index + 1} Email
-                                          </label>
-                                          <input
-                                            type="email"
-                                            name={`founder${index}Email`}
-                                            id={`founder${index}Email`}
-                                            value={founder.email}
-                                            onChange={(e) =>
-                                              setDealFlow((prevDealFlow) => ({
-                                                ...prevDealFlow,
-                                                founders: prevDealFlow.founders.map((f, i) =>
-                                                  i === index ? { ...f, email: e.target.value } : f
-                                                ),
-                                              }))
-                                            }
-                                            required
-                                            className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 
-                                            rounded-lg p-1 m-1 text-sm text-black dark:text-white placeholder:text-gray-500
-                                            focus:outline-none focus:border-blue-500/50 transition-colors"
-                                          />
-                                        </div>
-                                        <button
-                                          type="button"
-                                          onClick={() => handleRemoveFounder(index)}
-                                          className="mt-4 inline-flex items-center justify-center w-6 h-6 text-sm font-medium text-white bg-black rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                                        >
-                                          ×
-                                        </button>
-                                      </div>
-                                      ))}
-                                      <button
-                                        type="button"
-                                        onClick={handleAddFounder}
-                                        className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                      >
-                                        Add Founder
-                                      </button>
-                                    </div>
-                                    <div>
-                                      <label htmlFor="website" className="block text-sm font-medium text-gray-700">
-                                        Website
-                                      </label>
-                                      <input
-                                        // type="url"
-                                        name="website"
-                                        id="website"
-                                        required
-                                        className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 
-                                        rounded-lg p-1 m-1 text-sm text-black dark:text-white placeholder:text-gray-500
-                                        focus:outline-none focus:border-blue-500/50 transition-colors" 
-                                        onChange={(e) => setDealFlow({ ...dealFlow, website: e.target.value }) }                                    
-                                        />
-                                    </div>
-                                    <div>
-                                      <label htmlFor="lp_relationship" className="block text-sm font-medium text-gray-700">
-                                        LP Relationship
-                                      </label>
-                                      <textarea
-                                        name="lp_relationship"
-                                        id="lp_relationship"
-                                        required
-                                        rows="3"
-                                        className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 
-                                        rounded-lg p-1 m-1 text-sm text-black dark:text-white placeholder:text-gray-500
-                                        focus:outline-none focus:border-blue-500/50 transition-colors"
-                                        onChange={(e) => setDealFlow({ ...dealFlow, lp_relationship: e.target.value }) }
-                                      ></textarea>
-                                    </div>
-                                    <div>
-                                      <label htmlFor="linkedin" className="block text-sm font-medium text-gray-700">
-                                        Company LinkedIn
-                                      </label>
-                                      <input
-                                        name="linkedin"
-                                        id="linkedin"
-                                        required
-                                        className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 
-                                        rounded-lg p-1 m-1 text-sm text-black dark:text-white placeholder:text-gray-500
-                                        focus:outline-none focus:border-blue-500/50 transition-colors"
-                                        onChange={(e) => setDealFlow({ ...dealFlow, linkedin: e.target.value }) }
-                                      />
-                                    </div>
-                                    <div>
-                                      <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                                        Description
-                                      </label>
-                                      <textarea
-                                        name="description"
-                                        id="description"
-                                        required
-                                        rows="3"
-                                        className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 
-                                        rounded-lg p-1 m-1 text-sm text-black dark:text-white placeholder:text-gray-500
-                                        focus:outline-none focus:border-blue-500/50 transition-colors"
-                                        onChange={(e) => setDealFlow({ ...dealFlow, description: e.target.value }) }
-                                      ></textarea>
-                                    </div>
-                                    <button
-                                      type="submit"
-                                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        handleDealSubmission(dealFlow);
-                                      }}
-                                    >
-                                      Submit Referral
-                                    </button>
-                                </div>
-                              </div>
                             </div>
-                         
                           </td>
                         </tr>
                       )}
@@ -570,6 +484,170 @@ export const LPPortfolio = () => {
           </div>
         </div>
       </main>
+
+      {/* Company Referral Dialog */}
+      <Dialog open={isReferralOpen} onOpenChange={setIsReferralOpen}>
+        <DialogContent className="w-full max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Refer a Company</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="company_name" className="block text-sm font-medium text-gray-700">
+                Company Name
+              </label>
+              <input
+                value={dealFlow.company_name}
+                onChange={(e) => setDealFlow({ ...dealFlow, company_name: e.target.value })}
+                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 
+                          rounded-lg p-2 text-sm text-black dark:text-white placeholder:text-gray-500
+                          focus:outline-none focus:border-blue-500/50 transition-colors"
+              />
+            </div>
+            <div className="border border-gray-200 rounded-lg p-4">
+              <h3 className="text-sm font-medium text-gray-700 mb-3">Founders</h3>
+              {dealFlow.founders.map((founder, index) => (
+                <div key={index} className="mb-4 p-4 border border-gray-200 rounded-lg">
+                  <div className="space-y-3">
+                    <div>
+                      <label htmlFor={`founder${index}Name`} className="block text-sm font-medium text-gray-700">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        value={founder.name}
+                        onChange={(e) =>
+                          setDealFlow((prev) => ({
+                            ...prev,
+                            founders: prev.founders.map((f, i) =>
+                              i === index ? { ...f, name: e.target.value } : f
+                            ),
+                          }))
+                        }
+                        className="w-full bg-black/5 border border-black/10 rounded-lg p-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor={`founder${index}Linkedin`} className="block text-sm font-medium text-gray-700">
+                        LinkedIn
+                      </label>
+                      <input
+                        type="url"
+                        value={founder.linkedin}
+                        onChange={(e) =>
+                          setDealFlow((prev) => ({
+                            ...prev,
+                            founders: prev.founders.map((f, i) =>
+                              i === index ? { ...f, linkedin: e.target.value } : f
+                            ),
+                          }))
+                        }
+                        className="w-full bg-black/5 border border-black/10 rounded-lg p-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor={`founder${index}Email`} className="block text-sm font-medium text-gray-700">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        value={founder.email}
+                        onChange={(e) =>
+                          setDealFlow((prev) => ({
+                            ...prev,
+                            founders: prev.founders.map((f, i) =>
+                              i === index ? { ...f, email: e.target.value } : f
+                            ),
+                          }))
+                        }
+                        className="w-full bg-black/5 border border-black/10 rounded-lg p-2 text-sm"
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFounder(index)}
+                    className="mt-2 text-sm text-red-600 hover:text-red-800"
+                  >
+                    Remove Founder
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={handleAddFounder}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                + Add Another Founder
+              </button>
+            </div>
+            <div>
+              <label htmlFor="website" className="block text-sm font-medium text-gray-700">
+                Website
+              </label>
+              <input
+                value={dealFlow.website}
+                onChange={(e) => setDealFlow({ ...dealFlow, website: e.target.value })}
+                className="w-full bg-black/5 border border-black/10 rounded-lg p-2 text-sm"
+              />
+            </div>
+            <div>
+              <label htmlFor="lp_relationship" className="block text-sm font-medium text-gray-700">
+                Your Relationship
+              </label>
+              <textarea
+                value={dealFlow.lp_relationship}
+                onChange={(e) => setDealFlow({ ...dealFlow, lp_relationship: e.target.value })}
+                rows="3"
+                className="w-full bg-black/5 border border-black/10 rounded-lg p-2 text-sm"
+              />
+            </div>
+            <div>
+              <label htmlFor="linkedin" className="block text-sm font-medium text-gray-700">
+                Company LinkedIn
+              </label>
+              <input
+                value={dealFlow.linkedin}
+                onChange={(e) => setDealFlow({ ...dealFlow, linkedin: e.target.value })}
+                className="w-full bg-black/5 border border-black/10 rounded-lg p-2 text-sm"
+              />
+            </div>
+            <div>
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                Description
+              </label>
+              <textarea
+                value={dealFlow.description}
+                onChange={(e) => setDealFlow({ ...dealFlow, description: e.target.value })}
+                rows="3"
+                className="w-full bg-black/5 border border-black/10 rounded-lg p-2 text-sm"
+              />
+            </div>
+          </div>
+          <DialogFooter className="mt-6">
+            <DialogClose asChild>
+              <button
+                type="button"
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-800"
+              >
+                Cancel
+              </button>
+            </DialogClose>
+            <DialogClose asChild>
+              <button
+                type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDealSubmission(dealFlow, currentFundId);
+                }}
+                className="px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800"
+              >
+                Submit Referral
+              </button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
