@@ -91,12 +91,7 @@ export const MFAVerification = () => {
         sendWelcomeEmail(email, firstName);
         if (isDirectFlow) {
           localStorage.removeItem('directAccess') // Clear the flag
-          const userType = localStorage.getItem('userType')
-          if (userType !== 'gp') {
-            navigate("/dashboard")
-          } else if (userType === 'gp') {
-            navigate("/gp-dashboard")
-          }
+          navigate("/dashboard")          
         } else {
           navigate("/welcome") // Regular waitlist flow
         }

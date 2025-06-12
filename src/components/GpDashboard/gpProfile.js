@@ -29,12 +29,12 @@ export default function GpProfile() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userId = localStorage.getItem('gp_uuid');
-        if (!userId) {
+        const gpUUID = localStorage.getItem('gp_uuid');
+        if (!gpUUID) {
           throw new Error('User ID not found in localStorage');
         }
 
-        const response = await fetch(`https://limitless-backend.vercel.app/api/gp-user-info?id=${userId}`);
+        const response = await fetch(`https://limitless-backend.vercel.app/api/gp-user-info?id=${gpUUID}`);
         const data = await response.json();
 
         if (!response.ok) {

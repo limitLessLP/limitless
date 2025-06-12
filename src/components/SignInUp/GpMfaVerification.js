@@ -35,7 +35,7 @@ export const GpMfaVerification = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: localStorage.getItem('userEmail'),
+          email: localStorage.getItem('gp_userEmail'),
         }),
       })
 
@@ -70,8 +70,8 @@ export const GpMfaVerification = () => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
-    const email = localStorage.getItem('userEmail');
-    const firstName = localStorage.getItem('userName');
+    const email = localStorage.getItem('gp_userEmail');
+    const firstName = localStorage.getItem('gp_userName');
 
     try {
       const response = await fetch('https://limitless-backend.vercel.app/api/gp-verify-phone', {
@@ -91,12 +91,7 @@ export const GpMfaVerification = () => {
         sendWelcomeEmail(email, firstName);
         if (isDirectFlow) {
           localStorage.removeItem('directAccess') // Clear the flag
-          const userType = localStorage.getItem('userType')
-          if (userType !== 'gp') {
-            navigate("/dashboard")
-          } else if (userType === 'gp') {
-            navigate("/gp-dashboard")
-          }
+          navigate("/gp-dashboard")
         } else {
           navigate("/welcome") // Regular waitlist flow
         }

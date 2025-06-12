@@ -25,9 +25,9 @@ const Portfolio = () => {
     const [loading, setLoading] = useState(true);
     const [isAddingCompany, setIsAddingCompany] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const fund = localStorage.getItem("fund");
+    const fundUUID = localStorage.getItem("fund_uuid");
     const [newCompany, setNewCompany] = useState({
-        fund_id: fund,
+        fund_id: fundUUID,
         name: "",
         category: "",
         website: "",
@@ -41,7 +41,7 @@ const Portfolio = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: fund }),
+                body: JSON.stringify({ id: fundUUID }),
             });
             const data = await response.json();
             if (data) {
@@ -75,7 +75,7 @@ const Portfolio = () => {
 
             // Reset form and refresh companies
             setNewCompany({
-                fund_id: fund,
+                fund_id: fundUUID,
                 name: "",
                 category: "",
                 website: "",

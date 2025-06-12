@@ -31,11 +31,11 @@ export default function GPDashboard() {
   const [referralDialogOpen, setReferralDialogOpen] = useState(false);
   const [isAddingCompany, setIsAddingCompany] = useState(false);
   const [expandedDeal, setExpandedDeal] = useState(null);
-  const gp_uuid = localStorage.getItem("gp_uuid");
-  const fund = localStorage.getItem("fund");
+  const gpUUID = localStorage.getItem("gp_uuid");
+  const fundUUID = localStorage.getItem("fund_uuid");
 
   const [newCompany, setNewCompany] = useState({
-    fund_id: fund,
+    fund_id: fundUUID,
     name: "",
     category: "",
     website: "",
@@ -44,7 +44,7 @@ export default function GPDashboard() {
 
   const [dealFlow, setDealFlow] = useState({
     lp_uuid: "",
-    gp_uuid: gp_uuid,
+    gp_uuid: gpUUID,
     company_name: "",
     founders: [
       { name: "", linkedin: "", email: "" }
@@ -100,7 +100,7 @@ export default function GPDashboard() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ gp_uuid: gp_uuid }),
+        body: JSON.stringify({ gp_uuid: gpUUID }),
       }
     )
     .then(response => response.json())
@@ -124,7 +124,7 @@ export default function GPDashboard() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: fund
+          id: fundUUID
         })
       });
       const data = await response.json();
@@ -145,7 +145,7 @@ export default function GPDashboard() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: fund }),
+        body: JSON.stringify({ id: fundUUID }),
       });
       const data = await response.json();
       if (data) {
@@ -175,7 +175,7 @@ export default function GPDashboard() {
 
       // Reset form and refresh companies
       setNewCompany({
-        fund_id: fund,
+        fund_id: fundUUID,
         name: "",
         category: "",
         website: "",
