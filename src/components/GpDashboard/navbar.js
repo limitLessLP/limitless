@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { LayoutDashboard, MessageSquare, TrendingUp, Bot } from "lucide-react"
 
 export const Navbar = ({ currentPage }) => {
-    const userName = localStorage.getItem('userName') || 'GP';
+    const userName = localStorage.getItem('gp_userName') || 'GP';
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
 

@@ -14,7 +14,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 
 export default function NewAnnouncement() {
   const navigate = useNavigate();
-  const userId = localStorage.getItem("userId");
+  const gpUUID = localStorage.getItem("gp_uuid");
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [announcementRequest, setAnnouncementRequest] = useState({
     title: "",
@@ -26,7 +26,7 @@ export default function NewAnnouncement() {
   const [loading, setLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const announcementsPerPage = 5
-  const fund = localStorage.getItem("fund");
+  const fund = localStorage.getItem("fund_uuid");
 
   const fetchAnnouncements = async () => {
     try {
@@ -70,7 +70,7 @@ export default function NewAnnouncement() {
       message: content,
       subject: subject,
       fundId: fund,
-      userId: userId,
+      userId: gpUUID,
     }
     fetch('https://limitless-backend.vercel.app/api/make-announcement', {
       method: 'POST',

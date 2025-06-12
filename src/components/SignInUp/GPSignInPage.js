@@ -45,11 +45,12 @@ export const GPSignInPage = () => {
         // Store the authentication token
         localStorage.setItem('token', data.token || data.accessToken || '')
         // Store user's name and email for dashboard
-        localStorage.setItem('userName', data.userName || 'GP Partner')
-        localStorage.setItem('userEmail', email)
-        localStorage.setItem('userType', 'gp')
-        localStorage.setItem('fund', data.fund || '')
-        localStorage.setItem('gp_uuid', data.id || '')
+        localStorage.setItem('gp_userName', data.userName);
+        localStorage.setItem('gp_firm', data.firm);
+        localStorage.setItem('gp_position', data.position);
+        localStorage.setItem('fund_uuid', data.fund);
+        localStorage.setItem('gp_uuid', data.id); 
+        localStorage.setItem('gp_userEmail', data.email);
         
         // For debugging - log all possible verification fields
         console.log("Verification status check:", {

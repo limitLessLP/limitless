@@ -46,7 +46,7 @@ export const DirectSignInPage = () => {
         localStorage.setItem('token', data.token || data.accessToken || '')
         // Store user's name and email for dashboard
         localStorage.setItem('userName', data.userName || 'Investor')
-        localStorage.setItem('userId', data.userId || '6822617a6022fe11479d965d')
+        localStorage.setItem('userId', data.userId)
         localStorage.setItem('userEmail', email)
         
         // For debugging - log all possible verification fields
