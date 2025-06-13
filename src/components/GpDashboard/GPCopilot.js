@@ -1,21 +1,18 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { Download } from "lucide-react"
 import { Input } from "../Common/input"
 import { Navbar } from "./navbar"
 import { Footer } from "../Common/Footer"
 import { Textarea } from "../../ui/textarea.jsx"
-import html2canvas from 'html2canvas'
 
 export const GPCopilot = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisResult, setAnalysisResult] = useState(null)
   const [openaiKey] = useState(process.env.REACT_APP_OPENAI_API_KEY || '')
   const [LINKEDIN_API_KEY] = useState(process.env.LINKEDIN_API_KEY || '')
-  const [isExporting, setIsExporting] = useState(false)
-  const analysisRef = useRef(null)
-  
+  const [isExporting] = useState(false)
   // Form data
   const [formData, setFormData] = useState({
     gpInvestmentThesis: '',
