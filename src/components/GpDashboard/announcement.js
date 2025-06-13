@@ -127,7 +127,7 @@ export default function NewAnnouncement() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-grow mx-auto px-12 py-24 w-full">
+      <div className="flex-grow px-12 py-12 w-full">
         <SectionHeader title="New Announcement" description="Create a new broadcast message for your LPs" />
         <Card className="mt-8 max-w-3xl mx-auto">
           <form onSubmit={handleSubmit}>
@@ -166,15 +166,22 @@ export default function NewAnnouncement() {
                 />
               </div>
             </CardContent>
-            <CardContent className="flex justify-between">
-              <>
-              <Button type="button" className="bg-black hover:bg-gray-800 text-white" onClick={() => navigate("/gp-dashboard")}>
+            <CardContent className="flex justify-between items-center pt-4 pb-6">
+              <Button 
+                type="button" 
+                className="bg-black hover:bg-gray-800 text-white" 
+                onClick={() => navigate("/gp-dashboard")}
+                disabled={isSubmitting}
+              >
                 Cancel
               </Button>
-              <Button type="submit" className="bg-black hover:bg-gray-800 text-white" disabled={isSubmitting}>
+              <Button 
+                type="submit" 
+                className="bg-black hover:bg-gray-800 text-white" 
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? "Sending..." : "Send Announcement"}
               </Button>
-              </>
             </CardContent>
           </form>
         </Card>
@@ -187,26 +194,27 @@ export default function NewAnnouncement() {
               onChange={(e) => handleSearch(e.target.value)}
               disabled={loading || !announcements}
             />
-            <SkeletonWrapper loading={loading} rows={3} height="h-32" />
-            {(currentAnnouncements.length > 0 && !loading) ? (
-              <>
-                <div className="space-y-4">
-                  {currentAnnouncements.map((announcement, index) => (
-                    <Card
-                      key={index}
-                      className="border border-gray-200 shadow-md rounded-2xl p-4 bg-white transition hover:shadow-lg"
-                    >
-                      <CardContent className="space-y-4">
-                        <div className="pt-2">
-                          <p className="py-2 text-lg font-semibold text-gray-800">{announcement.title}</p>
-                          <p className="py-2 text-base text-gray-700">{announcement.subject}</p>
-                          <p className="py-2 text-base text-gray-700 whitespace-pre-line">{announcement.message}</p>
-                          <p className="py-2 text-sm text-gray-600">{announcement.date ? new Date(announcement.date).toDateString() : "N/A"}</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+            {loading ? (
+              <div className="min-h-[300px]">
+                <SkeletonWrapper loading={true} rows={3} height="h-32" />
+              </div>
+            ) : currentAnnouncements.length > 0 ? (
+              <div className="space-y-4 min-h-[300px]">
+                {currentAnnouncements.map((announcement, index) => (
+                  <Card
+                    key={index}
+                    className="border border-gray-200 shadow-md rounded-2xl p-4 bg-white transition hover:shadow-lg"
+                  >
+                    <CardContent className="space-y-4">
+                      <div className="pt-2">
+                        <p className="py-2 text-lg font-semibold text-gray-800">{announcement.title}</p>
+                        <p className="py-2 text-base text-gray-700">{announcement.subject}</p>
+                        <p className="py-2 text-base text-gray-700 whitespace-pre-line">{announcement.message}</p>
+                        <p className="py-2 text-sm text-gray-600">{announcement.date ? new Date(announcement.date).toDateString() : "N/A"}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
                 {totalPages > 1 && (
                   <div className="flex items-center justify-center space-x-2 pt-4">
                     <Button
@@ -230,12 +238,11 @@ export default function NewAnnouncement() {
                     </Button>
                   </div>
                 )}
-              </>
+              </div>
             ) : (
-              !loading && 
-              <CardContent className="space-y-4 pt-6 h-32">
-                <Label htmlFor="category">Data not found</Label>
-              </CardContent>
+              <div className="min-h-[300px] flex items-center justify-center">
+                <p className="text-gray-500">No announcements found</p>
+              </div>
             )}
           </CardContent>
         </Card>

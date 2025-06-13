@@ -142,144 +142,144 @@ export default function DealFlow() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className={`transition-all duration-300 ${isDetailOpen ? 'blur-sm' : ''}`}>
+      <div className={`flex-grow transition-all duration-300 ${isDetailOpen ? 'blur-sm' : ''}`}>
         <Navbar />
-        <div className="container mx-auto py-24 flex-grow">      
-        <SectionHeader title="LP-Referred Deal Flow" description="Startups referred by your limited partners" />
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-            <Card className="premium-card">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Referrals</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {loading ? (
-                  <MetricCardSkeleton />
-                ) : (
-                  <>
-                    <div className="text-2xl font-bold">{deals.length}</div>
-                    <p className="text-xs text-muted-foreground">Total</p>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-            <Card className="premium-card">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Top Industry</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {loading ? (
-                  <MetricCardSkeleton />
-                ) : (
-                  <>
-                    <div className="text-2xl font-bold">AI/ML</div>
-                    <p className="text-xs text-muted-foreground">8 referrals</p>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-            <Card className="premium-card">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Top LP Referrer</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {loading ? (
-                  <MetricCardSkeleton />
-                ) : (
-                  <>
-                    <div className="text-2xl font-bold">Sarah Johnson</div>
-                    <p className="text-xs text-muted-foreground">5 referrals</p>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-        </div>
+        <div className="container mx-auto py-24">      
+          <SectionHeader title="LP-Referred Deal Flow" description="Startups referred by your limited partners" />
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+              <Card className="premium-card">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">Total Referrals</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <MetricCardSkeleton />
+                  ) : (
+                    <>
+                      <div className="text-2xl font-bold">{deals.length}</div>
+                      <p className="text-xs text-muted-foreground">Total</p>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+              <Card className="premium-card">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">Top Industry</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <MetricCardSkeleton />
+                  ) : (
+                    <>
+                      <div className="text-2xl font-bold">AI/ML</div>
+                      <p className="text-xs text-muted-foreground">8 referrals</p>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+              <Card className="premium-card">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">Top LP Referrer</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {loading ? (
+                    <MetricCardSkeleton />
+                  ) : (
+                    <>
+                      <div className="text-2xl font-bold">Sarah Johnson</div>
+                      <p className="text-xs text-muted-foreground">5 referrals</p>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+          </div>
 
-        <div className="mt-8">
-            <Card>
-            <CardHeader>
-                <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-                <CardTitle>Startup Referrals</CardTitle>
-                <div className="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
-                    <div className="relative">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                        type="search"
-                        placeholder="Search companies..."
-                        className="w-full pl-8 md:w-[200px] lg:w-[300px]"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    </div>
-                    <Select 
-                      value={selectedStage}
-                      onValueChange={setSelectedStage}
-                    >
-                    <SelectTrigger className="w-full md:w-[150px]">
-                        <SelectValue placeholder="Filter by stage" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All Stages</SelectItem>
-                        <SelectItem value="new">New</SelectItem>
-                        <SelectItem value="reviewing">Reviewing</SelectItem>
-                        <SelectItem value="meeting scheduled">Meeting Scheduled</SelectItem>
-                        <SelectItem value="interested">Interested</SelectItem>
-                        <SelectItem value="passed">Passed</SelectItem>
-                    </SelectContent>
-                    </Select>
-                </div>
-                </div>
-            </CardHeader>
-            <CardContent>
-                <Tabs defaultValue="all">
-                <TabsList>
-                    <TabsTrigger value="all">All</TabsTrigger>
-                    <TabsTrigger value="new">New</TabsTrigger>
-                    <TabsTrigger value="reviewing">Reviewing</TabsTrigger>
-                    <TabsTrigger value="meeting">Meeting</TabsTrigger>
-                    <TabsTrigger value="interested">Interested</TabsTrigger>
-                    <TabsTrigger value="passed">Passed</TabsTrigger>
-                </TabsList>
-                <TabsContent value="all" className="mt-4">
-                    <div className="space-y-4">
-                    {loading ? (
-                        <SkeletonWrapper loading={loading} rows={3} width="w-full" height="h-24" />
-                    ) : filteredDeals.length === 0 ? (
-                        <div className="text-center text-muted-foreground">
-                            No referrals found. Start building your network!
-                        </div>
-                    ) : (
-                    filteredDeals.map((deal) => (
-                          <DealCard key={deal.referralUUID} deal={deal} onDetailsClick={() => openDealDetail(deal)} onStateChange={updateReferralState} />
-                    )))}
-                    </div>
-                </TabsContent>
-                {["new", "reviewing", "meeting", "interested", "passed"].map((status) => (
-                    <TabsContent key={status} value={status} className="mt-4">
-                    <div className="space-y-4">
-                        {filteredDeals
-                        .filter((d) => {
-                            const dealState = d.state.toLowerCase();
-                            if (status === "new") return dealState === "new";
-                            if (status === "reviewing") return dealState === "reviewing";
-                            if (status === "meeting") return dealState === "meeting scheduled";
-                            if (status === "interested") return dealState === "interested";
-                            if (status === "passed") return dealState === "passed";
-                            return false;
-                        })
-                        .map((deal) => (
+          <div className="mt-8">
+              <Card>
+              <CardHeader>
+                  <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+                  <CardTitle>Startup Referrals</CardTitle>
+                  <div className="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+                      <div className="relative">
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input
+                          type="search"
+                          placeholder="Search companies..."
+                          className="w-full pl-8 md:w-[200px] lg:w-[300px]"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                      </div>
+                      <Select 
+                        value={selectedStage}
+                        onValueChange={setSelectedStage}
+                      >
+                      <SelectTrigger className="w-full md:w-[150px]">
+                          <SelectValue placeholder="Filter by stage" />
+                      </SelectTrigger>
+                      <SelectContent>
+                          <SelectItem value="all">All Stages</SelectItem>
+                          <SelectItem value="new">New</SelectItem>
+                          <SelectItem value="reviewing">Reviewing</SelectItem>
+                          <SelectItem value="meeting scheduled">Meeting Scheduled</SelectItem>
+                          <SelectItem value="interested">Interested</SelectItem>
+                          <SelectItem value="passed">Passed</SelectItem>
+                      </SelectContent>
+                      </Select>
+                  </div>
+                  </div>
+              </CardHeader>
+              <CardContent>
+                  <Tabs defaultValue="all">
+                  <TabsList>
+                      <TabsTrigger value="all">All</TabsTrigger>
+                      <TabsTrigger value="new">New</TabsTrigger>
+                      <TabsTrigger value="reviewing">Reviewing</TabsTrigger>
+                      <TabsTrigger value="meeting">Meeting</TabsTrigger>
+                      <TabsTrigger value="interested">Interested</TabsTrigger>
+                      <TabsTrigger value="passed">Passed</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="all" className="mt-4">
+                      <div className="space-y-4">
+                      {loading ? (
+                          <SkeletonWrapper loading={loading} rows={3} width="w-full" height="h-24" />
+                      ) : filteredDeals.length === 0 ? (
+                          <div className="text-center text-muted-foreground">
+                              No referrals found. Start building your network!
+                          </div>
+                      ) : (
+                      filteredDeals.map((deal) => (
                             <DealCard key={deal.referralUUID} deal={deal} onDetailsClick={() => openDealDetail(deal)} onStateChange={updateReferralState} />
-                        ))}
-                    </div>
-                    </TabsContent>
-                ))}
-                </Tabs>
-            </CardContent>
-            </Card>
+                      )))}
+                      </div>
+                  </TabsContent>
+                  {["new", "reviewing", "meeting", "interested", "passed"].map((status) => (
+                      <TabsContent key={status} value={status} className="mt-4">
+                      <div className="space-y-4">
+                          {filteredDeals
+                          .filter((d) => {
+                              const dealState = d.state.toLowerCase();
+                              if (status === "new") return dealState === "new";
+                              if (status === "reviewing") return dealState === "reviewing";
+                              if (status === "meeting") return dealState === "meeting scheduled";
+                              if (status === "interested") return dealState === "interested";
+                              if (status === "passed") return dealState === "passed";
+                              return false;
+                          })
+                          .map((deal) => (
+                              <DealCard key={deal.referralUUID} deal={deal} onDetailsClick={() => openDealDetail(deal)} onStateChange={updateReferralState} />
+                          ))}
+                      </div>
+                      </TabsContent>
+                  ))}
+                  </Tabs>
+              </CardContent>
+              </Card>
+          </div>
         </div>
       </div>
       <Footer />
       <GPCopilotWidget />
-      </div>
       
       {/* Deal Detail Sliding Window */}
       <DealDetailSlider 

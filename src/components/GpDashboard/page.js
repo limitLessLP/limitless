@@ -28,7 +28,6 @@ export default function GPDashboard() {
   const [portfolioCompanies, setPortfolioCompanies] = useState([]);
   const [portfolioLoading, setPortfolioLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [referralDialogOpen, setReferralDialogOpen] = useState(false);
   const [isAddingCompany, setIsAddingCompany] = useState(false);
   const [expandedDeal, setExpandedDeal] = useState(null);
   const gpUUID = localStorage.getItem("gp_uuid");
@@ -41,55 +40,6 @@ export default function GPDashboard() {
     website: "",
     description: ""
   });
-
-  const [dealFlow, setDealFlow] = useState({
-    lp_uuid: "",
-    gp_uuid: gpUUID,
-    company_name: "",
-    founders: [
-      { name: "", linkedin: "", email: "" }
-    ],
-    website: "",
-    lp_relationship: "",
-    linkedin: "",
-    description: ""
-  });
-
-  const handleAddFounder = () => {
-    setDealFlow({...dealFlow, founders: [...dealFlow.founders, { name: "", linkedin: "", email: "" }]});
-  };
-  
-  const handleRemoveFounder = (index) => {
-    setDealFlow({...dealFlow, founders: dealFlow.founders.filter((_, i) => i !== index)});
-  };
-
-  const handleDealSubmission = async (dealData) => {
-    try {
-      const response = await fetch(
-        "https://limitless-backend.vercel.app/api/provide-referral-deal-flow",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({...dealData, action: "create_new_deal_flow"}),
-        }
-      );
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Deal submitted successfully:", result);
-        alert("Deal submitted successfully!");
-        setReferralDialogOpen(false);
-        getDeals();
-      } else {
-        console.error("Failed to submit deal:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error submitting deal:", error);
-      alert("An error occurred while submitting the deal.");
-    }
-  };
 
   const getDeals = () => {
     setLoading(true);
@@ -199,38 +149,49 @@ export default function GPDashboard() {
   }, [])
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
         <Navbar />
-        <div className="mx-auto p-12">
+        <div className="flex-grow p-12">
             <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <MetricCard
-                    title="Total LPs"
-                    value="42"
-                    description="Active limited partners"
-                    icon={<Users className="h-4 w-4" />}
-                    trend={{ value: 12, isPositive: true }}
-                />
-                <MetricCard
-                    title="LP Responses"
-                    value="128"
-                    description="Across all announcements"
-                    icon={<MessageSquare className="h-4 w-4" />}
-                    trend={{ value: 8, isPositive: true }}
-                />
-                <MetricCard
-                    title="Talent Pool"
-                    value="86"
-                    description="Candidates submitted by LPs"
-                    icon={<Briefcase className="h-4 w-4" />}
-                    trend={{ value: 15, isPositive: true }}
-                />
-                <MetricCard
-                    title="Deal Flow"
-                    value={deals.length.toString()}
-                    description="Startups referred by LPs"
-                    icon={<TrendingUp className="h-4 w-4" />}
-                    trend={{ value: 5, isPositive: true }}
-                />
+                {loading ? (
+                    <>
+                        <SkeletonWrapper loading={true} rows={1} width="w-full" height="h-32" />
+                        <SkeletonWrapper loading={true} rows={1} width="w-full" height="h-32" />
+                        <SkeletonWrapper loading={true} rows={1} width="w-full" height="h-32" />
+                        <SkeletonWrapper loading={true} rows={1} width="w-full" height="h-32" />
+                    </>
+                ) : (
+                    <>
+                        <MetricCard
+                            title="Total LPs"
+                            value="42"
+                            description="Active limited partners"
+                            icon={<Users className="h-4 w-4" />}
+                            trend={{ value: 12, isPositive: true }}
+                        />
+                        <MetricCard
+                            title="LP Responses"
+                            value="128"
+                            description="Across all announcements"
+                            icon={<MessageSquare className="h-4 w-4" />}
+                            trend={{ value: 8, isPositive: true }}
+                        />
+                        <MetricCard
+                            title="Talent Pool"
+                            value="86"
+                            description="Candidates submitted by LPs"
+                            icon={<Briefcase className="h-4 w-4" />}
+                            trend={{ value: 15, isPositive: true }}
+                        />
+                        <MetricCard
+                            title="Deal Flow"
+                            value={deals.length.toString()}
+                            description="Startups referred by LPs"
+                            icon={<TrendingUp className="h-4 w-4" />}
+                            trend={{ value: 5, isPositive: true }}
+                        />
+                    </>
+                )}
             </div>
 
             <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -240,7 +201,7 @@ export default function GPDashboard() {
                     <CardDescription>Your latest broadcasts to LPs</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="space-y-4">
+                    <div className="space-y-4 min-h-[200px]">
                     {announcementsLoading ? (
                         <SkeletonWrapper loading={announcementsLoading} rows={3} width="w-full" height="h-24" />
                     ) : announcements.length === 0 ? (
@@ -355,7 +316,7 @@ export default function GPDashboard() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="space-y-4">
+                    <div className="space-y-4 min-h-[200px]">
                     {portfolioLoading ? (
                         <SkeletonWrapper loading={portfolioLoading} rows={3} width="w-full" height="h-24" />
                     ) : portfolioCompanies.length === 0 ? (
@@ -399,144 +360,10 @@ export default function GPDashboard() {
                             <CardTitle>Recent LP-Referred Deal Flow</CardTitle>
                             <CardDescription>Startups referred by your limited partners</CardDescription>
                         </div>
-                        <Dialog open={referralDialogOpen} onOpenChange={setReferralDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button className="flex items-center gap-2">
-                                    <Plus className="h-4 w-4" />
-                                    Add Referral
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-2xl">
-                                <DialogHeader>
-                                    <DialogTitle>Add Company Referral</DialogTitle>
-                                    <DialogDescription>
-                                        Submit a new company referral. Please provide the company and founder details below.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <div className="space-y-4 mt-4">
-                                    <div>
-                                        <Label htmlFor="company_name">Company Name</Label>
-                                        <Input
-                                            id="company_name"
-                                            value={dealFlow.company_name}
-                                            onChange={(e) => setDealFlow({ ...dealFlow, company_name: e.target.value })}
-                                            placeholder="Enter company name"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label>Founders</Label>
-                                        {dealFlow.founders.map((founder, index) => (
-                                            <div key={index} className="mt-2 p-4 border rounded-lg space-y-2">
-                                                <div className="flex justify-between items-center">
-                                                    <Label>Founder {index + 1}</Label>
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => handleRemoveFounder(index)}
-                                                    >
-                                                        Remove
-                                                    </Button>
-                                                </div>
-                                                <Input
-                                                    placeholder="Name"
-                                                    value={founder.name}
-                                                    onChange={(e) =>
-                                                        setDealFlow((prev) => ({
-                                                            ...prev,
-                                                            founders: prev.founders.map((f, i) =>
-                                                                i === index ? { ...f, name: e.target.value } : f
-                                                            ),
-                                                        }))
-                                                    }
-                                                />
-                                                <Input
-                                                    type="email"
-                                                    placeholder="Email"
-                                                    value={founder.email}
-                                                    onChange={(e) =>
-                                                        setDealFlow((prev) => ({
-                                                            ...prev,
-                                                            founders: prev.founders.map((f, i) =>
-                                                                i === index ? { ...f, email: e.target.value } : f
-                                                            ),
-                                                        }))
-                                                    }
-                                                />
-                                                <Input
-                                                    placeholder="LinkedIn URL"
-                                                    value={founder.linkedin}
-                                                    onChange={(e) =>
-                                                        setDealFlow((prev) => ({
-                                                            ...prev,
-                                                            founders: prev.founders.map((f, i) =>
-                                                                i === index ? { ...f, linkedin: e.target.value } : f
-                                                            ),
-                                                        }))
-                                                    }
-                                                />
-                                            </div>
-                                        ))}
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={handleAddFounder}
-                                            className="mt-2"
-                                        >
-                                            Add Founder
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="website">Website</Label>
-                                        <Input
-                                            id="website"
-                                            value={dealFlow.website}
-                                            onChange={(e) => setDealFlow({ ...dealFlow, website: e.target.value })}
-                                            placeholder="Company website"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="linkedin">Company LinkedIn</Label>
-                                        <Input
-                                            id="linkedin"
-                                            value={dealFlow.linkedin}
-                                            onChange={(e) => setDealFlow({ ...dealFlow, linkedin: e.target.value })}
-                                            placeholder="Company LinkedIn URL"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="lp_relationship">Your Relationship</Label>
-                                        <Textarea
-                                            id="lp_relationship"
-                                            value={dealFlow.lp_relationship}
-                                            onChange={(e) => setDealFlow({ ...dealFlow, lp_relationship: e.target.value })}
-                                            placeholder="Describe your relationship with the company"
-                                            rows={2}
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="description">Company Description</Label>
-                                        <Textarea
-                                            id="description"
-                                            value={dealFlow.description}
-                                            onChange={(e) => setDealFlow({ ...dealFlow, description: e.target.value })}
-                                            placeholder="Brief description of the company"
-                                            rows={3}
-                                        />
-                                    </div>
-                                    <div className="flex justify-end">
-                                        <Button onClick={() => handleDealSubmission(dealFlow)}>
-                                            Submit Referral
-                                        </Button>
-                                    </div>
-                                </div>
-                            </DialogContent>
-                        </Dialog>
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="space-y-4">
+                    <div className="space-y-4 min-h-[200px]">
                     {loading ? (
                         <SkeletonWrapper loading={loading} rows={3} width="w-full" height="h-24" />
                     ) : deals.length === 0 ? (
@@ -665,6 +492,6 @@ export default function GPDashboard() {
         </div>
         <Footer />
         <GPCopilotWidget />
-    </>
+    </div>
   )
 }

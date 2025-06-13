@@ -101,9 +101,9 @@ const Portfolio = () => {
     };
 
     return (
-        <>
+        <div className="min-h-screen flex flex-col">
             <Navbar />
-            <div className="container mx-auto py-24 min-h-[calc(100vh-4rem)]">
+            <div className="flex-grow container mx-auto py-24">
                 <div className="flex justify-between items-center mb-8">
                     <SectionHeader title="Portfolio Companies" description="Companies currently backed by your firm" />
                     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -232,7 +232,7 @@ const Portfolio = () => {
             </div>
             <Footer />
             <GPCopilotWidget />
-        </>
+        </div>
     );
 };
 
