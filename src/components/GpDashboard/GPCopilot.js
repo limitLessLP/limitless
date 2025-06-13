@@ -6,7 +6,6 @@ import { Input } from "../Common/input"
 import { Navbar } from "./navbar"
 import { Footer } from "../Common/Footer"
 import { Textarea } from "../../ui/textarea.jsx"
-import { jsPDF } from "jspdf/dist/jspdf.es.min.js"
 import html2canvas from 'html2canvas'
 
 export const GPCopilot = () => {
@@ -709,35 +708,6 @@ CRITICAL RULES:
     }
   }
 
-  const exportToPDF = async () => {
-    if (!analysisRef.current) return;
-    
-    setIsExporting(true);
-    try {
-      const canvas = await html2canvas(analysisRef.current, {
-        scale: 2,
-        backgroundColor: '#0F172A',
-        logging: false,
-        windowWidth: analysisRef.current.scrollWidth,
-        windowHeight: analysisRef.current.scrollHeight
-      });
-
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'px',
-        format: [canvas.width / 2, canvas.height / 2]
-      });
-
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
-      pdf.save(`${formData.companyProfile.name || 'Company'}_Analysis_${new Date().toISOString().split('T')[0]}.pdf`);
-    } catch (error) {
-      console.error('PDF export failed:', error);
-    } finally {
-      setIsExporting(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-[#0F172A] text-gray-100">
       <style>
@@ -1000,7 +970,7 @@ CRITICAL RULES:
                       <div className="flex items-center justify-between mb-2">
                         <div className="text-sm font-medium text-gray-400">Quick Score</div>
                         <button
-                          onClick={exportToPDF}
+                          onClick={() => {}}
                           disabled={isExporting}
                           className="p-1.5 hover:bg-[#1E293B] rounded-lg transition-colors"
                           title="Download Report"
