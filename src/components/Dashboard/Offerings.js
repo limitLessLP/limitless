@@ -209,7 +209,7 @@ export const Offerings = () => {
 
           {/* Enhanced Results Grid */}
           {filteredFunds.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="columns-3 gap-8">
               {filteredFunds.map((fund, index) => {
                 const FundComponent = fund.component
                 return (
@@ -218,12 +218,10 @@ export const Offerings = () => {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.15, duration: 0.5 }}
-                    className="group"
+                    className="w-full mb-8 break-inside-avoid"
                   >
-                    <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-gray-200 transition-all duration-300 overflow-hidden">
-                      <div className="p-2">
-                        <FundComponent />
-                      </div>
+                    <div className="w-full">
+                      <FundComponent />
                     </div>
                   </motion.div>
                 )

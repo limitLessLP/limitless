@@ -1029,7 +1029,7 @@ function ReferralSlider({
   )
 }
 
-function AnnouncementsModal({ isOpen, onClose, announcements, currentFundId }) {
+function AnnouncementsModal({ isOpen, onClose, announcements }) {
   const [replyText, setReplyText] = useState("")
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null)
   const [isReplying, setIsReplying] = useState(false)
@@ -1047,27 +1047,33 @@ function AnnouncementsModal({ isOpen, onClose, announcements, currentFundId }) {
   const handleReply = async () => {
     if (!replyText.trim()) return
     
-    // TODO: Implement reply API call when endpoint is available
-    // const replyData = {
-    //   announcement_id: selectedAnnouncement.ann_id,
-    //   fund_id: currentFundId,
-    //   lp_uuid: localStorage.getItem("userId"),
-    //   reply_message: replyText,
-    //   reply_date: new Date().toISOString()
-    // }
-    
-    console.log("Reply to be sent:", {
-      announcement_id: selectedAnnouncement?.ann_id,
-      fund_id: currentFundId,
-      lp_uuid: localStorage.getItem("userId"),
-      reply_message: replyText,
-      reply_date: new Date().toISOString()
-    })
+    try {
+      const response = await fetch('https://limitless-backend.vercel.app/api/make-announcement-comment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lp_id: localStorage.getItem("userId"),
+          ann_id: selectedAnnouncement.ann_id,
+          comment: replyText.trim()
+        })
+      });
 
-    // Simulate API call
-    alert("Reply functionality will be implemented when the endpoint is available")
-    setReplyText("")
-    setIsReplying(false)
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Reply sent successfully:", data);
+        alert("Reply sent successfully!");
+        setReplyText("");
+        setIsReplying(false);
+      } else {
+        console.error("Failed to send reply:", response.statusText);
+        alert("Failed to send reply. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error sending reply:", error);
+      alert("An error occurred while sending the reply.");
+    }
   }
 
   return (
@@ -1109,7 +1115,7 @@ function AnnouncementsModal({ isOpen, onClose, announcements, currentFundId }) {
                       <div 
                         key={announcement.ann_id || i} 
                         className="bg-gray-50 hover:bg-gray-100 transition-colors rounded-xl p-6 border border-gray-200 cursor-pointer"
-                        onClick={() => handleAnnouncementClick(announcement)}
+                        onClick={() => announcement.comments_enabled && handleAnnouncementClick(announcement)}
                       >
                         <div className="flex items-start justify-between mb-3">
                           <h3 className="text-lg font-semibold text-gray-900">{announcement.title}</h3>
@@ -1123,10 +1129,13 @@ function AnnouncementsModal({ isOpen, onClose, announcements, currentFundId }) {
                         <p className="text-gray-600 leading-relaxed line-clamp-3">
                           {announcement.message || announcement.description}
                         </p>
-                        <div className="flex items-center justify-between mt-4">
+                        {announcement.comments_enabled && <div className="flex items-center justify-between mt-4">
                           <span className="text-sm text-gray-500">Click to view details and reply</span>
                           <MessageSquare className="h-4 w-4 text-gray-400" />
-                        </div>
+                        </div>}
+                        {!announcement.comments_enabled && <div className="flex items-center justify-between mt-4">
+                          <span className="text-sm text-gray-500">Comments disabled for this announcement</span>
+                        </div>}
                       </div>
                     ))}
                   </div>
