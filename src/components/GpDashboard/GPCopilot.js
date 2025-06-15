@@ -1,20 +1,20 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { Download } from "lucide-react"
 import { Input } from "../Common/input"
 import { Navbar } from "./navbar"
 import { Footer } from "../Common/Footer"
 import { Textarea } from "../../ui/textarea.jsx"
-import html2canvas from 'html2canvas'
+// import html2canvas from 'html2canvas'
 
 export const GPCopilot = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisResult, setAnalysisResult] = useState(null)
   const [openaiKey] = useState(process.env.REACT_APP_OPENAI_API_KEY || '')
   const [LINKEDIN_API_KEY] = useState(process.env.LINKEDIN_API_KEY || '')
-  const [isExporting, setIsExporting] = useState(false)
-  const analysisRef = useRef(null)
+  // const [isExporting, setIsExporting] = useState(false)
+  // const analysisRef = useRef(null)
   
   // Form data
   const [formData, setFormData] = useState({
@@ -970,18 +970,18 @@ CRITICAL RULES:
                       <div className="flex items-center justify-between mb-2">
                         <div className="text-sm font-medium text-gray-400">Quick Score</div>
                         <button
-                          onClick={() => {}}
-                          disabled={isExporting}
+                          // onClick={() => setIsExporting(true)}
+                          // disabled={isExporting}
                           className="p-1.5 hover:bg-[#1E293B] rounded-lg transition-colors"
                           title="Download Report"
                         >
-                          {isExporting ? (
+                          {/* {isExporting ? (
                             <svg className="animate-spin h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
-                          ) : (
+                          ) : ( */}
                             <Download className="h-4 w-4 text-gray-400 hover:text-gray-200" />
-                          )}
+                          {/* )} */}
                         </button>
                       </div>
                       <div className={`text-4xl font-bold mb-2 ${
