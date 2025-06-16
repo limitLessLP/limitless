@@ -35,6 +35,9 @@ import { GpMfaVerification } from './components/SignInUp/GpMfaVerification';
 import { LPPortfolio } from './components/Dashboard/LPPortfolio';
 import { GPCopilot } from './components/GpDashboard/GPCopilot';
 import GpProfile from './components/GpDashboard/gpProfile';
+import PortCoDashboard from './components/PortCoDashboard/PortCoDashboard';
+import SignIn from './components/PortCoDashboard/SignIn';
+import SignUp from './components/PortCoDashboard/SignUp';
 
 
 function App() {
@@ -86,6 +89,11 @@ function App() {
         <Route path="/gp-deal-flow" element={<DealFlow />} />
         <Route path="/gp-portfolio" element={<Portfolio />} />
         <Route path="/gp-profile" element={<GpProfile />} />
+
+        {/* Portfolio Company Dashboard Routes */}
+        <Route path="/portco-signin" element={<SignIn />} />
+        <Route path="/portco-signup" element={<SignUp />} />
+        <Route path="/portco-dashboard/*" element={<PortCoDashboard />} />
         
       </Routes>
       <Analytics />
