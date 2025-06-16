@@ -26,7 +26,6 @@ export const LPPortfolio = () => {
   const [isTalentRequestsOpen, setIsTalentRequestsOpen] = useState(false)
   const [currentFundId, setCurrentFundId] = useState("")
   const [currentFundAnnouncements, setCurrentFundAnnouncements] = useState([])
-  const [currentPortcoId, setCurrentPortcoId] = useState("")
   const [talentRequests, setTalentRequests] = useState([])
   const [talentRequestsLoading, setTalentRequestsLoading] = useState(false)
   const [pastReferrals, setPastReferrals] = useState([])
@@ -338,7 +337,6 @@ export const LPPortfolio = () => {
   };
 
   const openTalentRequestsWindow = (portcoId) => {
-    setCurrentPortcoId(portcoId);
     setIsTalentRequestsOpen(true);
     fetchTalentRequests(portcoId);
   };
@@ -346,7 +344,6 @@ export const LPPortfolio = () => {
   const closeTalentRequestsWindow = () => {
     setIsTalentRequestsOpen(false);
     setTimeout(() => {
-      setCurrentPortcoId("");
       setTalentRequests([]);
     }, 300);
   };
