@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Download } from "lucide-react"
 import { Input } from "../Common/input"
 import { Navbar } from "./navbar"
 import { Footer } from "../Common/Footer"
@@ -11,6 +10,14 @@ import { Textarea } from "../../ui/textarea.jsx"
 export const GPCopilot = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisResult, setAnalysisResult] = useState(null)
+  const [analysisStep, setAnalysisStep] = useState(0)
+  const [analysisSteps] = useState([
+    { title: "Uploading pitch deck", description: "Processing PDF document...", duration: 3000 },
+    { title: "Fetching founder profiles", description: "Analyzing LinkedIn data...", duration: 8000 },
+    { title: "Extracting key metrics", description: "Parsing financial and traction data...", duration: 6000 },
+    { title: "Running AI analysis", description: "Evaluating investment factors...", duration: 15000 },
+    { title: "Generating insights", description: "Creating recommendations and scoring...", duration: 8000 }
+  ])
   const [openaiKey] = useState(process.env.REACT_APP_OPENAI_API_KEY || '')
   const [LINKEDIN_API_KEY] = useState(process.env.LINKEDIN_API_KEY || '')
   // const [isExporting, setIsExporting] = useState(false)
@@ -56,6 +63,22 @@ export const GPCopilot = () => {
         [field]: value
       }))
     }
+  }
+
+  const startStepProgression = () => {
+    setAnalysisStep(0)
+    let currentStep = 0
+    
+    const progressToNextStep = () => {
+      if (currentStep < analysisSteps.length - 1) {
+        currentStep++
+        setAnalysisStep(currentStep)
+        setTimeout(progressToNextStep, analysisSteps[currentStep].duration)
+      }
+    }
+    
+    // Start the first step
+    setTimeout(progressToNextStep, analysisSteps[0].duration)
   }
 
   const transformResponse = (rawResponse) => {
@@ -228,6 +251,7 @@ export const GPCopilot = () => {
     }
 
     setIsAnalyzing(true)
+    startStepProgression()
 
     // ----------------------
     // Fetch LinkedIn profiles (max 2) if user provided URLs/IDs
@@ -404,9 +428,16 @@ export const GPCopilot = () => {
 
     const founderProfiles = []
     const founderMetrics = []
+    
+    console.log('Processing founder LinkedIn URLs:')
+    console.log('Founder 1:', formData.founderLinkedIn1)
+    console.log('Founder 2:', formData.founderLinkedIn2)
+    
     if (formData.founderLinkedIn1) {
       const id1 = extractLinkId(formData.founderLinkedIn1)
+      console.log('Extracted ID1:', id1)
       const profile1 = await fetchLinkedInProfile(id1)
+      console.log('Profile1 result:', profile1 ? 'Success' : 'Failed')
       if (profile1) {
         founderProfiles.push(profile1)
         founderMetrics.push(extractFounderMetrics(profile1))
@@ -414,12 +445,17 @@ export const GPCopilot = () => {
     }
     if (formData.founderLinkedIn2) {
       const id2 = extractLinkId(formData.founderLinkedIn2)
+      console.log('Extracted ID2:', id2)
       const profile2 = await fetchLinkedInProfile(id2)
+      console.log('Profile2 result:', profile2 ? 'Success' : 'Failed')
       if (profile2) {
         founderProfiles.push(profile2)
         founderMetrics.push(extractFounderMetrics(profile2))
       }
     }
+    
+    console.log('Total founder profiles fetched:', founderProfiles.length)
+    console.log('Total founder metrics extracted:', founderMetrics.length)
 
     const systemPrompt = `##########  SYSTEM  ##########
 You are "GP Copilot", a venture-capital analyst bot embedded in a web app.
@@ -451,9 +487,9 @@ You will receive:
 1. A pitch deck PDF to analyze
 2. Company profile data
 3. GP investment thesis
-4. Founder LinkedIn profiles and metrics
+4. Founder LinkedIn profiles and metrics (may include 1-2 founders)
 
-Please analyze all materials and provide a comprehensive investment analysis.
+IMPORTANT: If multiple founders are provided, analyze ALL of them in the founderInsights array. Each founder should get their own complete analysis object.
 
 REQUIRED OUTPUT FORMAT (COPY EXACTLY):
 {
@@ -479,8 +515,36 @@ REQUIRED OUTPUT FORMAT (COPY EXACTLY):
   "redFlags": ["<potential deal-breakers or serious risks>"],
   "founderInsights": [
     {
-      "name": "",
-      "role": "",
+      "name": "Founder Name 1",
+      "role": "CEO",
+      "totalScore": 0,
+      "band": "",
+      "scores": {
+        "domainExpertise": 0,
+        "trackRecord": 0,
+        "executionDiscipline": 0,
+        "leadership": 0,
+        "techDepth": 0,
+        "networkLeverage": 0,
+        "capitalRaising": 0,
+        "commitment": 0,
+        "reputationRisk": 0
+      },
+      "strengthSignals": [""],
+      "watchouts": [""],
+      "followUpQs": [""],
+      "rawMetrics": {
+        "domainYears": 0,
+        "priorExits": 0,
+        "avgTenureMonths": 0,
+        "linkedinConnections": 0,
+        "patentCount": 0,
+        "capitalRaisedPrior": "$0"
+      }
+    },
+    {
+      "name": "Founder Name 2",
+      "role": "CTO",
       "totalScore": 0,
       "band": "",
       "scores": {
@@ -517,6 +581,7 @@ CRITICAL RULES:
 5. "band": "High-conviction invest" OR "Conditional / milestone SAFE" OR "Pass for now"
 6. All arrays limited to stated maximums
 7. NO markdown, NO comments, NO explanations outside the JSON
+8. IMPORTANT: Include ALL founders provided in founderInsights array - if 2 founders provided, return 2 founder objects
 
 ##########  USER  ##########`
 
@@ -635,6 +700,7 @@ CRITICAL RULES:
       }
     } finally {
       setIsAnalyzing(false)
+      setAnalysisStep(0)
     }
   }
 
@@ -709,522 +775,664 @@ CRITICAL RULES:
   }
 
   return (
-    <div className="min-h-screen bg-[#0F172A] text-gray-100">
+    <div className="min-h-screen bg-white">
       <style>
         {`
         .dashboard-card {
-          background: rgba(30, 41, 59, 0.5);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(8px);
+          background: #ffffff;
+          border: 1px solid rgba(0, 0, 0, 0.1);
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
         .dashboard-input {
-          background: rgba(15, 23, 42, 0.6);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #fff;
+          background: #ffffff;
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          color: #1a1a1a;
           transition: all 0.3s ease;
         }
         
         .dashboard-input:focus {
-          border-color: rgba(255, 255, 255, 0.2);
-          box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+          border-color: rgba(0, 0, 0, 0.3);
+          box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
         }
         
         .dashboard-highlight {
-          background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+          border: 1px solid rgba(0, 0, 0, 0.1);
         }
-
+        
         .upload-area {
-          background: rgba(15, 23, 42, 0.6);
-          border: 1px dashed rgba(255, 255, 255, 0.2);
+          background: #ffffff;
+          border: 1px dashed rgba(0, 0, 0, 0.2);
           transition: all 0.3s ease;
         }
-
+        
         .upload-area:hover {
-          border-color: rgba(255, 255, 255, 0.4);
-          background: rgba(15, 23, 42, 0.8);
+          border-color: rgba(0, 0, 0, 0.4);
+          background: #f9fafb;
         }
         `}
       </style>
-
       <Navbar currentPage="copilot" />
       
       <div className="max-w-7xl mx-auto px-4 pt-20 pb-6">
-        <div className="grid grid-cols-12 gap-6">
-          {/* Left Column - Input Forms */}
-          <div className="col-span-5 space-y-3">
-            {/* Investment Thesis */}
-            <div className="dashboard-card rounded-xl p-2.5">
-              <h2 className="text-base font-semibold mb-2 flex items-center gap-2">
-                <svg className="h-4 w-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Investment Thesis
-              </h2>
-              <Textarea
-                value={formData.gpInvestmentThesis}
-                onChange={(e) => handleInputChange('gpInvestmentThesis', e.target.value)}
-                placeholder="Describe your fund's investment thesis and strategic priorities..."
-                className="dashboard-input min-h-[60px] w-full rounded-lg p-2 text-sm"
-              />
-            </div>
-
-            {/* Company Profile - Pitch Deck Only */}
-            <div className="dashboard-card rounded-xl p-2.5">
-              <h2 className="text-base font-semibold mb-2 flex items-center gap-2">
-                <svg className="h-4 w-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Pitch Deck
-              </h2>
-              <div className="upload-area rounded-lg p-2.5">
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => handleFileUpload(e)}
-                  className="hidden"
-                  id="pitch-deck-upload"
+        <div className="relative">
+          <div className="grid grid-cols-12 gap-6">
+            {/* Left Column - Input Forms */}
+            <div className="col-span-5 space-y-3 relative">
+              {/* Investment Thesis */}
+              <div className="dashboard-card rounded-lg p-4">
+                <h2 className="text-sm font-medium mb-3 flex items-center gap-2 text-gray-900">
+                  <svg className="h-3 w-3 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Investment Thesis
+                </h2>
+                <Textarea
+                  value={formData.gpInvestmentThesis}
+                  onChange={(e) => handleInputChange('gpInvestmentThesis', e.target.value)}
+                  placeholder="Describe your fund's investment thesis and strategic priorities..."
+                  className="dashboard-input min-h-[60px] w-full rounded-md p-3 text-sm resize-none"
                 />
-                <label
-                  htmlFor="pitch-deck-upload"
-                  className="cursor-pointer block"
-                >
-                  {!uploadStatus.fileId ? (
-                    <div className="flex items-center gap-3 justify-center">
-                      <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-                        <svg className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                        </svg>
+              </div>
+
+              {/* Company Profile - Pitch Deck Only */}
+              <div className="dashboard-card rounded-lg p-4">
+                <h2 className="text-sm font-medium mb-3 flex items-center gap-2 text-gray-900">
+                  <svg className="h-3 w-3 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Pitch Deck
+                </h2>
+                <div className="upload-area rounded-md p-3">
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => handleFileUpload(e)}
+                    className="hidden"
+                    id="pitch-deck-upload"
+                  />
+                  <label
+                    htmlFor="pitch-deck-upload"
+                    className="cursor-pointer block"
+                  >
+                    {!uploadStatus.fileId ? (
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-md">
+                          <svg className="h-3 w-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                          </svg>
             </div>
             <div>
-                        <p className="text-sm font-medium text-gray-300">
-                          {uploadStatus.isUploading ? 'Uploading...' : 'Upload Pitch Deck'}
-                        </p>
-                        <p className="text-xs text-gray-500">PDF format, max 32MB</p>
+                          <p className="text-sm font-medium text-gray-900">
+                            {uploadStatus.isUploading ? 'Uploading...' : 'Upload Pitch Deck'}
+                          </p>
+                          <p className="text-xs text-gray-500">PDF format, max 32MB</p>
             </div>
           </div>
-                  ) : (
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg">
-                        <svg className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-300 truncate">
-                          {uploadStatus.fileName}
-                        </p>
-                        <p className="text-xs text-gray-500">Ready for analysis</p>
-                      </div>
-                      <div className="flex items-center gap-1">
-            <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            document.getElementById('pitch-deck-upload').click()
-                          }}
-                          className="p-1.5 hover:bg-gray-700 rounded-lg transition-colors"
-                          title="Replace file"
-                        >
-                          <svg className="h-3 w-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    ) : (
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-green-600 rounded-md">
+                          <svg className="h-3 w-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {uploadStatus.fileName}
+                          </p>
+                          <p className="text-xs text-gray-500">Ready for analysis</p>
+                        </div>
+                        <div className="flex items-center gap-1">
+            <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              document.getElementById('pitch-deck-upload').click()
+                            }}
+                            className="p-1 hover:bg-gray-100 rounded transition-colors"
+                            title="Replace file"
+                          >
+                            <svg className="h-3 w-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
             </button>
             <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            setUploadStatus({
-                              isUploading: false,
-                              error: null,
-                              fileId: null,
-                              fileName: null
-                            })
-                            setFormData(prev => ({
-                              ...prev,
-                              pitchDeckFileId: ''
-                            }))
-                          }}
-                          className="p-1.5 hover:bg-gray-700 rounded-lg transition-colors"
-                          title="Remove file"
-                        >
-                          <svg className="h-3 w-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              setUploadStatus({
+                                isUploading: false,
+                                error: null,
+                                fileId: null,
+                                fileName: null
+                              })
+                              setFormData(prev => ({
+                                ...prev,
+                                pitchDeckFileId: ''
+                              }))
+                            }}
+                            className="p-1 hover:bg-gray-100 rounded transition-colors"
+                            title="Remove file"
+                          >
+                            <svg className="h-3 w-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
             </button>
           </div>
         </div>
-                  )}
-                </label>
+                    )}
+                  </label>
                     </div>
                     </div>
 
-            {/* Founder LinkedIn Profiles */}
-            <div className="dashboard-card rounded-xl p-2.5">
-              <h2 className="text-base font-semibold mb-2 flex items-center gap-2">
-                <svg className="h-4 w-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                Founders
-              </h2>
-              <div className="grid grid-cols-2 gap-2">
+              {/* Founder LinkedIn Profiles */}
+              <div className="dashboard-card rounded-lg p-4">
+                <h2 className="text-sm font-medium mb-3 flex items-center gap-2 text-gray-900">
+                  <svg className="h-3 w-3 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  Founders
+                </h2>
+                <div className="grid grid-cols-2 gap-2">
                       <Input
-                  value={formData.founderLinkedIn1}
-                  onChange={(e) => handleInputChange('founderLinkedIn1', e.target.value)}
-                  placeholder="Founder 1 LinkedIn URL"
-                  className="dashboard-input rounded-lg p-1.5 text-sm"
-                />
+                    value={formData.founderLinkedIn1}
+                    onChange={(e) => handleInputChange('founderLinkedIn1', e.target.value)}
+                    placeholder="Founder 1 LinkedIn"
+                    className="dashboard-input rounded-md p-2 text-sm"
+                  />
                       <Input
-                  value={formData.founderLinkedIn2}
-                  onChange={(e) => handleInputChange('founderLinkedIn2', e.target.value)}
-                  placeholder="Founder 2 LinkedIn URL"
-                  className="dashboard-input rounded-lg p-1.5 text-sm"
+                    value={formData.founderLinkedIn2}
+                    onChange={(e) => handleInputChange('founderLinkedIn2', e.target.value)}
+                    placeholder="Founder 2 LinkedIn"
+                    className="dashboard-input rounded-md p-2 text-sm"
                       />
                     </div>
                   </div>
 
-            {/* Notes & Comments */}
-            <div className="dashboard-card rounded-xl p-2.5">
-              <h2 className="text-base font-semibold mb-2 flex items-center gap-2">
-                <svg className="h-4 w-4 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Notes & Comments
-              </h2>
-              <div className="space-y-2">
+              {/* Notes & Comments */}
+              <div className="dashboard-card rounded-lg p-4">
+                <h2 className="text-sm font-medium mb-3 flex items-center gap-2 text-gray-900">
+                  <svg className="h-3 w-3 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Notes & Comments
+                </h2>
+                <div className="space-y-2">
                     <Textarea
                       value={formData.interactionNotes}
                       onChange={(e) => handleInputChange('interactionNotes', e.target.value)}
-                  placeholder="Meeting notes, founder conversations..."
-                  className="dashboard-input min-h-[50px] w-full rounded-lg p-1.5 text-sm"
+                    placeholder="Meeting notes, founder conversations..."
+                    className="dashboard-input min-h-[40px] w-full rounded-md p-2 text-sm resize-none"
                     />
                     <Textarea
                       value={formData.additionalDocs}
                       onChange={(e) => handleInputChange('additionalDocs', e.target.value)}
-                  placeholder="Additional context, documents..."
-                  className="dashboard-input min-h-[50px] w-full rounded-lg p-1.5 text-sm"
+                    placeholder="Additional context, documents..."
+                    className="dashboard-input min-h-[40px] w-full rounded-md p-2 text-sm resize-none"
                     />
                   </div>
+              </div>
             </div>
 
-              {/* Analyze Button */}
-            <button
+            {/* Right Column - Analysis Results */}
+            <div className="col-span-7">
+              <div className="flex flex-col gap-4 ">
+                {/* Fixed GP Copilot Card - Never changes size */}
+                <div className="dashboard-card rounded-xl p-6 flex flex-col h-[660px]">
+              {isAnalyzing ? (
+                    <div className="flex flex-col h-full px-6 py-4">
+                      {/* Header with Icon and Current Step */}
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="relative flex-shrink-0">
+                          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-ping opacity-20"></div>
+                          <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 rounded-full p-3">
+                            <svg className="h-5 w-5 text-white animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-semibold text-gray-900 mb-1">{analysisSteps[analysisStep].title}</h3>
+                          <p className="text-gray-500 text-sm">
+                            {analysisSteps[analysisStep].description}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className="mb-4">
+                        <div className="flex justify-between text-xs text-gray-400 mb-2">
+                          <span>Step {analysisStep + 1} of {analysisSteps.length}</span>
+                          <span>{Math.round(((analysisStep + 1) / analysisSteps.length) * 100)}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-1000 ease-out"
+                            style={{ width: `${((analysisStep + 1) / analysisSteps.length) * 100}%` }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      {/* Compact Step List */}
+                      <div className="flex-1 overflow-y-auto">
+                        <div className="space-y-2">
+                          {analysisSteps.map((step, index) => (
+                            <div key={index} className={`flex items-center gap-3 p-2 rounded-md transition-all duration-300 ${
+                              index < analysisStep ? 'bg-green-50' :
+                              index === analysisStep ? 'bg-blue-50' :
+                              'bg-gray-50'
+                            }`}>
+                              <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${
+                                index < analysisStep ? 'bg-green-500 text-white' :
+                                index === analysisStep ? 'bg-blue-500 text-white animate-pulse' :
+                                'bg-gray-300 text-gray-600'
+                              }`}>
+                                {index < analysisStep ? (
+                                  <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                  </svg>
+                                ) : (
+                                  index + 1
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className={`text-sm font-medium ${
+                                  index < analysisStep ? 'text-green-700' :
+                                  index === analysisStep ? 'text-blue-700' :
+                                  'text-gray-500'
+                                }`}>
+                                  {step.title}
+                                </p>
+                              </div>
+                              {index === analysisStep && (
+                                <div className="flex-shrink-0">
+                                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : !analysisResult ? (
+                    <>
+                      {/* Header */}
+                      <div className="mb-6">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs text-gray-500 font-medium tracking-wider uppercase mb-1">
+                              {new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 18 ? 'Good afternoon' : 'Good evening'}
+                            </p>
+                            <h1 className="text-lg font-semibold text-gray-900 mb-1 flex items-center">
+                              GP Copilot
+                              <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-blue-50 text-blue-600">
+                                Beta
+                              </span>
+                            </h1>
+                            <p className="text-xs text-gray-600">
+                              Instant AI analysis for smarter investment decisions
+                            </p>
+                  </div>
+                </div>
+                      </div>
+                      
+                      {/* Stats */}
+                      <div className="grid grid-cols-2 gap-3 mb-6">
+                        <div className="text-center p-3 bg-gray-50 rounded-lg">
+                          <div className="text-lg font-semibold text-gray-900">0-100</div>
+                          <div className="text-xs text-gray-600">Investment Score</div>
+                        </div>
+                        <div className="text-center p-3 bg-gray-50 rounded-lg">
+                          <div className="text-lg font-semibold text-gray-900">~30s</div>
+                          <div className="text-xs text-gray-600">Analysis Time</div>
+                        </div>
+                  </div>
+
+                      {/* Features */}
+                      <div className="space-y-4 flex-1">
+                        <div>
+                          <h3 className="text-sm font-medium text-gray-900 mb-3">Analysis Report</h3>
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-3 text-xs">
+                              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                              <span className="text-gray-700">Investment recommendation with scoring rationale</span>
+                                </div>
+                            <div className="flex items-center gap-3 text-xs">
+                              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                              <span className="text-gray-700">Founder evaluation across 9 dimensions</span>
+                              </div>
+                            <div className="flex items-center gap-3 text-xs">
+                              <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                              <span className="text-gray-700">Tailored due diligence questions</span>
+                            </div>
+                            <div className="flex items-center gap-3 text-xs">
+                              <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                              <span className="text-gray-700">Risk factors and red flags</span>
+                          </div>
+                      </div>
+                          </div>
+
+                        <div className="pt-4 border-t border-gray-100">
+                          <h3 className="text-sm font-medium text-gray-900 mb-2">Best Results</h3>
+                          <div className="text-xs text-gray-600 space-y-1">
+                            <div>• Comprehensive pitch decks with financials</div>
+                            <div>• Founder LinkedIn profiles for background analysis</div>
+                            <div>• Meeting notes and additional context</div>
+                          </div>
+                  </div>
+
+                        {/* Disclaimer Section */}
+                        <div className="mt-auto pt-4 border-t border-gray-100">
+                          <div className="flex items-start gap-2 text-xs text-gray-500">
+                            <svg className="h-4 w-4 text-gray-400 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                                                        <p>
+                              GP Copilot provides AI-powered insights to support investment decisions. While our analysis is comprehensive, it should be used as a supplementary tool alongside your expertise and due diligence.
+                            </p>
+                        </div>
+                            </div>
+                          </div>
+                    </>
+                                     ) : (
+                     <>
+                       {/* Fixed Header for Results */}
+                       <div className="mb-4 pb-4 border-b border-gray-100 flex-shrink-0">
+                         <div className="flex items-start gap-3">
+                           <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                             <svg className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                               <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                             </svg>
+                           </div>
+                           <div className="flex-1 min-w-0">
+                             <h1 className="text-base font-semibold text-gray-900 mb-1">Analysis Complete</h1>
+                             <p className="text-xs text-gray-600">
+                               Investment recommendation and insights
+                             </p>
+                           </div>
+                         </div>
+                       </div>
+
+                       {/* Scrollable Results Content - Takes remaining space */}
+                       <div className="flex-1 overflow-y-auto pr-2 space-y-4 min-h-0">
+                         {/* Summary & Score */}
+                         <div className="grid grid-cols-3 gap-4">
+                           <div className="col-span-2 dashboard-card rounded-xl p-4">
+                             <h3 className="text-base font-semibold mb-2 text-gray-900">Executive Summary</h3>
+                             <p className="text-gray-700 text-sm leading-relaxed">{analysisResult.summary}</p>
+                           </div>
+
+                           <div className={`dashboard-card rounded-xl p-4 border-2 ${
+                             analysisResult.quickScore.total >= 60 ? 'border-green-500' :
+                             analysisResult.quickScore.total >= 50 ? 'border-blue-500' :
+                             'border-red-500'
+                           }`}>
+                             <div className="text-center">
+                               <div className="flex items-center justify-between mb-2">
+                                 <div className="text-sm font-medium text-gray-600">Quick Score</div>
+                               </div>
+                               <div className={`text-4xl font-bold mb-2 ${
+                                 analysisResult.quickScore.total >= 60 ? 'text-green-600' :
+                                 analysisResult.quickScore.total >= 50 ? 'text-blue-600' :
+                                 'text-red-600'
+                               }`}>{analysisResult.quickScore.total}</div>
+                               <div className={`text-xs px-2 py-0.5 rounded-full ${
+                                 analysisResult.quickScore.total >= 60 ? 'bg-green-100 text-green-700' :
+                                 analysisResult.quickScore.total >= 50 ? 'bg-blue-100 text-blue-700' :
+                                 'bg-red-100 text-red-700'
+                               }`}>{analysisResult.quickScore.band}</div>
+                             </div>
+                           </div>
+                         </div>
+
+                         {/* Scoring Breakdown */}
+                         <div className="dashboard-card rounded-xl p-4">
+                           <h3 className="text-base font-semibold mb-3 text-gray-900">Scoring Breakdown</h3>
+                           <div className="space-y-3">
+                             {analysisResult.quickScore.factors.map((factor, index) => (
+                               <div key={index} className="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors">
+                                 <div className="flex justify-between items-start mb-2">
+                                   <h4 className="text-sm font-medium text-gray-900">{factor.name}</h4>
+                                   <div className="text-right">
+                                     <div className="font-mono text-xs font-medium text-gray-600">
+                                       {factor.raw} × {factor.weight} = <span className="text-gray-900">{factor.weighted}</span>
+                                     </div>
+                                   </div>
+                                 </div>
+                                 <p className="text-xs text-gray-600 leading-relaxed">{factor.rationale}</p>
+                               </div>
+                             ))}
+                           </div>
+                         </div>
+
+                         {/* Strengths & Weaknesses */}
+                         <div className="grid grid-cols-2 gap-4">
+                           <div className="dashboard-card rounded-xl p-4">
+                             <h3 className="text-base font-semibold mb-3 flex items-center gap-2 text-gray-900">
+                               <svg className="h-4 w-4 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                               </svg>
+                               Key Strengths
+                             </h3>
+                             <ul className="space-y-2">
+                               {analysisResult.topStrengths.map((strength, index) => (
+                                 <li key={index} className="flex items-start gap-2 bg-gray-50 rounded-lg p-2">
+                                   <span className="text-green-600 mt-0.5 flex-shrink-0">•</span>
+                                   <span className="text-sm text-gray-700">{strength}</span>
+                                 </li>
+                               ))}
+                             </ul>
+                           </div>
+
+                           <div className="dashboard-card rounded-xl p-4">
+                             <h3 className="text-base font-semibold mb-3 flex items-center gap-2 text-gray-900">
+                               <svg className="h-4 w-4 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                               </svg>
+                               Areas of Concern
+                             </h3>
+                             <ul className="space-y-2">
+                               {analysisResult.topWeaknesses.map((weakness, index) => (
+                                 <li key={index} className="flex items-start gap-2 bg-gray-50 rounded-lg p-2">
+                                   <span className="text-red-600 mt-0.5 flex-shrink-0">•</span>
+                                   <span className="text-sm text-gray-700">{weakness}</span>
+                                 </li>
+                               ))}
+                             </ul>
+                           </div>
+                         </div>
+
+                         {/* Due Diligence Questions */}
+                         <div className="dashboard-card rounded-xl p-4">
+                           <h3 className="text-base font-semibold mb-3 flex items-center gap-2 text-gray-900">
+                             <svg className="h-4 w-4 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                             </svg>
+                             Due Diligence Questions
+                           </h3>
+                           <div className="grid gap-2">
+                             {analysisResult.diligenceQuestions.map((question, index) => (
+                               <div key={index} className="flex items-start gap-2 bg-gray-50 rounded-lg p-2">
+                                 <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 text-blue-700 text-xs font-bold rounded-full flex-shrink-0">
+                                   {index + 1}
+                                 </span>
+                                 <span className="text-sm text-gray-700">{question}</span>
+                               </div>
+                             ))}
+                           </div>
+                         </div>
+
+                         {/* Red Flags */}
+                         {analysisResult.redFlags && analysisResult.redFlags.length > 0 && (
+                           <div className="dashboard-card rounded-xl p-4">
+                             <h3 className="text-base font-semibold mb-3 flex items-center gap-2 text-gray-900">
+                               <svg className="h-4 w-4 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                               </svg>
+                               Critical Risk Factors
+                             </h3>
+                             <ul className="space-y-2">
+                               {analysisResult.redFlags.map((flag, index) => (
+                                 <li key={index} className="flex items-start gap-2 bg-gray-50 rounded-lg p-2">
+                                   <span className="text-red-600 mt-0.5 flex-shrink-0">•</span>
+                                   <span className="text-sm text-gray-700">{flag}</span>
+                                 </li>
+                               ))}
+                             </ul>
+                           </div>
+                         )}
+
+                         {/* Founder Insights */}
+                         {analysisResult.founderInsights && analysisResult.founderInsights.length > 0 && (
+                           <div className="dashboard-card rounded-xl p-4">
+                             <h3 className="text-base font-semibold mb-3 flex items-center gap-2 text-gray-900">
+                               <svg className="h-4 w-4 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                               </svg>
+                               Founder Analysis
+                             </h3>
+                             <div className="space-y-3">
+                               {analysisResult.founderInsights.map((founder, idx) => (
+                                 <div key={idx} className={`bg-gray-50 rounded-lg p-3 border ${
+                                   founder.totalScore >= 70 ? 'border-green-500' :
+                                   founder.totalScore >= 50 ? 'border-blue-500' :
+                                   founder.totalScore >= 30 ? 'border-yellow-500' :
+                                   'border-red-500'
+                                 }`}>
+                                   <div className="flex justify-between items-start mb-3">
+                                     <div>
+                                       <h4 className="text-sm font-medium text-gray-900">{founder.name}</h4>
+                                       <p className="text-xs text-gray-600">{founder.role}</p>
+                                     </div>
+                                     <div className="text-right">
+                                       <div className={`text-lg font-bold mb-1 ${
+                                         founder.totalScore >= 70 ? 'text-green-600' :
+                                         founder.totalScore >= 50 ? 'text-blue-600' :
+                                         founder.totalScore >= 30 ? 'text-yellow-600' :
+                                         'text-red-600'
+                                       }`}>{founder.totalScore}</div>
+                                       <div className={`text-xs px-2 py-0.5 rounded-full ${
+                                         founder.totalScore >= 70 ? 'bg-green-100 text-green-700' :
+                                         founder.totalScore >= 50 ? 'bg-blue-100 text-blue-700' :
+                                         founder.totalScore >= 30 ? 'bg-yellow-100 text-yellow-700' :
+                                         'bg-red-100 text-red-700'
+                                       }`}>{founder.band}</div>
+                                     </div>
+                                   </div>
+
+                                   {/* Sub-scores */}
+                                   <div className="grid grid-cols-3 gap-2 mb-3">
+                                     {Object.entries(founder.scores).map(([dimension, score]) => (
+                                       <div key={dimension} className="bg-white rounded p-2 border border-gray-200">
+                                         <div className="flex justify-between items-center mb-1">
+                                           <span className="text-xs text-gray-600 capitalize">
+                                             {dimension.replace(/([A-Z])/g, ' $1').trim()}
+                                           </span>
+                                           <span className="text-xs font-medium text-gray-900">{score}/10</span>
+                                         </div>
+                                         <div className="w-full bg-gray-200 rounded-full h-1">
+                                           <div 
+                                             className={`h-1 rounded-full ${
+                                               score >= 8 ? 'bg-green-500' :
+                                               score >= 6 ? 'bg-blue-500' :
+                                               score >= 4 ? 'bg-yellow-500' :
+                                               'bg-red-500'
+                                             }`}
+                                             style={{ width: `${(score / 10) * 100}%` }}
+                                           />
+                                         </div>
+                                       </div>
+                                     ))}
+                                   </div>
+
+                                   {/* Signals & Questions */}
+                                   <div className="space-y-2 text-xs">
+                                     {founder.strengthSignals?.length > 0 && (
+                                       <div>
+                                         <span className="text-green-600 font-medium">Strengths:</span>
+                                         <ul className="mt-1 space-y-1">
+                                           {founder.strengthSignals.map((signal, i) => (
+                                             <li key={i} className="flex items-start gap-2 text-gray-700">
+                                               <span className="text-green-600 mt-0.5 flex-shrink-0">•</span>
+                                               <span>{signal}</span>
+                                             </li>
+                                           ))}
+                                         </ul>
+                                       </div>
+                                     )}
+
+                                     {founder.watchouts?.length > 0 && (
+                                       <div>
+                                         <span className="text-yellow-600 font-medium">Watch-outs:</span>
+                                         <ul className="mt-1 space-y-1">
+                                           {founder.watchouts.map((watchout, i) => (
+                                             <li key={i} className="flex items-start gap-2 text-gray-700">
+                                               <span className="text-yellow-600 mt-0.5 flex-shrink-0">•</span>
+                                               <span>{watchout}</span>
+                                             </li>
+                                           ))}
+                                         </ul>
+                                       </div>
+                                     )}
+
+                                     {founder.followUpQs?.length > 0 && (
+                                       <div>
+                                         <span className="text-blue-600 font-medium">Follow-up Questions:</span>
+                                         <ul className="mt-1 space-y-1">
+                                           {founder.followUpQs.map((q, i) => (
+                                             <li key={i} className="flex items-start gap-2 text-gray-700">
+                                               <span className="text-blue-600 mt-0.5 flex-shrink-0">{i + 1}.</span>
+                                               <span>{q}</span>
+                                             </li>
+                                           ))}
+                                         </ul>
+                                       </div>
+                                     )}
+                                   </div>
+                                 </div>
+                               ))}
+                             </div>
+                           </div>
+                         )}
+                       </div>
+                     </>
+                   )}
+                      </div>
+                
+                {/* Run Analysis Button */}
+                <button
                   onClick={analyzeCompany}
                   disabled={isAnalyzing || !openaiKey?.trim()}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg py-2 font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg py-2.5 px-4 font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isAnalyzing ? (
                     <>
-                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  Analyzing
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                      <span className="text-sm">Analyzing...</span>
                     </>
                   ) : (
                     <>
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Run Analysis
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-sm font-medium">Run Analysis</span>
                     </>
                   )}
-            </button>
-              </div>
-
-          {/* Right Column - Analysis Results */}
-          <div className="col-span-7">
-              {isAnalyzing ? (
-              <div className="dashboard-card rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px]">
-                <div className="relative mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-ping opacity-20"></div>
-                  <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 rounded-full p-4">
-                    <svg className="h-8 w-8 text-white animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    </div>
-                    </div>
-                <h3 className="text-xl font-semibold mb-2">Running Analysis</h3>
-                <p className="text-gray-400 text-center max-w-md">
-                  Our AI is analyzing the company data, evaluating metrics, and generating comprehensive insights...
-                </p>
+                </button>
                 </div>
-              ) : analysisResult ? (
-              <div className="space-y-4">
-                  {/* Summary & Score */}
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="col-span-2 dashboard-card rounded-xl p-4">
-                    <h3 className="text-base font-semibold mb-2">Executive Summary</h3>
-                    <p className="text-gray-300 text-sm leading-relaxed">{analysisResult.summary}</p>
-                  </div>
-
-                  <div className={`dashboard-card rounded-xl p-4 border-2 ${
-                    analysisResult.quickScore.total >= 60 ? 'border-green-500/30' :
-                    analysisResult.quickScore.total >= 50 ? 'border-blue-500/30' :
-                    'border-red-500/30'
-                  }`}>
-                    <div className="text-center">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="text-sm font-medium text-gray-400">Quick Score</div>
-                        <button
-                          // onClick={() => setIsExporting(true)}
-                          // disabled={isExporting}
-                          className="p-1.5 hover:bg-[#1E293B] rounded-lg transition-colors"
-                          title="Download Report"
-                        >
-                          {/* {isExporting ? (
-                            <svg className="animate-spin h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                          ) : ( */}
-                            <Download className="h-4 w-4 text-gray-400 hover:text-gray-200" />
-                          {/* )} */}
-                        </button>
-                      </div>
-                      <div className={`text-4xl font-bold mb-2 ${
-                        analysisResult.quickScore.total >= 60 ? 'text-green-400' :
-                        analysisResult.quickScore.total >= 50 ? 'text-blue-400' :
-                        'text-red-400'
-                      }`}>
-                          {analysisResult.quickScore.total}
-                        </div>
-                      <div className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                        analysisResult.quickScore.total >= 60 ? 'bg-green-500/20 text-green-400' :
-                        analysisResult.quickScore.total >= 50 ? 'bg-blue-500/20 text-blue-400' :
-                        'bg-red-500/20 text-red-400'
-                      }`}>
-                        {analysisResult.quickScore.band}
                       </div>
                     </div>
                   </div>
-                  </div>
-
-                  {/* Scoring Factors */}
-                <div className="dashboard-card rounded-xl p-4">
-                  <h3 className="text-base font-semibold mb-3">Scoring Breakdown</h3>
-                      <div className="space-y-3">
-                        {analysisResult.quickScore.factors.map((factor, index) => (
-                      <div key={index} className="bg-[#1E293B] rounded-lg p-3 hover:bg-[#1E293B]/80 transition-colors">
-                            <div className="flex justify-between items-start mb-2">
-                          <h4 className="text-sm font-medium text-gray-200">{factor.name}</h4>
-                              <div className="text-right">
-                            <div className="font-mono text-xs font-medium text-gray-400">
-                              {factor.raw} × {factor.weight} = <span className="text-gray-200">{factor.weighted}</span>
-                                </div>
-                              </div>
-                            </div>
-                        <p className="text-xs text-gray-400 leading-relaxed">{factor.rationale}</p>
-                          </div>
-                        ))}
-                      </div>
-                </div>
-
-                  {/* Strengths & Weaknesses */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="dashboard-card rounded-xl p-4">
-                    <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
-                      <svg className="h-4 w-4 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                          Key Strengths
-                    </h3>
-                    <ul className="space-y-2">
-                          {analysisResult.topStrengths.map((strength, index) => (
-                        <li key={index} className="flex items-start gap-2 bg-[#1E293B] rounded-lg p-2">
-                          <span className="text-green-400 mt-1">•</span>
-                          <span className="text-sm text-gray-300">{strength}</span>
-                            </li>
-                          ))}
-                        </ul>
-                          </div>
-
-                  <div className="dashboard-card rounded-xl p-4">
-                    <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
-                      <svg className="h-4 w-4 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                      </svg>
-                          Areas of Concern
-                    </h3>
-                    <ul className="space-y-2">
-                          {analysisResult.topWeaknesses.map((weakness, index) => (
-                        <li key={index} className="flex items-start gap-2 bg-[#1E293B] rounded-lg p-2">
-                          <span className="text-red-400 mt-1">•</span>
-                          <span className="text-sm text-gray-300">{weakness}</span>
-                            </li>
-                          ))}
-                        </ul>
-                  </div>
-                  </div>
-
-                  {/* Due Diligence Questions */}
-                <div className="dashboard-card rounded-xl p-4">
-                  <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
-                    <svg className="h-4 w-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Due Diligence Questions
-                  </h3>
-                  <div className="grid gap-2">
-                        {analysisResult.diligenceQuestions.map((question, index) => (
-                      <div key={index} className="flex items-start gap-2 bg-[#1E293B] rounded-lg p-2">
-                        <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-500/20 text-blue-400 text-xs font-bold rounded-full flex-shrink-0">
-                                {index + 1}
-                              </span>
-                        <span className="text-sm text-gray-300">{question}</span>
-                          </div>
-                        ))}
-                      </div>
-                </div>
-
-                  {/* Red Flags */}
-                  {analysisResult.redFlags && analysisResult.redFlags.length > 0 && (
-                  <div className="dashboard-card rounded-xl p-4">
-                    <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
-                      <svg className="h-4 w-4 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                      </svg>
-                          Critical Risk Factors
-                    </h3>
-                    <ul className="space-y-2">
-                          {analysisResult.redFlags.map((flag, index) => (
-                        <li key={index} className="flex items-start gap-2 bg-[#1E293B] rounded-lg p-2">
-                          <span className="text-red-400 mt-1">•</span>
-                          <span className="text-sm text-gray-300">{flag}</span>
-                            </li>
-                          ))}
-                        </ul>
-                  </div>
-                )}
-
-                {/* Founder Insights */}
-                {analysisResult.founderInsights && analysisResult.founderInsights.length > 0 && (
-                  <div className="dashboard-card rounded-xl p-4">
-                    <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
-                      <svg className="h-4 w-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                      Founder Analysis
-                    </h3>
-                    <div className="space-y-3">
-                      {analysisResult.founderInsights.map((founder, idx) => (
-                        <div key={idx} className={`bg-[#1E293B] rounded-lg p-3 border ${
-                          founder.totalScore >= 70 ? 'border-green-500/30' :
-                          founder.totalScore >= 50 ? 'border-blue-500/30' :
-                          founder.totalScore >= 30 ? 'border-yellow-500/30' :
-                          'border-red-500/30'
-                        }`}>
-                          <div className="flex justify-between items-start mb-3">
-                            <div>
-                              <h4 className="text-sm font-medium text-gray-200">{founder.name}</h4>
-                              <p className="text-xs text-gray-400">{founder.role}</p>
-                </div>
-                            <div className="text-right">
-                              <div className={`text-lg font-bold mb-1 ${
-                                founder.totalScore >= 70 ? 'text-green-400' :
-                                founder.totalScore >= 50 ? 'text-blue-400' :
-                                founder.totalScore >= 30 ? 'text-yellow-400' :
-                                'text-red-400'
-                              }`}>{founder.totalScore}</div>
-                              <div className={`text-xs px-2 py-0.5 rounded-full ${
-                                founder.totalScore >= 70 ? 'bg-green-500/20 text-green-400' :
-                                founder.totalScore >= 50 ? 'bg-blue-500/20 text-blue-400' :
-                                founder.totalScore >= 30 ? 'bg-yellow-500/20 text-yellow-400' :
-                                'bg-red-500/20 text-red-400'
-                              }`}>{founder.band}</div>
-                      </div>
-                    </div>
-
-                          {/* Sub-scores */}
-                          <div className="grid grid-cols-3 gap-2 mb-3">
-                            {Object.entries(founder.scores).map(([dimension, score]) => (
-                              <div key={dimension} className="bg-[#0F172A] rounded p-2">
-                                <div className="flex justify-between items-center mb-1">
-                                  <span className="text-xs text-gray-400 capitalize">
-                                    {dimension.replace(/([A-Z])/g, ' $1').trim()}
-                                  </span>
-                                  <span className="text-xs font-medium text-gray-300">{score}/10</span>
-                  </div>
-                                <div className="w-full bg-gray-700/30 rounded-full h-1">
-                                  <div 
-                                    className={`h-1 rounded-full ${
-                                      score >= 8 ? 'bg-green-400' :
-                                      score >= 6 ? 'bg-blue-400' :
-                                      score >= 4 ? 'bg-yellow-400' :
-                                      'bg-red-400'
-                                    }`}
-                                    style={{ width: `${(score / 10) * 100}%` }}
-                                  />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Signals & Questions */}
-                          <div className="space-y-2 text-xs">
-                            {founder.strengthSignals?.length > 0 && (
-                              <div>
-                                <span className="text-green-400 font-medium">Strengths:</span>
-                                <ul className="mt-1 space-y-1">
-                                  {founder.strengthSignals.map((signal, i) => (
-                                    <li key={i} className="flex gap-2 text-gray-300">
-                                      <span className="text-green-400">•</span>
-                                      {signal}
-                                    </li>
-                                  ))}
-                                </ul>
-                </div>
-              )}
-                            {founder.watchouts?.length > 0 && (
-                              <div>
-                                <span className="text-yellow-400 font-medium">Watch-outs:</span>
-                                <ul className="mt-1 space-y-1">
-                                  {founder.watchouts.map((watchout, i) => (
-                                    <li key={i} className="flex gap-2 text-gray-300">
-                                      <span className="text-yellow-400">•</span>
-                                      {watchout}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-                            {founder.followUpQs?.length > 0 && (
-                              <div>
-                                <span className="text-blue-400 font-medium">Follow-up Questions:</span>
-                                <ul className="mt-1 space-y-1">
-                                  {founder.followUpQs.map((q, i) => (
-                                    <li key={i} className="flex gap-2 text-gray-300">
-                                      <span className="text-blue-400">{i + 1}.</span>
-                                      {q}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="dashboard-card rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px]">
-                <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-full p-4 mb-6">
-                  <svg className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Ready to Analyze</h3>
-                <p className="text-gray-400 text-center max-w-md">
-                  Fill out the company details and upload a pitch deck to get started with the analysis.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
 
       <Footer />
