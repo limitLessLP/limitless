@@ -56,7 +56,7 @@ export const DirectSignUpGP = () => {
         console.log("Signup successful:", signupData)
         // Store user information in localStorage
         localStorage.setItem('userName', firstName)
-        localStorage.setItem('userEmail', email)
+        localStorage.setItem('gp_userEmail', email)
         localStorage.setItem('userId', signupData.userId)
         localStorage.setItem('directAccess', 'true')
         localStorage.setItem('userType', 'gp')
