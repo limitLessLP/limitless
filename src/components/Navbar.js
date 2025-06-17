@@ -103,6 +103,12 @@ export function Navbar({ section }) {
               >
                 FAQ
               </button>
+              <button
+                onClick={() => navigate("/portco-signin")}
+                className={`text-sm ${getTextColor()} transition-colors`}
+              >
+                Portfolio Company
+              </button>
             </div>
           </div>
 
