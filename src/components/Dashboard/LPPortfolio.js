@@ -156,10 +156,13 @@ export const LPPortfolio = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log('Open Position IDs:', data.open_position_ids); // Debug log
+
         if (data.success && data.open_position_ids && data.open_position_ids.length > 0) {
           // Then, fetch details for each position
           const positionDetails = await Promise.all(
             data.open_position_ids.map(async (positionId) => {
+              console.log('Fetching details for position ID:', positionId); // Debug log
               const detailResponse = await fetch('https://limitless-backend.vercel.app/api/portco-handle-position', {
                 method: 'POST',
                 headers: {
@@ -173,12 +176,24 @@ export const LPPortfolio = () => {
               });
               if (detailResponse.ok) {
                 const detailData = await detailResponse.json();
-                return detailData.success ? detailData.position : null;
+                console.log('Position details:', detailData.position); // Debug log
+                if (detailData.success) {
+                  // Ensure we have both the position details and the original ID
+                  const positionWithId = {
+                    ...detailData.position,
+                    position_id: positionId,
+                    portco_id: portcoId
+                  };
+                  console.log('Combined position data:', positionWithId); // Debug log
+                  return positionWithId;
+                }
               }
               return null;
             })
           );
-          setTalentRequests(positionDetails.filter(detail => detail !== null));
+          const validPositions = positionDetails.filter(detail => detail !== null);
+          console.log('Final positions array:', validPositions); // Debug log
+          setTalentRequests(validPositions);
         } else {
           setTalentRequests([]);
         }
@@ -1342,6 +1357,80 @@ function AnnouncementsModal({ isOpen, onClose, announcements }) {
 }
 
 function TalentRequestsSlider({ isOpen, onClose, talentRequests, talentRequestsLoading }) {
+  const [selectedPosition, setSelectedPosition] = useState(null);
+  const [referralForm, setReferralForm] = useState({
+    candidate_name: '',
+    candidate_email: '',
+    resume_pdf: null
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type === 'application/pdf') {
+      setReferralForm(prev => ({ ...prev, resume_pdf: file }));
+    } else {
+      alert('Please upload a PDF file');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!referralForm.candidate_name || !referralForm.candidate_email || !referralForm.resume_pdf) {
+      alert('Please fill in all fields and upload a resume');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // Convert PDF to base64
+      const reader = new FileReader();
+      reader.readAsDataURL(referralForm.resume_pdf);
+      
+      reader.onload = async () => {
+        const base64String = reader.result.split(',')[1]; // Remove the data URL prefix
+
+        console.log('Selected Position:', selectedPosition); // Debug log
+
+        const response = await fetch('https://limitless-backend.vercel.app/api/create-talent-referral', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            lp_id: localStorage.getItem('userId'),
+            portco_id: selectedPosition.portco_id,
+            position_id: selectedPosition.position_id,
+            candidate_name: referralForm.candidate_name,
+            candidate_email: referralForm.candidate_email,
+            resume_pdf: base64String
+          }),
+        });
+
+        if (response.ok) {
+          alert('Talent referral submitted successfully!');
+          setSelectedPosition(null);
+          setReferralForm({
+            candidate_name: '',
+            candidate_email: '',
+            resume_pdf: null
+          });
+        } else {
+          throw new Error('Failed to submit referral');
+        }
+      };
+
+      reader.onerror = () => {
+        throw new Error('Failed to read file');
+      };
+    } catch (error) {
+      console.error('Error submitting referral:', error);
+      alert('Failed to submit referral. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       {/* Backdrop */}
@@ -1362,8 +1451,20 @@ function TalentRequestsSlider({ isOpen, onClose, talentRequests, talentRequestsL
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
             <div className="flex items-center space-x-3">
+              {selectedPosition ? (
+                <button 
+                  onClick={() => setSelectedPosition(null)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                </button>
+              ) : null}
               <User className="h-6 w-6" />
-              <h2 className="text-xl font-semibold">Open Positions</h2>
+              <h2 className="text-xl font-semibold">
+                {selectedPosition ? 'Refer Talent' : 'Open Positions'}
+              </h2>
             </div>
             <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="h-4 w-4" />
@@ -1372,64 +1473,175 @@ function TalentRequestsSlider({ isOpen, onClose, talentRequests, talentRequestsL
 
           {/* Content */}
           <div className="flex-1 overflow-y-auto p-6">
-            {talentRequestsLoading ? (
-              <div className="space-y-4">
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <div key={index} className="animate-pulse border rounded-lg p-4">
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+            {selectedPosition ? (
+              // Referral Form
+              <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-6">
+                <div className="bg-gray-50 rounded-xl p-6 mb-6">
+                  <h3 className="text-lg font-semibold mb-2">{selectedPosition.position_title}</h3>
+                  <p className="text-sm text-gray-600">{selectedPosition.description}</p>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Candidate Name
+                    </label>
+                    <input
+                      type="text"
+                      value={referralForm.candidate_name}
+                      onChange={(e) => setReferralForm(prev => ({ ...prev, candidate_name: e.target.value }))}
+                      className="w-full bg-gray-50 border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:border-blue-500"
+                      placeholder="Enter candidate's full name"
+                      required
+                    />
                   </div>
-                ))}
-              </div>
-            ) : talentRequests.length > 0 ? (
-              <div className="space-y-4">
-                {talentRequests.map((position, index) => (
-                  <div key={position.portco_id + index} className="border rounded-lg p-4 hover:bg-gray-50">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium">{position.position_title}</h4>
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                          {position.experience_level}
-                        </Badge>
-                        {position.open_position && (
-                          <Badge variant="secondary" className="bg-green-100 text-green-800">
-                            Open
-                          </Badge>
-                        )}
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Candidate Email
+                    </label>
+                    <input
+                      type="email"
+                      value={referralForm.candidate_email}
+                      onChange={(e) => setReferralForm(prev => ({ ...prev, candidate_email: e.target.value }))}
+                      className="w-full bg-gray-50 border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:border-blue-500"
+                      placeholder="Enter candidate's email address"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Resume (PDF)
+                    </label>
+                    <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
+                      <div className="space-y-1 text-center">
+                        <svg
+                          className="mx-auto h-12 w-12 text-gray-400"
+                          stroke="currentColor"
+                          fill="none"
+                          viewBox="0 0 48 48"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                        <div className="flex text-sm text-gray-600">
+                          <label
+                            htmlFor="resume-upload"
+                            className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                          >
+                            <span>Upload a file</span>
+                            <input
+                              id="resume-upload"
+                              name="resume-upload"
+                              type="file"
+                              accept=".pdf"
+                              className="sr-only"
+                              onChange={handleFileChange}
+                              required
+                            />
+                          </label>
+                          <p className="pl-1">or drag and drop</p>
+                        </div>
+                        <p className="text-xs text-gray-500">PDF up to 10MB</p>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">{position.description}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4 text-xs text-gray-500">
-                        <div className="flex items-center">
-                          <Calendar className="h-3 w-3 mr-1" />
-                          {position.created_at ? new Date(position.created_at).toLocaleDateString() : 'Date unknown'}
-                        </div>
-                        <div className="flex items-center">
-                          <User className="h-3 w-3 mr-1" />
-                          {position.location || 'Remote'}
-                        </div>
-                        {position.applications && position.applications.length > 0 && (
-                          <div className="flex items-center">
-                            <MessageSquare className="h-3 w-3 mr-1" />
-                            {position.applications.length} {position.applications.length === 1 ? 'Application' : 'Applications'}
-                          </div>
-                        )}
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Refer Talent
-                      </Button>
-                    </div>
+                    {referralForm.resume_pdf && (
+                      <p className="mt-2 text-sm text-gray-500">
+                        Selected file: {referralForm.resume_pdf.name}
+                      </p>
+                    )}
                   </div>
-                ))}
-              </div>
+                </div>
+
+                <div className="flex justify-end space-x-3 pt-6">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setSelectedPosition(null)}
+                  >
+                    Back to Positions
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Submit Referral'}
+                  </Button>
+                </div>
+              </form>
             ) : (
-              <div className="text-center text-gray-500 mt-8">
-                <User className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                <p>No open positions available</p>
-                <p className="text-sm">Check back later for new opportunities</p>
-              </div>
+              // Positions List
+              <>
+                {talentRequestsLoading ? (
+                  <div className="space-y-4">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                      <div key={index} className="animate-pulse border rounded-lg p-4">
+                        <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                      </div>
+                    ))}
+                  </div>
+                ) : talentRequests.length > 0 ? (
+                  <div className="space-y-4">
+                    {talentRequests.map((position, index) => (
+                      <div key={position.portco_id + index} className="border rounded-lg p-4 hover:bg-gray-50">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="font-medium">{position.position_title}</h4>
+                          <div className="flex items-center space-x-2">
+                            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                              {position.experience_level}
+                            </Badge>
+                            {position.open_position && (
+                              <Badge variant="secondary" className="bg-green-100 text-green-800">
+                                Open
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-3">{position.description}</p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4 text-xs text-gray-500">
+                            <div className="flex items-center">
+                              <Calendar className="h-3 w-3 mr-1" />
+                              {position.created_at ? new Date(position.created_at).toLocaleDateString() : 'Date unknown'}
+                            </div>
+                            <div className="flex items-center">
+                              <User className="h-3 w-3 mr-1" />
+                              {position.location || 'Remote'}
+                            </div>
+                            {position.applications && position.applications.length > 0 && (
+                              <div className="flex items-center">
+                                <MessageSquare className="h-3 w-3 mr-1" />
+                                {position.applications.length} {position.applications.length === 1 ? 'Application' : 'Applications'}
+                              </div>
+                            )}
+                          </div>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setSelectedPosition(position)}
+                          >
+                            Refer Talent
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500 mt-8">
+                    <User className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                    <p>No open positions available</p>
+                    <p className="text-sm">Check back later for new opportunities</p>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
