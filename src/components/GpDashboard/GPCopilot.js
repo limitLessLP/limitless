@@ -1473,7 +1473,7 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                          .join(', ')
                                      : 'N/A'}
                                  </span>
-                               </div>
+                  </div>
                                <div>
                                  <span className="font-medium text-gray-700">Differentiation:</span>
                                  <span className="text-gray-700 ml-1">{analysisResult?.competitiveAnalysis?.differentiation || 'N/A'}</span>
@@ -1498,7 +1498,7 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                </svg>
                                Founder Analysis
                              </h3>
-                             <div className="space-y-3">
+                      <div className="space-y-3">
                                {(analysisResult.founderInsights || []).map((founder, idx) => (
                                  <div key={idx} className={`bg-gray-50 rounded-lg p-3 border ${
                                    founder.totalScore >= 70 ? 'border-green-500' :
@@ -1513,7 +1513,7 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                        <h4 className="text-sm font-medium text-gray-900">{founder.name}</h4>
                                        <p className="text-xs text-gray-600">{founder.role}</p>
                                      </div>
-                                     <div className="text-right">
+                              <div className="text-right">
                                        <div className={`text-lg font-bold mb-1 ${
                                          founder.totalScore >= 70 ? 'text-green-600' :
                                          founder.totalScore >= 50 ? 'text-blue-600' :
@@ -1526,8 +1526,8 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                          founder.totalScore >= 30 ? 'bg-yellow-100 text-yellow-700' :
                                          'bg-red-100 text-red-700'
                                        }`}>{founder.band}</div>
-                                     </div>
-                                   </div>
+                                </div>
+                              </div>
 
                                    {/* Scores */}
                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
@@ -1541,7 +1541,7 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                                {dimension.replace(/([A-Z])/g, ' $1').trim()}
                                              </span>
                                              <span className="text-xs font-medium text-gray-900">{score}/10</span>
-                                           </div>
+                            </div>
                                            <div className="w-full bg-gray-200 rounded-full h-1">
                                              <div className={`h-1 rounded-full ${
                                                score >= 8 ? 'bg-green-500' :
@@ -1549,11 +1549,11 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                                score >= 4 ? 'bg-yellow-500' :
                                                'bg-red-500'
                                              }`} style={{ width: `${(score / 10) * 100}%` }} />
-                                           </div>
-                                         </div>
+                          </div>
+                      </div>
                                        )
                                      })}
-                                   </div>
+                          </div>
 
                                    {/* Strengths, Watchouts, Questions same as original */}
                                    <div className="space-y-2 text-xs">
@@ -1565,9 +1565,9 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                              <li key={i} className="flex items-start gap-2 text-gray-700">
                                                <span className="text-green-600 mt-0.5 flex-shrink-0">•</span>
                                                <span>{signal}</span>
-                                             </li>
-                                           ))}
-                                         </ul>
+                            </li>
+                          ))}
+                        </ul>
                                        </div>
                                      )}
 
@@ -1582,7 +1582,7 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                              </li>
                                            ))}
                                          </ul>
-                                       </div>
+                          </div>
                                      )}
 
                                      {founder.followUpQs?.length > 0 && (
@@ -1593,10 +1593,10 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                              <li key={i} className="flex items-start gap-2 text-gray-700">
                                                <span className="text-blue-600 mt-0.5 flex-shrink-0">{i + 1}.</span>
                                                <span>{q}</span>
-                                             </li>
-                                           ))}
-                                         </ul>
-                                       </div>
+                            </li>
+                          ))}
+                        </ul>
+                  </div>
                                      )}
                                    </div>
                                  </div>
@@ -1611,7 +1611,7 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                              <h3 className="text-base font-semibold text-gray-900">Scoring Breakdown</h3>
                              <div className="text-xs text-gray-500">
                                Click for details
-                             </div>
+                        </div>
                            </div>
                            <div className="space-y-3">
                              {(analysisResult.quickScore?.factors || []).map((factor, index) => {
@@ -1627,7 +1627,7 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                    key={index} 
                                    className="bg-gray-50 rounded-lg p-3"
                                  >
-                                   <div className="flex items-start gap-3">
+                            <div className="flex items-start gap-3">
                                      {/* Score circle */}
                                      <div className="relative flex-shrink-0">
                                        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
@@ -1646,8 +1646,8 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                                          </h4>
                                          <span className="text-xs text-gray-500 font-medium">
                                            Score: {factor.weighted}
-                                         </span>
-                  </div>
+                              </span>
+                            </div>
                                        <p className="text-xs text-gray-600 leading-relaxed">
                                          {factor.rationale || 'No rationale provided'}
                                        </p>
@@ -1679,7 +1679,7 @@ Make it bite—short, sharp, and actionable (≤250 words).`
                       </div>
                          </div>
 
-                         {/* Red Flags */}
+                  {/* Red Flags */}
                          {analysisResult?.redFlags && analysisResult.redFlags.length > 0 && (
                            <div className="dashboard-card rounded-xl p-4">
                              <h3 className="text-base font-semibold mb-3 flex items-center gap-2 text-gray-900">
