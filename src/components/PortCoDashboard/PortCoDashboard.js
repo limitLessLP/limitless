@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, Routes, Route, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { LayoutDashboard, Users, UserPlus, LogOut } from 'lucide-react';
 import TalentRequests from './TalentRequests';
 import TalentReferrals from './TalentReferrals';
@@ -17,7 +16,7 @@ const PortCoDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="min-h-screen bg-white text-black flex flex-col">
       <nav className="bg-white/80 backdrop-blur-sm border-b border-neutral-200 fixed w-full z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -64,20 +63,7 @@ const PortCoDashboard = () => {
         </div>
       </nav>
       
-      <main className="pt-16">
-        <div className="bg-white py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center"
-            >
-              <h1 className="text-4xl font-extralight mb-4">Portfolio Company Dashboard</h1>
-              <p className="text-neutral-600">Manage your talent requests, referrals, and team</p>
-            </motion.div>
-          </div>
-        </div>
-
+      <main className="flex-grow pt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Routes>
             <Route path="/talent-requests" element={<TalentRequests />} />

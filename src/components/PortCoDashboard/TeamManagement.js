@@ -9,24 +9,7 @@ import {
 } from '../../ui/select';
 
 const TeamManagement = () => {
-  const [teamMembers, setTeamMembers] = useState([
-    {
-      id: 1,
-      name: 'John Doe',
-      role: 'Software Engineer',
-      department: 'Engineering',
-      email: 'john@example.com',
-      status: 'active'
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      role: 'Product Manager',
-      department: 'Product',
-      email: 'jane@example.com',
-      status: 'active'
-    }
-  ]);
+  const [teamMembers, setTeamMembers] = useState([]);
 
   const [formData, setFormData] = useState({
     name: '',
