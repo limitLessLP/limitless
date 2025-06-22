@@ -16,7 +16,7 @@ export const UserInvestments = () => {
   const fetchInvestments = async () => {
     try {
       const res = await fetch(
-        `https://limitless-backend.vercel.app/api/get-funds-invested`,
+        `https://limitless-backend.vercel.app/api/get-lp-investments`,
         {
           method: "POST",
           headers: {

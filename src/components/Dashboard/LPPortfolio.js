@@ -69,7 +69,7 @@ export const LPPortfolio = () => {
       try {
         setInvestmentsLoading(true)
         const res = await fetch(
-          `https://limitless-backend.vercel.app/api/get-funds-invested`,
+          `https://limitless-backend.vercel.app/api/get-lp-investments`,
           {
             method: "POST",
             headers: {
