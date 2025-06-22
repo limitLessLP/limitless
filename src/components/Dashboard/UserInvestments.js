@@ -16,13 +16,12 @@ export const UserInvestments = () => {
   const fetchInvestments = async () => {
     try {
       const res = await fetch(
-        `https://limitless-backend.vercel.app/api/get-lp-investments`,
+        `https://limitless-backend.vercel.app/api/get-lp-investments?id=${userId}`,
         {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ id: userId })
         }
       );
 
