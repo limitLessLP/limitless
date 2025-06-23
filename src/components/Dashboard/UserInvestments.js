@@ -245,7 +245,7 @@ export const UserInvestments = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="min-w-[300px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex-shrink-0 border-l-4 border-l-blue-500"
+                className="min-w-[300px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex-shrink-0"
               >
                 <div className="flex justify-between items-start">
                   <div>
