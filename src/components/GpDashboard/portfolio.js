@@ -336,11 +336,11 @@ const Portfolio = () => {
                         {!coInvestmentsLoading && coInvestments.length > 0 ? (
                             <div className="grid gap-4">
                                 {coInvestments.map((coInvestment, index) => (
-                                    <Card key={index} className="border-l-4 border-l-blue-500">
+                                    <Card key={index}>
                                         <CardContent className="p-6">
                                             <div className="flex justify-between items-start p-4">
                                                 <div className="flex-1">
-                                                    <div className="flex items-center gap-2 mb-4">
+                                                    <div className="flex items-center gap-2">
                                                         <h3 className="font-medium">Co-Investment Opportunity</h3>
                                                         <Badge variant={getStatusBadgeVariant(coInvestment.status)}>
                                                             {coInvestment.status}
@@ -569,7 +569,7 @@ const Portfolio = () => {
                                             <div className="space-y-3">
                                                 {coInvestments.filter(ci => ci.portco_uuid === selectedCompanyDetails._id || ci.portco_uuid === selectedCompanyDetails.id).length > 0 ? (
                                                     coInvestments.filter(ci => ci.portco_uuid === selectedCompanyDetails._id || ci.portco_uuid === selectedCompanyDetails.id).map((coInvestment, index) => (
-                                                        <Card key={index} className="border-l-4 border-l-blue-500">
+                                                        <Card key={index}>
                                                             <CardContent className="p-3">
                                                                 <div className="flex items-center justify-between mb-2">
                                                                     <Badge variant={getStatusBadgeVariant(coInvestment.status)}>
