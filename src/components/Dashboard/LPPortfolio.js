@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { DashboardNav } from "./DashboardNav"
-import { PieChart, X, Building, User, ExternalLink, Calendar, MessageSquare, Send } from "lucide-react"
+import { PieChart, X, Building, User, ExternalLink, Calendar, MessageSquare, Send, Users, Briefcase } from "lucide-react"
 import { Footer } from "../Common/Footer"
 import { useEffect, useState } from "react"
 import { Fragment } from "react"
@@ -30,6 +30,7 @@ export const LPPortfolio = () => {
   const [talentRequestsLoading, setTalentRequestsLoading] = useState(false)
   const [pastReferrals, setPastReferrals] = useState([])
   const [referralsLoading, setReferralsLoading] = useState(false)
+  const [activeTab, setActiveTab] = useState('fund-investments') // 'fund-investments', 'co-investments'
   const [dealFlow, setDealFlow] = useState({
     lp_uuid: localStorage.getItem("userId") || "",
     gp_uuid: "",
@@ -80,43 +81,124 @@ export const LPPortfolio = () => {
 
         const data = await res.json();
         let totalInvested = 0;
-        if (data) {
-          const mappedInvestments = data.funds.map((investment) => {
-              const fund = investment.Fund;
-              const investmentDetails = investment.Investment;
+        if (data && data.investments) {
+          const mappedInvestments = data.investments.map((investment) => {
+              const vehicle = investment.vehicle;
+              const investmentDetails = investment.investment;
 
               totalInvested = totalInvested + investmentDetails.commitment_amount;
               
-              return {
-                  fundId: investmentDetails.fund_id,
-                  gpUUID: fund.gpUUID,
-                  fundName: fund.fundName,
-                  categories: fund.categories,
+              if (investment.type === 'FUND_INVESTMENT') {
+                return {
+                  fundId: investmentDetails.vehicle_id,
+                  gpUUID: vehicle.gpUUID,
+                  fundName: vehicle.fundName,
+                  categories: vehicle.categories,
                   investedAmount: `$${investmentDetails.commitment_amount.toLocaleString()}`,
-                  minInvestment: `$${fund.financials.minInvestment.toLocaleString()}`,
-                  fundSize: `$${fund.financials.fundSize.toLocaleString()}`,
-                  managementFee: `${fund.financials.managementFee}%`,
-                  capitalCall: fund.timelines.capitalCallSchedule?.[0]
-                  ? new Date(fund.timelines.capitalCallSchedule[0]).toDateString()
+                  minInvestment: `$${vehicle.financials.minInvestment.toLocaleString()}`,
+                  fundSize: `$${vehicle.financials.fundSize.toLocaleString()}`,
+                  managementFee: `${vehicle.financials.managementFee}%`,
+                  capitalCall: vehicle.timelines.capitalCallSchedule?.[0]
+                  ? new Date(vehicle.timelines.capitalCallSchedule[0]).toDateString()
                   : "N/A",
                   announcements: [],
-                  announcementIds: fund.announcements || [],
+                  announcementIds: vehicle.fundAnnouncements || [],
                   expanded: false,
-                  portfolioCompanies: []
-              };
-        });
-        setInvestments(mappedInvestments);
-        setPortfolioStats({
-          totalInvested: `$${totalInvested.toLocaleString()}`,
-          totalValue: `$${totalInvested.toLocaleString()}`,
-          totalReturn: "N/A",
-          activeInvestments: mappedInvestments.length.toString()
-        });
+                  portfolioCompanies: [],
+                  type: 'FUND_INVESTMENT'
+                };
+              } else if (investment.type === 'CO_INVESTMENT') {
+                return {
+                  fundId: investmentDetails.vehicle_id,
+                  gpUUID: vehicle.gp_uuid,
+                  fundName: 'Co-Investment Opportunity',
+                  categories: [],
+                  investedAmount: `$${investmentDetails.commitment_amount.toLocaleString()}`,
+                  minInvestment: 'N/A',
+                  fundSize: `$${vehicle.total_allocation.toLocaleString()}`,
+                  managementFee: 'N/A',
+                  capitalCall: vehicle.closing_date,
+                  announcements: [],
+                  announcementIds: [],
+                  expanded: false,
+                  portfolioCompanies: [],
+                  type: 'CO_INVESTMENT',
+                  vehicle: vehicle, // Add the vehicle data for access to portco_uuid
+                  coInvestmentData: {
+                    status: vehicle.status,
+                    totalAllocation: vehicle.total_allocation,
+                    fundsCollected: vehicle.funds_collected,
+                    closingDate: vehicle.closing_date,
+                    lpCount: vehicle.lp_uuids?.length || 0
+                  }
+                };
+              }
+              return null;
+          }).filter(Boolean);
+          
+          setInvestments(mappedInvestments);
+          setPortfolioStats({
+            totalInvested: `$${totalInvested.toLocaleString()}`,
+            totalValue: `$${totalInvested.toLocaleString()}`,
+            totalReturn: "N/A",
+            activeInvestments: mappedInvestments.length.toString()
+          });
+        } else {
+          setInvestments([]);
+          setPortfolioStats({
+            totalInvested: "$0",
+            totalValue: "$0",
+            totalReturn: "N/A",
+            activeInvestments: "0"
+          });
+        }
         setInvestmentsLoading(false);
-      } else {
-        console.error("Failed to fetch investments:", data.message);
-    }} catch (err) {
-      console.error("Fetch error:", err);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setInvestments([]);
+        setInvestmentsLoading(false);
+      }
+  };
+
+  const getFundInvestments = () => {
+    return investments.filter(inv => inv.type === 'FUND_INVESTMENT');
+  };
+
+  const getCoInvestments = () => {
+    return investments.filter(inv => inv.type === 'CO_INVESTMENT');
+  };
+
+  const getStatusBadgeVariant = (status) => {
+    switch (status) {
+      case 'OPEN':
+        return 'default';
+      case 'FULL':
+        return 'secondary';
+      case 'CLOSED':
+        return 'destructive';
+      case 'CANCELLED':
+        return 'outline';
+      default:
+        return 'outline';
+    }
+  };
+
+  const formatCurrency = (amount) => {
+    if (!amount) return '$0';
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    try {
+      return new Date(dateString).toLocaleDateString();
+    } catch (error) {
+      return dateString;
     }
   };
 
@@ -214,26 +296,56 @@ export const LPPortfolio = () => {
 
   const handleRowExpand = async (index) => {
     const investment = investments[index];
+    console.log('Expanding investment:', investment); // Debug log
+    
     if (!investment.expanded) {
       setExpandedRowLoading(true);
       setCurrentFundId(investment.gpUUID);
       
       try {
-        const [announcements, portCos] = await Promise.all([
-          fetchAnnouncements(investment.announcementIds),
-          getPortfolioCompanies(investment.fundId)
-        ]);
+        if (investment.type === 'FUND_INVESTMENT') {
+          console.log('Expanding fund investment'); // Debug log
+          const [announcements, portCos] = await Promise.all([
+            fetchAnnouncements(investment.announcementIds),
+            getPortfolioCompanies(investment.fundId)
+          ]);
 
-        const updatedInvestments = investments.map((inv, i) =>
-          i === index ? { ...inv, announcements, portfolioCompanies: portCos, expanded: true } : inv
-        );
-        setInvestments(updatedInvestments);
+          const updatedInvestments = investments.map((inv, i) =>
+            i === index ? { ...inv, announcements, portfolioCompanies: portCos, expanded: true } : inv
+          );
+          setInvestments(updatedInvestments);
+        } else if (investment.type === 'CO_INVESTMENT') {
+          console.log('Expanding co-investment, vehicle:', investment.vehicle); // Debug log
+          // For co-investments, fetch the portfolio company information
+          const portcoResponse = await fetch('https://limitless-backend.vercel.app/api/get-portco-info', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ portco_id: investment.vehicle.portco_uuid }),
+          });
+          
+          let portcoData = null;
+          if (portcoResponse.ok) {
+            const portcoResult = await portcoResponse.json();
+            portcoData = portcoResult.portco;
+            console.log('Portfolio company data:', portcoData); // Debug log
+          } else {
+            console.error('Failed to fetch portfolio company:', portcoResponse.status); // Debug log
+          }
+
+          const updatedInvestments = investments.map((inv, i) =>
+            i === index ? { ...inv, portfolioCompany: portcoData, expanded: true } : inv
+          );
+          setInvestments(updatedInvestments);
+        }
       } catch (error) {
         console.error("Error expanding row:", error);
       } finally {
         setExpandedRowLoading(false);
       }
     } else {
+      console.log('Collapsing investment'); // Debug log
       const updatedInvestments = investments.map((inv, i) =>
         i === index ? { ...inv, expanded: false } : inv
       );
@@ -512,6 +624,29 @@ export const LPPortfolio = () => {
               Monitor your investment portfolio with detailed fund information, announcements, and portfolio companies
             </p>
           </motion.div>
+
+          {/* Tab Navigation */}
+          <div className="flex space-x-1 mb-6 bg-gray-100 p-1 rounded-lg max-w-md mx-auto">
+            <Button
+              variant={activeTab === 'fund-investments' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setActiveTab('fund-investments')}
+              className="flex-1"
+            >
+              <Briefcase className="h-4 w-4 mr-2" />
+              Fund Investments
+            </Button>
+            <Button
+              variant={activeTab === 'co-investments' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setActiveTab('co-investments')}
+              className="flex-1"
+            >
+              <Users className="h-4 w-4 mr-2" />
+              Co-Investments
+            </Button>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -556,215 +691,409 @@ export const LPPortfolio = () => {
                         </tr>
                       ))}
                     </>
-                  ) : (
-                    investments.map((investment, index) => (
-                    <Fragment key={index}>
-                      <motion.tr
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                        className="group hover:bg-gray-50 transition-colors duration-150 ease-in-out cursor-pointer"
-                        onClick={() => handleRowExpand(index)}
-                      >
-                        <td className="px-6 py-4 text-center whitespace-nowrap">
-                          <motion.div
-                            initial={{ rotate: investment.expanded ? 0 : -90 }}
-                            animate={{ rotate: investment.expanded ? 90 : 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="inline-block transform"
+                  ) : activeTab === 'fund-investments' ? (
+                    getFundInvestments().length > 0 ? (
+                      getFundInvestments().map((investment, index) => (
+                        <Fragment key={index}>
+                          <motion.tr
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className="group hover:bg-gray-50 transition-colors duration-150 ease-in-out cursor-pointer"
+                            onClick={() => handleRowExpand(index)}
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 text-gray-500"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
-                          </motion.div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <div className="font-medium text-gray-900">{investment.fundName}</div>
-                            <div className="text-sm text-gray-500">{investment.firm}</div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.investedAmount}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.investedAmount}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-green-600">{investment.return || "N/A"}</span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.exitDate || "N/A"}</td>
-                      </motion.tr>
-                      {investment.expanded && (
-                        <tr className="bg-gray-50">
-                          <td colSpan="6" className="px-8 py-8">
-                            <div className="flex flex-wrap gap-6">
-                              {/* Left Section: Fund Info */}
-                              <div className="flex-1">
-                                <h4 className="text-base font-semibold text-gray-700 mb-4">Fund Info</h4>
-                                <div className="space-y-4">
-                                  <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
-                                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Categories</h4>
-                                    <p className="text-gray-900 font-medium">{investment.categories.join(", ")}</p>
-                                  </div>
-                                  <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
-                                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Minimum Investment</h4>
-                                    <p className="text-gray-900 font-medium">{investment.minInvestment}</p>
-                                  </div>
-                                  <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
-                                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Fund Size</h4>
-                                    <p className="text-gray-900 font-medium">{investment.fundSize}</p>
-                                  </div>
-                                  <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
-                                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Management Fee</h4>
-                                    <p className="text-gray-900 font-medium">{investment.managementFee}</p>
-                                  </div>
-                                  <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
-                                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Capital Call</h4>
-                                    <p className="text-gray-900 font-medium">{investment.capitalCall}</p>
-                                  </div>
-                                </div>
+                            <td className="px-6 py-4 text-center whitespace-nowrap">
+                              <motion.div
+                                initial={{ rotate: investment.expanded ? 0 : -90 }}
+                                animate={{ rotate: investment.expanded ? 90 : 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="inline-block transform"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 text-gray-500"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5l7 7-7 7"
+                                  />
+                                </svg>
+                              </motion.div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div>
+                                <div className="font-medium text-gray-900">{investment.fundName}</div>
+                                <div className="text-sm text-gray-500">{investment.firm}</div>
                               </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.investedAmount}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.investedAmount}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span className="text-green-600">{investment.return || "N/A"}</span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.exitDate || "N/A"}</td>
+                          </motion.tr>
+                          {investment.expanded && (
+                            <tr className="bg-gray-50">
+                              <td colSpan="6" className="px-8 py-8">
+                                <div className="flex flex-wrap gap-6">
+                                  {/* Left Section: Fund Info */}
+                                  <div className="flex-1">
+                                    <h4 className="text-base font-semibold text-gray-700 mb-4">Fund Info</h4>
+                                    <div className="space-y-4">
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Categories</h4>
+                                        <p className="text-gray-900 font-medium">{investment.categories.join(", ")}</p>
+                                      </div>
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Minimum Investment</h4>
+                                        <p className="text-gray-900 font-medium">{investment.minInvestment}</p>
+                                      </div>
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Fund Size</h4>
+                                        <p className="text-gray-900 font-medium">{investment.fundSize}</p>
+                                      </div>
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Management Fee</h4>
+                                        <p className="text-gray-900 font-medium">{investment.managementFee}</p>
+                                      </div>
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Capital Call</h4>
+                                        <p className="text-gray-900 font-medium">{investment.capitalCall}</p>
+                                      </div>
+                                    </div>
+                                  </div>
 
-                              {/* Middle Section: Announcements */}
-                              <div className="flex-1 flex flex-col">
-                                <h4 className="text-base font-semibold text-gray-700 mb-4">Announcements</h4>
-                                <div className="flex-1 flex flex-col">
-                                  {expandedRowLoading ? (
-                                    <div className="space-y-4">
-                                      {Array.from({ length: 3 }).map((_, i) => (
-                                        <div key={i} className="bg-white shadow-sm rounded-xl p-6 border border-gray-100 animate-pulse">
-                                          <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                                          <div className="h-3 bg-gray-200 rounded w-1/2 mb-3"></div>
-                                          <div className="h-3 bg-gray-200 rounded w-full"></div>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  ) : investment.announcements.length > 0 ? (
-                                    <div className="space-y-4">
-                                      {investment.announcements.slice(0, 5).map((announcement, i) => (
-                                        <div key={i} className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
-                                          <h5 className="text-sm font-semibold text-gray-700 mb-2">{announcement.title}</h5>
-                                          <p className="text-gray-500 text-xs mb-3">{announcement.date}</p>
-                                          <p className="text-gray-900 leading-relaxed">{announcement.description || announcement.message}</p>
-                                        </div>
-                                      ))}
-                                      {investment.announcements.length > 5 && (
-                                        <p className="text-sm text-gray-500 text-center">
-                                          And {investment.announcements.length - 5} more announcements...
-                                        </p>
-                                      )}
-                                    </div>
-                                  ) : (
-                                    <div className="text-center py-8">
-                                      <MessageSquare className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                                      <p className="text-gray-500">No announcements available</p>
-                                      <p className="text-sm text-gray-400 mt-1">Updates will appear here when posted</p>
-                                    </div>
-                                  )}
-                                </div>
-                                
-                                {!expandedRowLoading && investment.announcements.length > 0 && (
-                                  <button
-                                    onClick={() => openAnnouncementsModal(investment.announcements, investment.gpUUID)}
-                                    className="mt-6 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 hover:shadow-md"
-                                  >
-                                    <MessageSquare className="h-4 w-4 mr-2" />
-                                    View All Announcements
-                                  </button>
-                                )}
-                              </div>
-
-                              {/* Right Section: Portfolio Companies */}
-                              <div className="flex-1 flex flex-col">
-                                <h4 className="text-base font-semibold text-gray-700 mb-4">Portfolio Companies</h4>
-                                <div className="flex-1 flex flex-col">
-                                  {expandedRowLoading ? (
-                                    <div className="space-y-4">
-                                      {Array.from({ length: 2 }).map((_, i) => (
-                                        <div key={i} className="bg-white shadow-sm rounded-xl p-6 border border-gray-100 animate-pulse">
-                                          <div className="h-4 bg-gray-200 rounded w-2/3 mb-2"></div>
-                                          <div className="h-3 bg-gray-200 rounded w-full mb-4"></div>
-                                          <div className="flex gap-3">
-                                            <div className="h-4 bg-gray-200 rounded w-16"></div>
-                                            <div className="h-4 bg-gray-200 rounded w-16"></div>
-                                          </div>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  ) : (
-                                    <div className="space-y-4">
-                                      {investment?.portfolioCompanies?.length > 0 ? (
-                                        investment.portfolioCompanies.map((company, i) => (
-                                          <div 
-                                            key={i} 
-                                            className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100 cursor-pointer"
-                                            onClick={() => openTalentRequestsWindow(company.portcoUUID)}
-                                          >
-                                            <h5 className="text-sm font-semibold text-gray-900 mb-2">{company.name}</h5>
-                                            <p className="text-sm text-gray-600 mb-4 leading-relaxed">{company.description}</p>
-                                            <div className="flex gap-3">
-                                              {company.website && (
-                                                <a 
-                                                  href={company.website} 
-                                                  target="_blank" 
-                                                  rel="noopener noreferrer" 
-                                                  className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium"
-                                                  onClick={(e) => e.stopPropagation()}
-                                                >
-                                                  <ExternalLink className="h-3 w-3 mr-1" />
-                                                  Website
-                                                </a>
-                                              )}
-                                              {company.linkedin && (
-                                                <a 
-                                                  href={company.linkedin} 
-                                                  target="_blank" 
-                                                  rel="noopener noreferrer" 
-                                                  className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium"
-                                                  onClick={(e) => e.stopPropagation()}
-                                                >
-                                                  <Building className="h-3 w-3 mr-1" />
-                                                  LinkedIn
-                                                </a>
-                                              )}
+                                  {/* Middle Section: Announcements */}
+                                  <div className="flex-1 flex flex-col">
+                                    <h4 className="text-base font-semibold text-gray-700 mb-4">Announcements</h4>
+                                    <div className="flex-1 flex flex-col">
+                                      {expandedRowLoading ? (
+                                        <div className="space-y-4">
+                                          {Array.from({ length: 3 }).map((_, i) => (
+                                            <div key={i} className="bg-white shadow-sm rounded-xl p-6 border border-gray-100 animate-pulse">
+                                              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                                              <div className="h-3 bg-gray-200 rounded w-1/2 mb-3"></div>
+                                              <div className="h-3 bg-gray-200 rounded w-full"></div>
                                             </div>
-                                          </div>
-                                        ))
+                                          ))}
+                                        </div>
+                                      ) : investment.announcements.length > 0 ? (
+                                        <div className="space-y-4">
+                                          {investment.announcements.slice(0, 5).map((announcement, i) => (
+                                            <div key={i} className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                              <h5 className="text-sm font-semibold text-gray-700 mb-2">{announcement.title}</h5>
+                                              <p className="text-gray-500 text-xs mb-3">{announcement.date}</p>
+                                              <p className="text-gray-900 leading-relaxed">{announcement.description || announcement.message}</p>
+                                            </div>
+                                          ))}
+                                          {investment.announcements.length > 5 && (
+                                            <p className="text-sm text-gray-500 text-center">
+                                              And {investment.announcements.length - 5} more announcements...
+                                            </p>
+                                          )}
+                                        </div>
                                       ) : (
                                         <div className="text-center py-8">
-                                          <Building className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                                          <p className="text-gray-500">No portfolio companies available</p>
-                                          <p className="text-sm text-gray-400 mt-1">Portfolio companies will appear here</p>
+                                          <MessageSquare className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                                          <p className="text-gray-500">No announcements available</p>
+                                          <p className="text-sm text-gray-400 mt-1">Updates will appear here when posted</p>
                                         </div>
                                       )}
                                     </div>
-                                  )}
+                                    
+                                    {!expandedRowLoading && investment.announcements.length > 0 && (
+                                      <button
+                                        onClick={() => openAnnouncementsModal(investment.announcements, investment.gpUUID)}
+                                        className="mt-6 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 hover:shadow-md"
+                                      >
+                                        <MessageSquare className="h-4 w-4 mr-2" />
+                                        View All Announcements
+                                      </button>
+                                    )}
+                                  </div>
+
+                                  {/* Right Section: Portfolio Companies */}
+                                  <div className="flex-1 flex flex-col">
+                                    <h4 className="text-base font-semibold text-gray-700 mb-4">Portfolio Companies</h4>
+                                    <div className="flex-1 flex flex-col">
+                                      {expandedRowLoading ? (
+                                        <div className="space-y-4">
+                                          {Array.from({ length: 2 }).map((_, i) => (
+                                            <div key={i} className="bg-white shadow-sm rounded-xl p-6 border border-gray-100 animate-pulse">
+                                              <div className="h-4 bg-gray-200 rounded w-2/3 mb-2"></div>
+                                              <div className="h-3 bg-gray-200 rounded w-full mb-4"></div>
+                                              <div className="flex gap-3">
+                                                <div className="h-4 bg-gray-200 rounded w-16"></div>
+                                                <div className="h-4 bg-gray-200 rounded w-16"></div>
+                                              </div>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      ) : (
+                                        <div className="space-y-4">
+                                          {investment?.portfolioCompanies?.length > 0 ? (
+                                            investment.portfolioCompanies.map((company, i) => (
+                                              <div 
+                                                key={i} 
+                                                className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100 cursor-pointer"
+                                                onClick={() => openTalentRequestsWindow(company.portcoUUID)}
+                                              >
+                                                <h5 className="text-sm font-semibold text-gray-900 mb-2">{company.name}</h5>
+                                                <p className="text-sm text-gray-600 mb-4 leading-relaxed">{company.description}</p>
+                                                <div className="flex gap-3">
+                                                  {company.website && (
+                                                    <a 
+                                                      href={company.website} 
+                                                      target="_blank" 
+                                                      rel="noopener noreferrer" 
+                                                      className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium"
+                                                      onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                      <ExternalLink className="h-3 w-3 mr-1" />
+                                                      Website
+                                                    </a>
+                                                  )}
+                                                  {company.linkedin && (
+                                                    <a 
+                                                      href={company.linkedin} 
+                                                      target="_blank" 
+                                                      rel="noopener noreferrer" 
+                                                      className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium"
+                                                      onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                      <Building className="h-3 w-3 mr-1" />
+                                                      LinkedIn
+                                                    </a>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            ))
+                                          ) : (
+                                            <div className="text-center py-8">
+                                              <Building className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                                              <p className="text-gray-500">No portfolio companies available</p>
+                                              <p className="text-sm text-gray-400 mt-1">Portfolio companies will appear here</p>
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                    
+                                    {!expandedRowLoading && (
+                                      <button
+                                        onClick={() => openReferralPanel(investment.gpUUID)}
+                                        className="mt-6 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 hover:shadow-md"
+                                      >
+                                        <Building className="h-4 w-4 mr-2" />
+                                        Refer Company
+                                      </button>
+                                    )}
+                                  </div>
                                 </div>
-                                
-                                {!expandedRowLoading && (
-                                  <button
-                                    onClick={() => openReferralPanel(investment.gpUUID)}
-                                    className="mt-6 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 hover:shadow-md"
-                                  >
-                                    <Building className="h-4 w-4 mr-2" />
-                                    Refer Company
-                                  </button>
-                                )}
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="px-6 py-12 text-center">
+                          <Briefcase className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                          <p className="text-gray-500 mb-2">No fund investments found</p>
+                          <p className="text-sm text-gray-400">Start investing in funds to see them here</p>
+                        </td>
+                      </tr>
+                    )
+                  ) : activeTab === 'co-investments' ? (
+                    getCoInvestments().length > 0 ? (
+                      getCoInvestments().map((investment, filteredIndex) => {
+                        // Find the actual index in the full investments array
+                        const actualIndex = investments.findIndex(inv => 
+                          inv.type === 'CO_INVESTMENT' && 
+                          inv.fundId === investment.fundId &&
+                          inv.investedAmount === investment.investedAmount
+                        );
+                        
+                        return (
+                        <Fragment key={filteredIndex}>
+                          <motion.tr
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className="group hover:bg-gray-50 transition-colors duration-150 ease-in-out cursor-pointer"
+                            onClick={() => handleRowExpand(actualIndex)}
+                          >
+                            <td className="px-6 py-4 text-center whitespace-nowrap">
+                              <motion.div
+                                initial={{ rotate: investment.expanded ? 0 : -90 }}
+                                animate={{ rotate: investment.expanded ? 90 : 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="inline-block transform"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 text-gray-500"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5l7 7-7 7"
+                                  />
+                                </svg>
+                              </motion.div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div>
+                                <div className="font-medium text-gray-900 flex items-center gap-2">
+                                  {investment.fundName}
+                                  <Badge variant={getStatusBadgeVariant(investment.coInvestmentData.status)}>
+                                    {investment.coInvestmentData.status}
+                                  </Badge>
+                                </div>
+                                <div className="text-sm text-gray-500">Co-Investment Opportunity</div>
                               </div>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </Fragment>
-                  )))}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.investedAmount}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-gray-900">{investment.investedAmount}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span className="text-green-600">N/A</span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-gray-900">{formatDate(investment.coInvestmentData.closingDate)}</td>
+                          </motion.tr>
+                          {investment.expanded && (
+                            <tr className="bg-gray-50">
+                              <td colSpan="6" className="px-8 py-8">
+                                <div className="flex flex-wrap gap-6">
+                                  {/* Co-Investment Details */}
+                                  <div className="flex-1">
+                                    <h4 className="text-base font-semibold text-gray-700 mb-4">Co-Investment Details</h4>
+                                    <div className="space-y-4">
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Status</h4>
+                                        <Badge variant={getStatusBadgeVariant(investment.coInvestmentData.status)}>
+                                          {investment.coInvestmentData.status}
+                                        </Badge>
+                                      </div>
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Total Allocation</h4>
+                                        <p className="text-gray-900 font-medium">{formatCurrency(investment.coInvestmentData.totalAllocation)}</p>
+                                      </div>
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Funds Collected</h4>
+                                        <p className="text-gray-900 font-medium">{formatCurrency(investment.coInvestmentData.fundsCollected)}</p>
+                                      </div>
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">Closing Date</h4>
+                                        <p className="text-gray-900 font-medium">{formatDate(investment.coInvestmentData.closingDate)}</p>
+                                      </div>
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2">LPs Registered</h4>
+                                        <p className="text-gray-900 font-medium">{investment.coInvestmentData.lpCount}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Co-Investment Progress */}
+                                  <div className="flex-1">
+                                    <h4 className="text-base font-semibold text-gray-700 mb-4">Progress</h4>
+                                    <div className="bg-white shadow-sm rounded-xl p-6 border border-gray-100">
+                                      <div className="mb-4">
+                                        <div className="flex justify-between text-sm text-gray-600 mb-2">
+                                          <span>Funds Collected</span>
+                                          <span>{formatCurrency(investment.coInvestmentData.fundsCollected)} / {formatCurrency(investment.coInvestmentData.totalAllocation)}</span>
+                                        </div>
+                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                          <div 
+                                            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                                            style={{ 
+                                              width: `${Math.min((investment.coInvestmentData.fundsCollected / investment.coInvestmentData.totalAllocation) * 100, 100)}%` 
+                                            }}
+                                          ></div>
+                                        </div>
+                                      </div>
+                                      <div className="text-sm text-gray-600">
+                                        <p>Your investment: {investment.investedAmount}</p>
+                                        <p>Closing date: {formatDate(investment.coInvestmentData.closingDate)}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Portfolio Company Information */}
+                                  <div className="flex-1">
+                                    <h4 className="text-base font-semibold text-gray-700 mb-4">Portfolio Company</h4>
+                                    {expandedRowLoading ? (
+                                      <div className="bg-white shadow-sm rounded-xl p-6 border border-gray-100 animate-pulse">
+                                        <div className="h-4 bg-gray-200 rounded w-2/3 mb-2"></div>
+                                        <div className="h-3 bg-gray-200 rounded w-full mb-4"></div>
+                                        <div className="flex gap-3">
+                                          <div className="h-4 bg-gray-200 rounded w-16"></div>
+                                          <div className="h-4 bg-gray-200 rounded w-16"></div>
+                                        </div>
+                                      </div>
+                                    ) : investment.portfolioCompany ? (
+                                      <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-xl p-6 border border-gray-100">
+                                        <h5 className="text-sm font-semibold text-gray-900 mb-2">{investment.portfolioCompany.name}</h5>
+                                        <p className="text-sm text-gray-600 mb-4 leading-relaxed">{investment.portfolioCompany.description}</p>
+                                        <div className="flex gap-3">
+                                          {investment.portfolioCompany.website && (
+                                            <a 
+                                              href={investment.portfolioCompany.website} 
+                                              target="_blank" 
+                                              rel="noopener noreferrer" 
+                                              className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium"
+                                            >
+                                              <ExternalLink className="h-3 w-3 mr-1" />
+                                              Website
+                                            </a>
+                                          )}
+                                          {investment.portfolioCompany.linkedin && (
+                                            <a 
+                                              href={investment.portfolioCompany.linkedin} 
+                                              target="_blank" 
+                                              rel="noopener noreferrer" 
+                                              className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium"
+                                            >
+                                              <Building className="h-3 w-3 mr-1" />
+                                              LinkedIn
+                                            </a>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <div className="text-center py-8">
+                                        <Building className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                                        <p className="text-gray-500">Portfolio company information not available</p>
+                                        <p className="text-sm text-gray-400 mt-1">Details will appear here when available</p>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="px-6 py-12 text-center">
+                          <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                          <p className="text-gray-500 mb-2">No co-investments found</p>
+                          <p className="text-sm text-gray-400">Participate in co-investment opportunities to see them here</p>
+                        </td>
+                      </tr>
+                    )
+                  ) : null}
                 </tbody>
               </table>
             </div>
