@@ -45,6 +45,7 @@ const Portfolio = () => {
 
     const [newCoInvestment, setNewCoInvestment] = useState({
         gp_uuid: gpUUID,
+        fund_uuid: fundUUID,
         portco_uuid: "",
         closing_date: "",
         total_allocation: ""
