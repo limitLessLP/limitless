@@ -38,6 +38,7 @@ import GpProfile from './components/GpDashboard/gpProfile';
 import PortCoDashboard from './components/PortCoDashboard/PortCoDashboard';
 import SignIn from './components/PortCoDashboard/SignIn';
 import SignUp from './components/PortCoDashboard/SignUp';
+import PortCoDetail from './components/Dashboard/PortCoDetail';
 
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
         <Route path="/waitlist" element={<Waitlist />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/lp-portfolio" element={<LPPortfolio />} />
+        <Route path="/portfolio/portco/:portcoId" element={<PortCoDetail />} />
         
         {/* Early Access routes */}
         <Route path="/access-type" element={<AccessTypePage />} />

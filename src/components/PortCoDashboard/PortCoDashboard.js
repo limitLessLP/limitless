@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link, Routes, Route, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, UserPlus, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, UserPlus, LogOut, Megaphone } from 'lucide-react';
 import TalentRequests from './TalentRequests';
 import TalentReferrals from './TalentReferrals';
 import TeamManagement from './TeamManagement';
+import CustomerReferrals from './CustomerReferrals';
 import { Footer } from '../Common/Footer.js';
 
 const PortCoDashboard = () => {
@@ -27,6 +28,13 @@ const PortCoDashboard = () => {
                 </Link>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <Link 
+                  to="/portco-dashboard/customer-referrals" 
+                  className="inline-flex items-center px-1 pt-1 text-sm font-medium text-neutral-600 hover:text-black transition-colors"
+                >
+                  <Megaphone className="w-4 h-4 mr-2" />
+                  Requests
+                </Link>
                 <Link 
                   to="/portco-dashboard/talent-requests" 
                   className="inline-flex items-center px-1 pt-1 text-sm font-medium text-neutral-600 hover:text-black transition-colors"
@@ -68,6 +76,7 @@ const PortCoDashboard = () => {
           <Routes>
             <Route path="/talent-requests" element={<TalentRequests />} />
             <Route path="/talent-referrals" element={<TalentReferrals />} />
+            <Route path="/customer-referrals" element={<CustomerReferrals />} />
             <Route path="/team" element={<TeamManagement />} />
             <Route path="/" element={<TalentRequests />} />
           </Routes>
