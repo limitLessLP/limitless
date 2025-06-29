@@ -1,44 +1,16 @@
 "use client"
 
-import { useEffect, useState, useMemo, useCallback } from "react"
+import { useCallback } from "react"
 import { motion } from "framer-motion"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import { ChevronRight } from "lucide-react"
-import landingBackground from '../../assets/landingBackground.jpg';
 
 const title = "The Future Of Venture Capital";
-
-const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-const yStart = isMobile ? 200 : 400;
-
-const dataPoints = [5, 10, 15, 20, 25, 20, 25, 30, 35, 30, 40, 45, 60, 65, 70, 60, 75, 80, 75, 80, 85, 90];
-
-const calculateLinePath = (dataPoints) => {
-    const width = isMobile ? 600: 1175;
-    const height = isMobile ? 200 : 435;
-    const xStep = (width) / (dataPoints.length - 1);
-
-    const normalize = isMobile? 50 : 100;
-
-    return dataPoints
-        .map((point, index) => {
-            const normalizedY = height - (point / normalize) * height;
-            return `${index === 0 ? "M" : "L"} ${index * xStep} ${normalizedY}`;
-        })
-        .join(" ");
-};
 
 // eslint-disable-next-line react/display-name
 const Background = React.memo(() => {
     const navigate = useNavigate();
-    const [isVisible, setIsVisible] = useState(false);
-
-    const linePath = useMemo(() => calculateLinePath(dataPoints), [dataPoints]);
-
-    useEffect(() => {
-        setIsVisible(true);
-    }, []);
 
     const handleNavigate = useCallback(() => {
         navigate('/select-type?for=waitlist');
@@ -46,90 +18,17 @@ const Background = React.memo(() => {
 
     return (
         <div className="relative w-full h-screen flex flex-col overflow-hidden">
-            {/* Mountain background image */}
+            {/* Background GIF */}
             <img
-                src={landingBackground}
+                src="/home.gif"
                 className="absolute inset-0 w-full h-full object-cover"
-                alt="Mountain landscape with trees"
-                loading="lazy"
+                alt="Background animation"
             />
 
             {/* Overlay with slight transparency */}
             <div className="absolute inset-0 bg-black/40" />
 
-            {/* SVG for the graph */}
-            <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-                <defs>
-                    <marker
-                        id="arrowhead"
-                        markerWidth="10"
-                        markerHeight="7"
-                        refX="5"
-                        refY="3.5"
-                        orient="auto"
-                        markerUnits="strokeWidth"
-                    >
-                        <polygon points="0 0, 10 3.5, 0 7" fill="white" />
-                    </marker>
-                </defs>
-
-                <motion.path
-                    d={linePath}
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    initial={{
-                        pathLength: 0,
-                        y: yStart,
-                        x: 0
-                    }}
-                    animate={{
-                        pathLength: isVisible ? 1 : 0,
-                        y: 0,
-                        x: 0
-                    }}
-                    transition={{
-                        duration: 3,
-                        ease: "easeOut",
-                        delay: 0.5
-                    }}
-                    />
-
-                    <motion.path
-                    d={`${linePath} L ${window.innerWidth},400 L 0,400 Z`}
-                    fill="url(#areaGradient)"
-                    opacity="0.2"
-                    initial={{
-                        opacity: 0,
-                        y: yStart,
-                        x: 0
-                    }}
-                    animate={{
-                        opacity: isVisible ? 0.2 : 0,
-                        y: 0,
-                        x: 0
-                    }}
-                    transition={{
-                        duration: 3,
-                        ease: "easeOut",
-                        delay: 0.5
-                    }}
-                    />
-
-
-                {/* Gradient definitions */}
-                <defs>
-                    <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="white" stopOpacity="0.3" />
-                        <stop offset="100%" stopColor="white" stopOpacity="0.05" />
-                    </linearGradient>
-                </defs>
-            </svg>
-
             {/* Centered text */}
-            {/* <div className="absolute inset-0 flex items-center justify-center"> */}
             <div className="absolute inset-0 flex items-center justify-center -mt-20 md:-mt-32">
                 <motion.div
                     className="text-center"
